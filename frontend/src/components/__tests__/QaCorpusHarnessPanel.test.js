@@ -1,0 +1,147 @@
+// @vitest-environment jsdom
+import "../../../tests/test-support/panelAdapter.js";
+import { flushPromises, mount } from "@vue/test-utils";
+import { afterEach, describe, expect, it, vi } from "vitest";
+import { createI18n } from "vue-i18n";
+import { Quasar } from "quasar";
+import QaCorpusEvaluationPanel from "../QaCorpusEvaluationPanel.vue";
+import { harnessCapabilities } from "../../lib/__tests__/qa/corpus-harness-physical.js";
+import zhTW from "../../i18n/zh-TW.json";
+import en from "../../i18n/en.json";
+const transport = vi.hoisted(() => ({ fetch: null }));
+vi.mock("../../lib/runtime.js", async original => { const actual = await original(); return ({ ...actual, get QA_EVIDENCE() { return actual.QA_EVIDENCE; }, get QA_REPOSITORY() { return actual.QA_REPOSITORY; }, get WORKBENCH_TASKS() { return actual.WORKBENCH_TASKS; },  AGENT: "/qa/api", TS_SITEKEY: ""  }); });
+vi.mock("../../lib/qaSession.js", () => ({ apiFetch: (...args) => transport.fetch(...args) }));
+const mounted = [];
+async function openHarness(options = {}) {
+  const capabilities = harnessCapabilities(options), job = capabilities.recent[0], calls = [];
+  transport.fetch = async (url, init = {}) => {
+    const method = init.method || "GET"; calls.push({ url, method });
+    if (method !== "GET") throw new Error("A read-only offline artifact preview cannot dispatch a model");
+    const value = url === "/qa/api/qa/corpus-evaluations" ? capabilities : url === "/qa/api/qa/corpus-evaluations/" + job.id ? { job } : null;
+    if (!value) throw new Error("Unexpected synthetic artifact route");
+    return { ok: true, status: 200, json: async () => structuredClone(value) };
+  };
+  const i18n = createI18n({ legacy: false, locale: options.locale || "zh-TW", globalInjection: true, messages: { "zh-TW": zhTW, en } });
+  const wrapper = mount(QaCorpusEvaluationPanel, { global: { plugins: [Quasar, i18n] } });
+  mounted.push(wrapper); await flushPromises();
+  return { wrapper, calls, job };
+}
+afterEach(() => { mounted.splice(0).forEach((wrapper) => wrapper.unmount()); vi.restoreAllMocks(); });
+describe("read-only standalone application-harness evidence", () => {
+  it("explains the measured scope and conservative aggregate cost without fabricating API acceptance", async () => {
+    const { wrapper, calls } = await openHarness();
+    const scope = wrapper.get('[data-testid="qa-corpus-harness-scope"]').text();
+    expect(scope).toContain("獨立應用程式評測 · 真 ES");
+    expect(scope).toContain("未測項目：Firebase 登入、Turnstile、HTTP API 身分隔離、HTTP／SSE 傳輸、聊天與用量持久化");
+    expect(scope).toContain("不代表已部署");
+    const ledger = wrapper.get('[data-testid="qa-corpus-harness-ledger"]').text();
+    expect(ledger).toContain("已確認請求的保守費用上界US$ 0.000266");
+    expect(ledger).toContain("授權總上限US$ 10.000000");
+    expect(ledger).toContain("並非供應商帳單");
+    expect(wrapper.text()).toContain("本輪實際工具結果、原始回答、查核與用量");
+    expect(wrapper.text()).not.toContain("事後核對全文與用量");
+    expect(calls.every((call) => call.method === "GET")).toBe(true);
+    wrapper.vm.prepareRun(); await flushPromises();
+    expect(wrapper.text()).toContain("這是本機唯讀評測紀錄");
+    expect(wrapper.find('[data-testid="qa-corpus-start"]').exists()).toBe(false);
+    expect(wrapper.find('[data-testid="qa-corpus-review-file"]').exists()).toBe(false);
+  });
+  it("shows a completed AI review with case-level failures while preserving unexecuted cases and unknown allocations", async () => {
+    const { wrapper, calls } = await openHarness({ reviewed: true, unknown: true });
+    expect(wrapper.text()).toContain("AI 已檢視 2 案執行紀錄");
+    expect(wrapper.text()).not.toContain("人工語意審核已完成");
+    expect(wrapper.text()).toContain("回答引用無法支持該事實。");
+    expect(wrapper.text()).toContain("已嘗試 2／3 案 · 1 案尚未執行");
+    expect(wrapper.get('[data-testid="qa-corpus-harness-ledger"]').text()).toContain("結果未知，仍保留的額度US$ 0.001000");
+    expect(wrapper.text()).toContain("2026");
+    expect(calls.every((call) => call.method === "GET")).toBe(true);
+  });
+  it("renders the same explicit boundaries in English", async () => {
+    const { wrapper } = await openHarness({ reviewed: true, locale: "en" });
+    expect(wrapper.text()).toContain("Standalone application evaluation · real ES");
+    expect(wrapper.text()).toContain("Not measured: Firebase login, Turnstile");
+    expect(wrapper.text()).toContain("not a provider invoice");
+    expect(wrapper.text()).toContain("Synthetic raw answer");
+    expect(wrapper.get('[data-testid="qa-corpus-semantic"]').text()).toBe("AI semantic review completed: 2/2 cases assessed");
+  });
+  it("keeps a stopped first attempt distinct from completed answers or model quality", async () => {
+    const { wrapper, calls } = await openHarness({ reviewed: true, noAnswer: true });
+    expect(wrapper.get('[data-testid="qa-corpus-semantic"]').text()).toBe("AI 執行紀錄審核已完成：1 案無法評判；模型品質尚未判定");
+    expect(wrapper.text()).toContain("已嘗試 1／24 案 · 23 案尚未執行");
+    expect(wrapper.get('[data-testid="qa-corpus-harness-coverage"]').text()).toContain("完成回答 0 輪 · 語意品質可評判覆蓋：0／24 案");
+    expect(wrapper.get('[data-testid="qa-corpus-harness-ledger"]').text()).toContain("結果未知，仍保留的額度US$ 0.226759");
+    expect(wrapper.get('[data-testid="qa-corpus-no-retrieval"]').text()).toContain("尚不能判定模型的檢索品質");
+    expect(wrapper.text()).toContain("無檢索觀察／無法判定");
+    expect(wrapper.get('[data-testid="qa-corpus-case-retrieval-grade"]').text()).toBe("無檢索觀察／無法判定");
+    expect(wrapper.findAll(".qa-corpus-case-review dl")).toHaveLength(0);
+    const unexecuted = wrapper.get('[data-testid="qa-corpus-not-run-cases"]');
+    expect(unexecuted.element.open).toBe(false); expect(unexecuted.findAll("li")).toHaveLength(23);
+    expect(unexecuted.text()).toContain("real-002 · 未執行，無評分");
+    expect(unexecuted.text()).toContain("real-024 · 未執行，無評分");
+    expect(wrapper.get('[data-testid="qa-corpus-missing-turns"]').text()).toBe("未執行輪次：2；沒有本輪回答或評分。");
+    expect(wrapper.text()).not.toContain("人工語意審核已完成");
+    expect(calls.every((call) => call.method === "GET")).toBe(true);
+  });
+  it("displays the original shared cap, prior unknown reservation and reduced current cap without adding a second authorization", async () => {
+    const { wrapper, calls } = await openHarness({ combined: true });
+    const combined = wrapper.get('[data-testid="qa-corpus-combined-budget"]').text();
+    expect(combined).toContain("原授權總上限US$ 10.000000");
+    expect(combined).toContain("前次結果未知，完整保留額度US$ 0.226759");
+    expect(combined).toContain("合併保留後剩餘額度US$ 9.772975");
+    expect(combined).toContain("含前次失敗請求的保守預算占用上界US$ 0.227025");
+    expect(combined).toContain("並非供應商帳單");
+    expect(combined).toContain("這不是兩筆新的授權");
+    expect(combined).toContain("2".repeat(64)); expect(combined).toContain("3".repeat(64));
+    const ledger = wrapper.get('[data-testid="qa-corpus-harness-ledger"]').text();
+    expect(ledger).toContain("本次可用上限US$ 9.773241");
+    expect(ledger).toContain("已確認請求的保守費用上界US$ 0.000266");
+    expect(calls.every((call) => call.method === "GET")).toBe(true);
+  });
+  it("lists the actual per-turn citation refs and safe links rather than substituting frozen expected sources", async () => {
+    const { wrapper } = await openHarness({ actualCitations: true });
+    const sources = wrapper.findAll('[data-testid="qa-corpus-answer-citations"]');
+    expect(sources).toHaveLength(4);
+    expect(sources[0].text()).toContain("本輪實際引用來源");
+    expect(sources[0].text()).toContain("[7] Synthetic actual cited source");
+    expect(sources[0].findAll("a")).toHaveLength(1);
+    expect(sources[0].get("a").attributes("href")).toBe("https://actual-source.example.test/news");
+    expect(sources[0].get("a").attributes("rel")).toBe("noopener noreferrer");
+    expect(sources[0].text()).toContain("[8] Synthetic unsafe citation URL");
+    expect(sources[0].text()).not.toContain("離線新聞");
+    const empty = await openHarness({ noAnswer: true });
+    expect(empty.wrapper.get('[data-testid="qa-corpus-answer-citations"]').text()).toContain("本輪沒有實際引用來源。");
+  });
+  it("separates the standard-rate total including prior Gateway observation from conservative budget occupancy", async () => {
+    const { wrapper } = await openHarness({ costObservation: true });
+    const estimate = wrapper.get('[data-testid="qa-corpus-standard-cost"]').text();
+    expect(estimate).toContain("本輪標準 token 費率估算US$ 0.00013600");
+    expect(estimate).toContain("前次失敗請求的 Gateway 觀測估算US$ 0.00805600");
+    expect(estimate).toContain("標準費率估算合計（含前次 Gateway 觀測；非帳單）US$ 0.00819200");
+    expect(estimate).toContain("這不是供應商帳單，也不釋放前次保留額度");
+    expect(wrapper.get('[data-testid="qa-corpus-combined-budget"]').text()).toContain("保守預算占用上界US$ 0.227025");
+  });
+  it("shows cumulative prior confirmed and unknown amounts, typed estimates and same-bank retest limits", async () => {
+    const { wrapper, calls, job } = await openHarness({ cumulative: true, costObservation: true, reviewed: true });
+    const combined = wrapper.get('[data-testid="qa-corpus-combined-budget"]').text();
+    expect(combined).toContain("原授權總上限US$ 10.000000");
+    expect(combined).toContain("先前已確認請求的保守費用上界US$ 3.952680");
+    expect(combined).toContain("先前結果未知，仍完整保留的額度US$ 0.226759");
+    expect(combined).toContain("含先前各輪的累積保守預算占用上界US$ 4.179705");
+    expect(combined).toContain("合併保留後剩餘額度US$ 5.820295");
+    expect(wrapper.findAll('[data-testid="qa-corpus-prior-budget"]')).toHaveLength(2);
+    expect(wrapper.get('[data-testid="qa-corpus-harness-ledger"]').text()).toContain("本次可用上限US$ 5.820561");
+    const estimate = wrapper.get('[data-testid="qa-corpus-standard-cost"]').text();
+    expect(estimate).toContain("本輪標準 token 費率估算US$ 0.00013600");
+    expect(estimate).toContain("先前各輪估算合計（含 Gateway 觀測與標準 token 費率）US$ 1.05651024");
+    expect(estimate).toContain("累積費用估算合計（含先前各輪；非帳單）US$ 1.05664624");
+    const priors = wrapper.findAll('[data-testid="qa-corpus-prior-cost-observation"]');
+    expect(priors).toHaveLength(2);
+    expect(priors[0].text()).toContain("Gateway 觀測估算 · US$ 0.00805600");
+    expect(priors[1].text()).toContain("標準 token 費率估算 · US$ 1.04845424");
+    expect(priors[1].text()).toContain("9".repeat(64));
+    expect(wrapper.get('[data-testid="qa-corpus-rerun-limit"]').text()).toBe("本題庫已用於先前錯誤分析；本輪為同題庫修正後重測，不代表未見保留集驗收。");
+    expect(wrapper.get('[data-testid="qa-corpus-semantic"]').text()).toBe("AI 語意審核已完成：2／2 案已評判");
+    expect(wrapper.text()).toContain("保留集");
+    expect(job.cases).toHaveLength(2); expect(calls.every((call) => call.method === "GET")).toBe(true);
+  });
+});

@@ -1,0 +1,146 @@
+name: portable-evalkit
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  unit:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            python: '3.11'
+          - os: ubuntu-latest
+            python: '3.15.0'
+          - os: windows-latest
+            python: '3.15.0'
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        working-directory: packages/rag-evalkit
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: actions/setup-python@v7.0.0
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Upgrade pip certificate bundle
+        run: python -m pip install --upgrade pip==26.2.2
+      - run: pip install -e '.[test,postgres]'
+      - run: pip install ruff==0.17.1
+      - run: ruff check .
+      - run: python -m pytest tests -q
+      - name: Enforce script action physical boundaries
+        working-directory: .
+        run: python scripts/check_evalkit_layers.py
+
+  real-vector-stores:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: pgvector/pgvector:0.8.7-pg18
+        env:
+          POSTGRES_HOST_AUTH_METHOD: trust
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 5s --health-timeout 5s --health-retries 20
+      elasticsearch:
+        image: docker.elastic.co/elasticsearch/elasticsearch:9.5.5
+        env:
+          discovery.type: single-node
+          xpack.security.enabled: 'false'
+          ES_JAVA_OPTS: '-Xms512m -Xmx512m'
+        ports: ['9200:9200']
+        options: >-
+          --health-cmd "curl -fs http://localhost:9200/_cluster/health"
+          --health-interval 5s --health-timeout 5s --health-retries 40
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: actions/setup-python@v7.0.0
+        with:
+          python-version: '3.15.0'
+      - name: Upgrade pip certificate bundle
+        run: python -m pip install --upgrade pip==26.2.2
+      - run: pip install -e 'packages/rag-evalkit[test,postgres]'
+      - name: Prepare extension in isolated CI database
+        env:
+          EVALKIT_POSTGRES_DSN: 'host=127.0.0.1 port=5432 dbname=postgres user=postgres'
+        run: python -c "import os,psycopg; c=psycopg.connect(os.environ['EVALKIT_POSTGRES_DSN'],autocommit=True); c.execute('CREATE EXTENSION IF NOT EXISTS vector'); c.close()"
+      - name: Same conformance suite against actual ES and pgvector
+        working-directory: packages/rag-evalkit
+        env:
+          EVALKIT_INTEGRATION: '1'
+          EVALKIT_ES_URL: 'http://127.0.0.1:9200'
+          EVALKIT_POSTGRES_DSN: 'host=127.0.0.1 port=5432 dbname=postgres user=postgres'
+        run: python -m pytest tests/test_store_integration.py -q --junitxml=integration.xml
+      - name: Reject skipped or empty database integration evidence
+        working-directory: packages/rag-evalkit
+        run: python -c "import xml.etree.ElementTree as E; s=list(E.parse('integration.xml').getroot().iter('testsuite')); assert sum(int(x.get('tests','0')) for x in s)>0; assert all(int(x.get(k,'0'))==0 for x in s for k in ('failures','errors','skipped'))"
+      - uses: actions/upload-artifact@v7.0.0
+        if: always()
+        with:
+          name: portable-vector-integration
+          path: packages/rag-evalkit/integration.xml
+
+  external-integrations:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        working-directory: packages/rag-evalkit
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: actions/setup-python@v7.0.0
+        with:
+          python-version: '3.13.16'
+      - name: Upgrade pip certificate bundle
+        run: python -m pip install --upgrade pip==26.2.2
+      - name: Install tested optional frameworks without changing core dependencies
+        run: pip install -e '.[test,integrations]' 'langchain-core==1.6.12' 'llama-index-core==0.14.25' 'openai-agents==0.24.0'
+      - name: Install explicitly enabled example plugin
+        run: pip install --no-deps ./examples/integrations-plugin
+      - run: pip check
+      - name: Real SDK execution with offline models and retrievers
+        run: python -m pytest tests/test_integrations.py -q --junitxml=sdk-integration.xml
+      - name: Reject skipped or empty SDK integration evidence
+        run: python -c "import xml.etree.ElementTree as E; s=list(E.parse('sdk-integration.xml').getroot().iter('testsuite')); assert sum(int(x.get('tests','0')) for x in s)>0; assert all(int(x.get(k,'0'))==0 for x in s for k in ('failures','errors','skipped'))"
+      - uses: actions/upload-artifact@v7.0.0
+        if: always()
+        with:
+          name: portable-external-sdk-${{ matrix.os }}
+          path: packages/rag-evalkit/sdk-integration.xml
+
+  wheel:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: actions/setup-python@v7.0.0
+        with:
+          python-version: '3.11'
+      - name: Upgrade pip certificate bundle
+        run: python -m pip install --upgrade pip==26.2.2
+      - run: pip install build
+      - run: python -m build packages/rag-evalkit --outdir '${{ runner.temp }}/evalkit-dist'
+      - name: Install wheel and run an independent project outside checkout
+        run: |
+          python -m venv '${{ runner.temp }}/evalkit-venv'
+          '${{ runner.temp }}/evalkit-venv/bin/python' -m pip install --upgrade pip==26.2.2
+          '${{ runner.temp }}/evalkit-venv/bin/pip' install '${{ runner.temp }}'/evalkit-dist/*.whl
+          mkdir '${{ runner.temp }}/evalkit-project'
+          cp packages/rag-evalkit/examples/*.json '${{ runner.temp }}/evalkit-project/'
+          cd '${{ runner.temp }}/evalkit-project'
+          '${{ runner.temp }}/evalkit-venv/bin/rag-eval' validate experiment.json
+          '${{ runner.temp }}/evalkit-venv/bin/rag-eval' run experiment.json --output runs
+          '${{ runner.temp }}/evalkit-venv/bin/rag-eval' compare runs/* --baseline vector --candidate lexical --axes rag
+          '${{ runner.temp }}/evalkit-venv/bin/rag-eval' benchmark experiment.json --variant vector --output benchmark.json
+          '${{ runner.temp }}/evalkit-venv/bin/rag-eval' benchmark experiment.json --variant vector --scope pipeline --output pipeline-load.json --repeats 2 --warmup 1 --concurrency 2
+          '${{ runner.temp }}/evalkit-venv/bin/python' -I -c "from pathlib import Path; from rag_evalkit.cli import main; p=str(next(Path('runs').iterdir())); assert main(['quality-prepare',p,'--output','review'])==0; assert main(['quality-score','review/blind/bundle.json','review/private/key.json',p,'--output','quality.json'])==2"
+      - uses: actions/upload-artifact@v7.0.0
+        with:
+          name: rag-evalkit-distribution
+          path: ${{ runner.temp }}/evalkit-dist/*

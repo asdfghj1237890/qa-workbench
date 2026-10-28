@@ -1,0 +1,80 @@
+name: qa-workbench
+on: [push, pull_request]
+jobs:
+  backend:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        python: ['3.13', '3.15']
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: actions/setup-python@v7.0.0
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Upgrade pip certificate bundle
+        run: python -m pip install --upgrade pip==26.2.2
+      - run: python -m pip install --no-deps -r requirements-test.lock
+      - run: python -m pip install --no-deps -e .
+      - run: python -m pip check
+      - run: python -m pip install ruff==0.17.1
+      - run: ruff check src tests scripts templates
+      - run: qa-test-layers --config testing.json
+      - run: python -m pytest tests -q
+      - name: Build independently installable backend distributions
+        run: |
+          python -m pip install build
+          python -m build --outdir dist/backend
+      - run: python scripts/export_project.py --output dist/qa-workbench.zip
+      - uses: actions/upload-artifact@v7.0.2
+        with:
+          name: qa-workbench-${{ matrix.os }}-${{ matrix.python }}
+          path: dist/
+  backend-wheel:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: actions/setup-python@v7.0.0
+        with:
+          python-version: '3.11'
+      - name: Build backend distribution
+        run: |
+          python -m pip install --upgrade pip==26.2.2
+          python -m pip install build
+          python -m build --outdir '${{ runner.temp }}/backend-dist'
+      - name: Install wheel and run layered acceptance outside checkout
+        run: |
+          python -m venv '${{ runner.temp }}/backend-venv'
+          '${{ runner.temp }}/backend-venv/bin/python' -m pip install --upgrade pip==26.2.2
+          '${{ runner.temp }}/backend-venv/bin/python' -m pip install --no-deps -r requirements-test.lock
+          '${{ runner.temp }}/backend-venv/bin/python' -m pip install --no-deps '${{ runner.temp }}'/backend-dist/*.whl
+          '${{ runner.temp }}/backend-venv/bin/python' -m pip check
+          mkdir '${{ runner.temp }}/backend-project'
+          cp -R tests templates '${{ runner.temp }}/backend-project/'
+          cp testing.json '${{ runner.temp }}/backend-project/'
+          cd '${{ runner.temp }}/backend-project'
+          '${{ runner.temp }}/backend-venv/bin/qa-workbench' --help
+          '${{ runner.temp }}/backend-venv/bin/qa-test-layers' --config testing.json
+          '${{ runner.temp }}/backend-venv/bin/python' -I -m pytest tests/test_backend.py tests/test_testing_layers.py tests/test_testing_observations.py tests/test_testing_health.py tests/test_testing_storage.py -q
+      - uses: actions/upload-artifact@v7.0.2
+        with:
+          name: qa-workbench-backend-distribution
+          path: ${{ runner.temp }}/backend-dist/*
+  frontend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: actions/setup-node@v7.1.0
+        with:
+          node-version: '26.12.0'
+      - run: npm install --global @yarnpkg/cli-dist@4.18.1
+      - run: yarn install --immutable
+      - run: yarn lint
+      - run: yarn test
+      - run: yarn build
+      - run: yarn playwright install --with-deps chromium
+      - run: yarn e2e

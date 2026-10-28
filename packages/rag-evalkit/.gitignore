@@ -1,0 +1,10 @@
+!src/rag_evalkit/models/
+!src/rag_evalkit/models/*.py
+!src/rag_evalkit/models/*.md
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+build/
+dist/
+runs/

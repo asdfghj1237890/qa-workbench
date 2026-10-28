@@ -1,0 +1,20 @@
+{
+  "model": {
+    "type": "openai",
+    "model": "REPLACE_WITH_APPROVED_MODEL",
+    "api_key_env": "OPENAI_API_KEY",
+    "endpoint_env": "OPENAI_BASE_URL",
+    "pricing": {
+      "input_per_million": "REPLACE_WITH_VERIFIED_USD_RATE",
+      "output_per_million": "REPLACE_WITH_VERIFIED_USD_RATE"
+    }
+  },
+  "limits": {
+    "max_requests": 2,
+    "max_turns": 1,
+    "max_input_tokens": 16384,
+    "max_output_tokens": 1024,
+    "max_budget_usd": "REPLACE_WITH_APPROVED_PER_SAMPLE_USD_CAP",
+    "timeout_seconds": 60
+  }
+}

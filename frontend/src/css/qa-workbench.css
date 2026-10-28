@@ -1,0 +1,153 @@
+/* Selected workbench visual language with the shared compact QA type scale. */
+.ns.qa-page.qa-release-shell {
+  --wb-bg: var(--bg);
+  --wb-surface: var(--surface);
+  --wb-head: var(--surface-2);
+  --wb-border: var(--border);
+  --wb-ink: var(--ink);
+  --wb-muted: var(--ink-2);
+  --wb-accent: #28bfb5;
+  --wb-accent-ink: #072623;
+  --wb-accent-soft: #142522;
+  --wb-warning: #ffbd48;
+  --wb-warning-bg: #2b2114;
+  --wb-fail: #f3475d;
+  display: grid;
+  grid-template-columns: 224px minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr);
+  height: 100dvh;
+  min-height: 0;
+  overflow: hidden;
+  font-family: var(--font-sans);
+}
+.qa-release-shell[data-mode="dark"] {
+  --bg: #111314;
+  --surface: #181a1b;
+  --surface-2: #1b1d1e;
+  --border: #35393a;
+  --border-2: #303536;
+  --ink: #f1f3ef;
+  --ink-2: #bcbfba;
+  --ink-3: #a8ada8;
+  --accent: #28bfb5;
+  --accent-soft: #142522;
+  --danger: #f3475d;
+}
+.qa-release-shell[data-mode="light"] {
+  --wb-accent: #08796e;
+  --wb-accent-ink: #fff;
+  --wb-accent-soft: #e2f3ee;
+  --wb-warning: #805615;
+  --wb-warning-bg: #fff7e8;
+  --wb-fail: #bd2941;
+}
+.qa-release-shell .qa-sidebar {
+  grid-column: 1;
+  height: 100%;
+  min-height: 0;
+  padding: 0;
+  overflow: visible;
+  border-right: 1px solid var(--border);
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+}
+.qa-release-shell .qa-sidebar > .qa-brand {
+  margin: 0;
+  padding: 24px 20px;
+  gap: 13px;
+  font: 700 25px/1 var(--font-sans);
+  letter-spacing: -.8px;
+  border: 0;
+}
+.qa-release-shell .qa-sidebar > .qa-brand > b {
+  width: 34px;
+  height: 35px;
+  flex: 0 0 34px;
+  font: 700 28px/1 var(--font-serif);
+  border-radius: 4px;
+}
+.qa-release-shell .qa-navigation { margin: 0; padding: 0; gap: 0; }
+.qa-release-shell .qa-navigation > button {
+  width: 100%;
+  min-height: 56px;
+  padding: 14px 20px;
+  gap: 16px;
+  font: 400 var(--qa-type-subsection-title)/1.4 var(--font-sans);
+  border: 0;
+  border-left: 5px solid transparent;
+  border-radius: 0 7px 7px 0;
+  color: var(--ink-2);
+  text-align: left;
+}
+.qa-release-shell .qa-navigation > button .qa-icon { font-size: 22px; flex: none; }
+.qa-release-shell .qa-navigation > button[aria-current="page"] {
+  background: var(--accent-soft);
+  border-left-color: var(--accent);
+  color: var(--ink);
+  font-weight: 600;
+}
+.qa-release-shell .qa-navigation > button[aria-current="page"]::before { display: none; }
+.qa-release-shell .qa-sidebar-bottom {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: auto;
+  padding: 28px 16px 39px;
+}
+.qa-release-shell .qa-account-menu {
+  position: relative;
+  inset: auto;
+  flex: 0 0 21px;
+}
+.qa-release-shell .qa-account-menu summary { min-width: 21px; min-height: 39px; }
+.qa-release-shell .qa-account-menu summary .qa-icon { font-size: 22px; }
+.qa-release-shell .qa-account-menu > div { left: 0; right: auto; z-index: 20; margin-bottom: 10px; }
+.qa-release-shell .qa-account-menu > div a { font-size: var(--qa-type-body); padding: 5px 0; }
+.qa-release-shell .qa-preferences { gap: 16px; min-width: 0; }
+.qa-release-shell .qa-preferences .seg-ctl { display: flex; height: 41px; border-radius: 5px; }
+.qa-release-shell .qa-preferences .seg-ctl button { min-height: 39px; padding: 0 13px; font: 400 var(--qa-type-control)/1 var(--font-sans); }
+.qa-release-shell .qa-preferences .seg-ctl button.on { color: var(--wb-accent-ink); background: var(--accent); }
+.qa-release-shell .qa-preferences .qa-icon-button { width: 42px; height: 41px; }
+.qa-release-shell .qa-preferences .qa-icon-button .qa-icon { font-size: 24px; }
+.qa-release-shell .qa-workspace { grid-column: 2; height: 100%; min-height: 0; padding: 0; overflow-x: hidden; overflow-y: auto; }
+.qa-release-shell.qa-workbench .qa-wrap { width: 100%; max-width: 1600px; min-height: 100%; padding: 32px; margin: 0 auto; }
+/* Keep evidence and actions within reading distance on wide monitors. Data
+   exploration retains the full viewport for projections and distributions. */
+.qa-release-shell:is([data-flow-view="overview"], [data-flow-view="vectors"]) .qa-wrap { max-width: none; }
+.qa-release-shell :is(h1, h2, h3) { font-family: var(--font-sans); letter-spacing: -.02em; }
+.qa-release-shell .qa-release-detail-navigation { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin: -16px 0 20px; color: var(--ink-2); font-size: var(--qa-type-control); }
+.qa-release-shell .qa-release-detail-navigation > button { display: inline-flex; align-items: center; gap: 8px; appearance: none; background: none; border: 0; padding: 8px 0; font-size: var(--qa-type-control); cursor: pointer; }
+.qa-release-shell .qa-release-data-tabs { display: flex; flex-wrap: wrap; gap: 12px; margin: -10px 0 24px; }
+.qa-release-shell .qa-release-data-tabs [aria-pressed="true"] { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); }
+.qa-release-shell .qa-mobile-bar { display: none; }
+
+@media (max-width: 1350px) and (min-width: 761px) {
+  .ns.qa-page.qa-release-shell { grid-template-columns: 224px minmax(0, 1fr); }
+  .qa-release-shell .qa-sidebar > .qa-brand { padding: 24px 20px; gap: 11px; font-size: 25px; }
+  .qa-release-shell .qa-sidebar > .qa-brand > b { width: 34px; height: 35px; flex-basis: 34px; font-size: 28px; }
+  .qa-release-shell .qa-navigation > button { padding-left: 20px; gap: 16px; font-size: var(--qa-type-subsection-title); }
+  .qa-release-shell .qa-sidebar-bottom { gap: 10px; padding: 24px 12px 28px; }
+  .qa-release-shell .qa-preferences { gap: 10px; }
+  .qa-release-shell .qa-preferences .seg-ctl button { padding: 0 11px; }
+  .qa-release-shell.qa-workbench .qa-wrap { padding: 30px 24px 28px 28px; }
+}
+@media (max-width: 760px) {
+  .ns.qa-page.qa-release-shell { display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: 62px minmax(0, 1fr); }
+  .qa-release-shell .qa-mobile-bar { display: flex; grid-row: 1; grid-column: 1; height: 62px; align-items: center; justify-content: space-between; padding: 10px 16px; border-bottom: 1px solid var(--border); }
+  .qa-release-shell .qa-mobile-bar .qa-brand { padding: 0; font-size: 22px; }
+  .qa-release-shell .qa-mobile-bar .qa-brand > b { width: 30px; height: 32px; font-size: 25px; }
+  .qa-release-shell .qa-sidebar { position: fixed; top: 62px; left: 0; bottom: 0; width: min(286px, calc(100vw - 40px)); height: auto; z-index: 50; transform: translateX(-101%); visibility: hidden; transition: transform .16s ease, visibility .16s; }
+  .qa-release-shell .qa-sidebar.is-open { transform: translateX(0); visibility: visible; }
+  .qa-release-shell .qa-sidebar > .qa-brand { display: none; }
+  .qa-release-shell .qa-navigation { margin-top: 12px; }
+  .qa-release-shell .qa-navigation > button { min-height: 62px; padding: 15px 26px; gap: 20px; font-size: var(--qa-type-subsection-title); }
+  .qa-release-shell .qa-sidebar-bottom { padding-bottom: max(24px, env(safe-area-inset-bottom)); }
+  .qa-release-shell .qa-navigation-scrim { position: fixed; inset: 62px 0 0; z-index: 40; background: #0006; border: 0; }
+  .qa-release-shell .qa-workspace { grid-row: 2; grid-column: 1; }
+  .qa-release-shell.qa-workbench .qa-wrap { padding: 24px 16px; }
+  .qa-release-shell .qa-release-detail-navigation { margin-top: -8px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .qa-release-shell .qa-sidebar { transition: none; }
+}

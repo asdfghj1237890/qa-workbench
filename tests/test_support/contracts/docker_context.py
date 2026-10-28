@@ -1,0 +1,42 @@
+"""Build-input and private-artifact paths independent of Docker policy parsing."""
+
+REQUIRED_DOCKER_INPUTS = (
+    "pyproject.toml", "README.md", "BACKEND.md", "requirements.lock",
+    "src/qa_workbench/app.py", "src/qa_workbench/testing/layers.py",
+    "frontend/package.json", "frontend/yarn.lock", "frontend/.yarnrc.yml",
+    "frontend/vite.config.js", "frontend/index.html", "frontend/src/main.js",
+    "frontend/src/App.vue", "frontend/src/StandaloneShell.vue",
+    "frontend/src/lib/abortSignals.js", "frontend/src/i18n/zh-TW.json",
+    "frontend/public/fonts/qa/qa-serif-ui.woff2",
+    "frontend/public/fonts/qa/qa-sans-ui.woff2",
+    "frontend/public/fonts/qa/qa-mono-400.woff2",
+    "frontend/public/fonts/qa/qa-mono-500.woff2",
+    "frontend/public/fonts/qa/qa-mono-600.woff2",
+    "frontend/public/fonts/qa/README.md",
+    "frontend/public/fonts/qa/OFL-Noto-Serif-TC.txt",
+    "frontend/public/fonts/qa/OFL-Noto-Sans-TC.txt",
+    "frontend/public/fonts/qa/OFL-IBM-Plex-Mono.txt",
+    "packages/rag-evalkit/pyproject.toml", "packages/rag-evalkit/README.md",
+    "packages/rag-evalkit/MANIFEST.in", "packages/rag-evalkit/src/rag_evalkit/models/README.md",
+)
+
+PRIVATE_DOCKER_PATHS = (
+    ".env", "run.env", "private/identity.json", "operator-output/run.json",
+    "packages/rag-evalkit/reviews/private/key.json",
+    "packages/rag-evalkit/review/human.json", "packages/rag-evalkit/runs/trace.json",
+    "packages/rag-evalkit/custom-output/calibration.json",
+    "packages/rag-evalkit/examples/private/calibration.json",
+    "packages/rag-evalkit/src/rag_evalkit/private/identity.py",
+    "packages/rag-evalkit/src/rag_evalkit/models/reviews/calibration.py",
+    "packages/rag-evalkit/src/rag_evalkit/models/.ENV.private.py",
+    "src/qa_workbench/private/credentials.py", "src/qa_workbench/testing/review/labels.py",
+    "src/qa_workbench/testing/operator-output/result.py", "src/qa_workbench/.env.private.py",
+    "frontend/operator-output/report.json", "frontend/reviews/labels.json",
+    "frontend/node_modules/vendor/token.json", "frontend/.venv/credential.json",
+    "frontend/src/lib/private/token.js", "frontend/src/lib/reviews/calibration.js",
+    "frontend/src/lib/.ENV.private.js", "frontend/src/lib/run.env",
+    "frontend/public/fonts/qa/private/identity.txt",
+    "frontend/public/fonts/qa/calibration.txt",
+    "packages/rag-evalkit/src/rag_evalkit/models/calibration.md",
+    "frontend/public/fonts/qa/runs/captured.md", "frontend/test-results/browser.zip",
+)

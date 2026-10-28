@@ -1,0 +1,1707 @@
+{
+  "qaCorpus": {
+    "harness": {
+      "costObservation": {
+        "title": "標準費率估算（非帳單）",
+        "current": "本輪標準 token 費率估算",
+        "prior": "前次失敗請求的 Gateway 觀測估算",
+        "total": "標準費率估算合計（含前次 Gateway 觀測；非帳單）",
+        "priorAll": "先前各輪估算合計（含 Gateway 觀測與標準 token 費率）",
+        "totalAll": "累積費用估算合計（含先前各輪；非帳單）",
+        "noteAll": "本輪依已驗證的回答、查核與 embedding token 用量計算；先前各輪保留原有估算類型與證據。快取讀取、寫入與一般輸入各自計價一次。這不是供應商帳單，也不釋放先前保留額度。",
+        "evidence": "估算證據檔 SHA-256：",
+        "kinds": {
+          "gateway_estimate": "Gateway 觀測估算",
+          "standard_rate_token_estimate": "標準 token 費率估算"
+        },
+        "note": "本輪依已驗證的回答、查核與 embedding token 用量計算，快取讀取、寫入與一般輸入各自計價一次；前次採 Gateway 觀測估算。這不是供應商帳單，也不釋放前次保留額度。",
+        "provenance": "費用估算來源綁定",
+        "report": "本輪原始報告 SHA-256：",
+        "diagnosis": "前次 Gateway 診斷紀錄 SHA-256："
+      },
+      "actualCitations": "本輪實際引用來源",
+      "noCitations": "本輪沒有實際引用來源。",
+      "combined": {
+        "title": "原授權共用總預算",
+        "originalCap": "原授權總上限",
+        "priorRetained": "前次結果未知，完整保留額度",
+        "priorCommitted": "先前已確認請求的保守費用上界",
+        "priorUnknown": "先前結果未知，仍完整保留的額度",
+        "totalAllocationAll": "含先前各輪的累積保守預算占用上界",
+        "totalAllocation": "含前次失敗請求的保守預算占用上界",
+        "runCap": "本次可用上限",
+        "remaining": "合併保留後剩餘額度",
+        "policy": "原授權總上限包含前次未知額度與本次可用上限。總占用上界合計本次已確認請求的保守費用上界、本次未知與處理中預留額，以及前次完整保留額，並非供應商帳單。前次預留額不釋放回本次額度，也不視為零費用；這不是兩筆新的授權。",
+        "policyAll": "原授權總上限由先前已確認請求的保守費用上界、先前未知結果的完整保留額與本次可用上限共同分配。累積占用上界另加本輪已確認、未知與處理中額度，並非供應商帳單；先前額度不退款或重複授權。",
+        "provenance": "前次保留額度的來源紀錄",
+        "priorRun": "前次執行 ID：",
+        "priorReport": "前次原始報告 SHA-256：",
+        "priorCheckpoint": "前次派送紀錄 SHA-256："
+      },
+      "noRetrieval": "本次未取得實際工具檢索結果；未通過的是執行條件，尚不能判定模型的檢索品質。",
+      "noRetrievalShort": "未取得檢索結果",
+      "noRetrievalSummary": "無檢索觀察／無法判定",
+      "notRunCases": "未執行案例 · {n} 案（展開明細）",
+      "notRunCase": "未執行，無評分",
+      "missingTurns": "未執行輪次：{turns}；沒有本輪回答或評分。",
+      "attempted": "已嘗試 {done}／{total} 案 · {unexecuted} 案尚未執行",
+      "completedAnswers": "完成回答 {n} 輪",
+      "assessedCoverage": "語意品質可評判覆蓋：{n}／{total} 案",
+      "notAssessable": "無法評判",
+      "reviewNotAssessable": "AI 執行紀錄審核已完成：{n} 案無法評判；模型品質尚未判定",
+      "reviewCompleted": "AI 已檢視 {observed} 案執行紀錄；語意可評判 {assessed}／{total} 案",
+      "reviewSemanticCompleted": "AI 語意審核已完成：{assessed}／{total} 案已評判",
+      "rerunLimit": "本題庫已用於先前錯誤分析；本輪為同題庫修正後重測，不代表未見保留集驗收。",
+      "title": "獨立應用程式評測 · 真 ES",
+      "scope": "本次透過隔離程序直接執行目前的正式提示詞、工具與回答查核，使用真 ES 與付費模型。結果只適用這份題庫及所示程式內容。",
+      "excluded": "未測項目：Firebase 登入、Turnstile、HTTP API 身分隔離、HTTP／SSE 傳輸、聊天與用量持久化，以及 production 部署。",
+      "sourceRevision": "本機程式版本與內容指紋",
+      "sourceFiles": "Git SHA 是本機基底版本，不代表已部署；實際執行檔案的整體 SHA-256：",
+      "costTitle": "本次共用費用紀錄",
+      "costCap": "授權總上限",
+      "costCommitted": "已確認請求的保守費用上界",
+      "costUnknown": "結果未知，仍保留的額度",
+      "costInflight": "仍在處理，已保留的額度",
+      "costAvailable": "紀錄中的剩餘額度",
+      "costRequests": "已派送請求數（回答／查核／embedding）",
+      "costLimit": "費用依已驗證用量及保守費率計算上界，並非供應商帳單。未知結果保留預留額，不視為零元；本次不會自動續跑或重新使用剩餘額度。",
+      "costDetails": "逐次請求與額度明細",
+      "durability": "本次只派送一次。若連線或完成報告缺失，整筆授權額視為可能已用；不會自動重派或續跑。",
+      "answerEvidence": "本輪實際工具結果、原始回答、查核與用量",
+      "referenceLimit": "context_snapshot 是應用程式本輪保留的來源狀態；工具正文受原有長度限制。模型可見內容以本輪實際工具輸出為準，並非整篇封存新聞。未產生 API／SSE 或持久化證據。",
+      "readOnly": "這是本機唯讀評測紀錄；此頁只提供原始報告與既有審核，不提供開始、續跑、重派模型或審核上傳。"
+    },
+    "splits": {
+      "all": "全部題目",
+      "dev": "開發集",
+      "holdout": "保留集"
+    },
+    "title": "真實語料品質評測",
+    "intro": "使用版本固定的真新聞題庫，經目前的真 ES 檢索，逐題核對回答與來源。結果與合成回歸、RAG 整鏈驗證分開報告。",
+    "scopeTitle": "這個評測在測什麼？",
+    "scope": "固定問題、預期事實、來源內容指紋與新聞時間。執行前比對 ES 索引、mapping、embedding 與文章內容；來源變更會阻擋或標記過期。題庫載入成功不代表已執行或品質通過。",
+    "smokeLimit": "合成回歸檢查提示詞、工具與模型行為是否退步；既有 RAG 整鏈驗證只抽一篇新聞、跑兩輪對話，屬於 smoke。真新聞題庫補上多題回答與來源品質，三者互補。",
+    "bankTitle": "版本固定的真新聞題庫",
+    "bankCount": "{cases} 個兩輪案例 · {documents} 篇來源新聞",
+    "bankHash": "題庫 SHA-256",
+    "sourceHash": "原始來源 SHA-256",
+    "newsWindow": "新聞時間窗",
+    "captured": "來源擷取時間（台北）",
+    "coverage": {
+      "categories": "主題覆蓋（案例數）",
+      "sources": "新聞來源覆蓋（篇數）",
+      "task_types": "題型覆蓋（案例數）",
+      "splits": "開發／保留集（案例數）"
+    },
+    "taskTypeSummary": "題型明細 · {types} 種題型／{cases} 個案例",
+    "taskTypes": {
+      "attributed_accounting_argument": "帳務說法與論據",
+      "attribution_and_uncertainty": "說法歸屬與不確定性",
+      "relationship_timeline": "關係發展時間線",
+      "attributed_claims_and_post_separation_changes": "當事人說法與分開後變化",
+      "work_schedule_proposals": "工時制度提案",
+      "comparison_of_reported_perspectives": "報導觀點比較",
+      "family_timeline": "家庭事件時間線",
+      "career_and_recent_status": "生涯與近況",
+      "attributed_personal_experience": "當事人自述經驗",
+      "reported_schedule_and_priorities": "報導時程與優先事項",
+      "investigation_sequence_and_status": "調查經過與進度",
+      "competing_accounts_and_attribution": "不同說法與歸屬",
+      "career_milestones": "生涯重要事件",
+      "leadership_sequence_and_legal_status": "領導職務更迭與法律狀態",
+      "attribution_and_forecast_limits": "說法歸屬與預測限制",
+      "reported_causes_and_financial_estimates": "報導原因與財務估算",
+      "incident_sequence": "事件經過",
+      "investigation_status_and_attribution": "調查進度與消息歸屬",
+      "reported_speech_and_outcome_limits": "發言內容與結果限制",
+      "reported_naming_precedents_and_regional_display": "命名先例與地區顯示",
+      "score_progression_and_record_scope": "比分變化與紀錄範圍",
+      "player_contributions": "球員貢獻",
+      "incident_facts_and_unknowns": "事件事實與未知資訊",
+      "comparison_of_local_impacts": "各地影響比較"
+    },
+    "provenance": "ES 與 embedding 來源身分",
+    "mapping": "Mapping SHA-256",
+    "fixedVsLive": "題庫與預期事實固定；實際回答使用當下的 news_read 檢索，不把封存來源當作檢索結果回放。",
+    "configure": "設定真實語料評測",
+    "bank_missing": "此 QA 執行環境未提供真新聞題庫。若題庫與完整評測紀錄僅保存於本機，本頁不會顯示；無法由此判定是否曾執行或通過。",
+    "bank_invalid": "題庫內容、版本或來源指紋無法驗證，已停用執行。",
+    "unavailable": "真實語料評測目前不可執行，請確認題庫、模型費率與服務設定。",
+    "model": "回答模型：{model} · Embedding：{embedding}",
+    "reserve": "整份題庫保守預留 US$ {reserve}；本次預算上限可設至 US$ {ceiling}。預算較低時可能只完成部分案例。 這是用量估算，不是供應商帳單硬上限。",
+    "judgeLimit": "此流程不會自動把模型生成結果視為語意品質通過；完成後需匯入逐題審核結果。",
+    "consent": "我同意本次將使用真 ES 與付費模型，並受所設預算限制。匯入審核與查看報告不會重跑模型。",
+    "start": "開始真實語料品質評測",
+    "split": "題庫分組",
+    "notRun": "尚未執行",
+    "notEvidence": "已載入題庫、費率或選取設定都不等於已取得品質證據。",
+    "result": "本次真實語料結果",
+    "executionBank": "此結果使用的題庫：",
+    "otherBank": "目前服務已載入不同題庫。下方保留原題庫結果，不能作為新題庫已通過的證據。",
+    "selectedScope": "本次選取 {selected} 題；整份題庫共 {bank} 題，另 {unselected} 題不在本次範圍。本次通過只適用所選案例。",
+    "executed": "已執行 {done}／{total} 題 · {unexecuted} 題尚未執行",
+    "executedAt": "執行時間（台北）：",
+    "retrieval": "實際工具檢索檢查",
+    "semantic": "回答語意品質",
+    "resultCounts": "{passed} 通過 · {failed} 未通過",
+    "pending": "語意審核待完成 · 品質尚未判定",
+    "metricScope": "Recall 是本題固定預期來源在所有實際工具檢索結果的聯集覆蓋率，並非全 ES 新聞的召回率。MRR 是每次實際工具檢索的 reciprocal rank 平均；保留每次輸入與來源排名。最終回答來源覆蓋、檢索表現與語意支持度分開計算。",
+    "recall": "固定預期來源 Recall（跨次聯集）",
+    "mrr": "MRR（逐次工具 RR 平均）",
+    "orderedIds": "此次工具回傳來源順序：",
+    "finalSourceCoverage": "最終回答的來源項目覆蓋",
+    "finalSourceLimit": "這項只計算最終回答列出的來源，並非 ES 檢索排名；引用存在也不代表回答受其支持。",
+    "qualityLimit": "本區不合併合成回歸的結構分數，也不以單篇兩輪 RAG smoke 代表題庫通過。未執行案例與待審案例仍是缺口。",
+    "reviewImportHint": "匯入 JSON 審核須綁定此報告與每題內容雜湊，並完整覆蓋所有已產生案例；不會呼叫 ES 或付費模型。",
+    "expectedFacts": "預期事實與原文證據",
+    "expectedSources": "預期新聞來源",
+    "observedAnswers": "實際問題與回答",
+    "noAnswer": "本輪沒有產生回答。",
+    "turn": "第 {n} 輪",
+    "answerEvidence": "最終來源項目、引用、事後核對全文與用量",
+    "actualToolTrace": "模型實際工具輸入與輸出",
+    "referenceLimit": "sources 是執行後另從 ES 取得的核對全文，不代表模型曾讀到。模型實際看見的內容，以 SDK 工具輸入與輸出為準。",
+    "groundingScope": "來源支持度需對照模型實際收到的工具結果；題庫預期事實與事後取得的全文不能替未見過的回答背書。",
+    "traceIncomplete": "實際工具證據缺漏或已截斷，不能據此判定完整來源支持度。",
+    "expectedIds": "預期來源：",
+    "foundIds": "觀測來源：",
+    "rowHash": "本題內容 SHA-256",
+    "historyMeasurement": "來源命中與語意結果請開啟詳情；不與結構測試合計。",
+    "historyHint": "版本固定真新聞題庫；結果與合成回歸及 RAG smoke 分開。",
+    "status": {
+      "queued": "排隊中",
+      "running": "執行中",
+      "completed": "執行完成",
+      "incomplete": "執行未完整",
+      "failed": "執行失敗",
+      "cancelled": "已取消",
+      "timed_out": "已逾時",
+      "stale": "語料已變更 · 結果過期"
+    },
+    "errors": {
+      "request": "無法讀取或驗證評測資料，請重新整理。",
+      "busy": "有其他驗證執行中，或此審核與現有紀錄不符。",
+      "missing": "找不到此帳號的評測紀錄。",
+      "unavailable": "服務、費率或題庫目前不可用。",
+      "stale": "ES 語料與題庫指紋不符，已阻擋本次執行。",
+      "turnstile": "請完成安全驗證後再開始。",
+      "review": "審核資料不完整，或與本報告／逐題雜湊不符。",
+      "storage": "審核結果無法保存。",
+      "file": "審核檔案無效或超過大小限制。"
+    }
+  },
+  "qaRunFlow": {
+    "decisionTitle": "發布判斷",
+    "states": {
+      "running": "執行中，尚未產生發布判斷",
+      "blocked": "目前有發布阻擋",
+      "incomplete": "尚無法確認可發布",
+      "ready": "基礎發布檢查通過"
+    },
+    "summaries": {
+      "running": "測試仍在執行，請先查看下方進度；目前數字不是最終結果。",
+      "syncIssue": "無法取得最新執行狀態。請重新整理確認，暫時不能依這份結果判斷發布。",
+      "blocked": "已有失敗或錯誤需要處理。請先查看阻擋原因，修正後重新執行相關檢查。",
+      "incomplete": "現有證據尚不足以確認發布。請補齊下方列出的必要檢查與版本資訊。",
+      "ready": "目前版本的程式回歸與服務整合均有完整實測通過紀錄。這項判斷只涵蓋基礎發布檢查。"
+    },
+    "basicScope": "基礎發布判斷需要同一完整版本的程式回歸與服務整合全部通過；SKIP、缺少量測或舊版本都不能算通過。",
+    "qualityScope": "RAG／模型的答案品質需另外驗證；基礎檢查 PASS 不代表答案正確或語意審核通過。",
+    "blockersTitle": "阻擋原因",
+    "missingTitle": "缺少的驗證",
+    "pendingBlockers": "執行完成前，尚不能確認是否有阻擋。",
+    "noneBlockers": "目前沒有觀測到失敗；仍需確認所列的驗證缺口。",
+    "tasks": {
+      "offline_regression": "程式回歸",
+      "es_integration": "服務整合",
+      "real_es_llm_e2e": "RAG 整鏈驗證",
+      "model_evaluation": "模型評測",
+      "real_corpus_quality": "真實語料品質評測"
+    },
+    "reasons": {
+      "failed_checks": "{task} 有 FAIL 或 ERROR，需修正並重新驗證。",
+      "incomplete": "{task} 未完整執行，可能已取消、逾時或中斷。",
+      "skipped_checks": "{task} 仍有 SKIP，尚未驗證全部必要項目。",
+      "unmeasured": "{task} 缺少完整實測結果，不能把執行結束視為 PASS。",
+      "version_unknown": "{task} 缺少完整版本資訊，無法確認是否適用目前版本。",
+      "version_mismatch": "{task} 的版本與目前部署版本不同，需在目前版本重新驗證。",
+      "partial_scope": "{task} 只執行部分範圍，還缺完整範圍的驗證。",
+      "sync_error": "{task} 的最新狀態讀取中斷，請先重新整理確認。"
+    },
+    "missing": {
+      "offline_regression": "目前版本的完整程式回歸。",
+      "es_integration": "目前版本的完整服務整合。",
+      "humanReview": "答案品質與來源依據的語意審核尚未通過；需要 RAG／模型品質時，請補實跑與審核證據。",
+      "unknownBoundary": "這份結果未提供可確認的驗證邊界，仍需確認涵蓋範圍。"
+    },
+    "configuration": "測試設定",
+    "settings": "設定與開始",
+    "running": "執行中",
+    "results": "測試結果",
+    "backToSettings": "返回設定",
+    "backToWorkbench": "回工作台選任務",
+    "evidenceDetails": "檢查明細與證據",
+    "resultActions": "結果操作",
+    "runningActions": "執行操作",
+    "executionStatus": "執行狀態",
+    "selectMissing": "依上方列出的缺少驗證，回工作台選擇要補的任務。付費測試仍需確認設定後開始。"
+  },
+  "qa": {
+    "environment": "獨立測試環境",
+    "title": "登入 QA Workbench QA",
+    "description": "使用 Google 帳號登入後，開始測試新聞瀏覽與問答。",
+    "google": "使用 Google 帳號登入",
+    "signingIn": "登入中…",
+    "restoring": "正在確認登入狀態…",
+    "logout": "登出",
+    "unavailable": "QA 登入尚未設定完成，請稍後再試。",
+    "publicSite": "返回正式網站",
+    "errors": {
+      "denied": "此 Google 帳號未獲授權使用 QA，請改用受邀帳號。",
+      "expired": "登入已失效，請重新登入。",
+      "network": "無法確認登入狀態，請稍後再試。",
+      "unavailable": "登入服務暫時無法使用。",
+      "popupBlocked": "瀏覽器封鎖了登入視窗，請允許彈出視窗後重試。",
+      "cancelled": "登入視窗已關閉，尚未登入。",
+      "loginFailed": "Google 登入失敗，請稍後重試。",
+      "logoutFailed": "本頁已登出，但無法清除 Google 登入工作階段；請重新整理後確認。"
+    },
+    "signedIn": "Google 帳號",
+    "privacyIdentity": "QA 使用 Firebase 處理 Google 登入；本站以 Google 身分區隔對話及收藏，並用已驗證的 Email 檢查存取權限。",
+    "privacyIsolation": "QA 為獨立測試環境，與正式網站的匿名資料分開；請勿輸入個資或機敏資訊。"
+  },
+  "observatory": {
+    "observatory": "資料與品質觀測",
+    "back": "返回新聞",
+    "eyebrow": "資料快照",
+    "title": "讓資料，看得見。",
+    "subtitle": "索引的全貌、向量的分佈，以及每一層測試的驗證範圍。",
+    "loading": "讀取快照中…",
+    "refresh": "重新讀取快照",
+    "schedule": "排程設定：每日 05:20（UTC+8）更新；顯示最近一次成功產出的快照。",
+    "unavailable": "快照尚未就緒",
+    "unavailableHint": "尚無可讀取的資料快照。每日排程成功產出後，這裡才會顯示圖表。",
+    "error": "無法讀取資料快照",
+    "errorHint": "請稍後重試。重新讀取只會取得現有快照，不會啟動索引或向量運算。",
+    "retry": "重試讀取",
+    "stale": "這份快照需要更新",
+    "staleReasons": {
+      "age": "已超過每日更新間隔，請留意產出時間。",
+      "configuration": "索引或 embedding 設定已改變，等待新設定的快照。",
+      "future_timestamp": "快照時間晚於目前時間，請檢查排程時鐘。"
+    },
+    "index": "索引",
+    "generated": "產出時間",
+    "total": "索引文章總數",
+    "totalHint": "依文章文件計數",
+    "vectors": "目前模型的向量數",
+    "field": "欄位 {field}",
+    "coverage": "向量覆蓋率",
+    "missing": "{n} 篇缺少目前模型向量",
+    "model": "Embedding 模型",
+    "dimensions": "{n} 維向量",
+    "vectorSpace": "向量空間",
+    "projection": "Embedding 分佈",
+    "colorBy": "分佈圖著色依據",
+    "byCategory": "依分類",
+    "bySource": "依來源",
+    "categoryGroups": {
+      "politics": "政治",
+      "world": "國際",
+      "crossStrait": "兩岸",
+      "society": "社會",
+      "business": "財經",
+      "technology": "科技",
+      "entertainment": "娛樂",
+      "sports": "體育",
+      "lifestyle": "生活",
+      "other": "其他"
+    },
+    "sampled": "抽樣 {n} / {total} 筆向量（{ratio}）",
+    "allProjected": "投影 {n} / {total} 筆向量（{ratio}，全量）",
+    "halfSample": "embedding 總數的一半，奇數進位",
+    "emptyIndex": "索引目前沒有文章，尚無分佈可顯示。",
+    "insufficient": "目前可用的向量不足，尚無可呈現的分佈圖。",
+    "scatterDescription": "Embedding 分佈圖；目前顯示 {n} 個點，向量總數為 {total}。可旋轉、平移、縮放及選取資料點。",
+    "legend": "切換分佈圖群組（數字為樣本筆數）",
+    "plot": {
+      "controls": "探索投影圖",
+      "zoomIn": "放大投影圖",
+      "zoomOut": "縮小投影圖",
+      "zoomLevel": "投影縮放比例",
+      "reset": "重設視圖",
+      "labels": "群組標籤",
+      "xyPlane": "XY 平面",
+      "rotate": "旋轉",
+      "pan": "平移",
+      "true3d": "三維 UMAP · 使用目前快照實際擬合的三個座標。",
+      "xyNote": "目前是同一份三維 UMAP 的 XY 平面，並非重新擬合的二維 UMAP；標籤保留三維區域成員。",
+      "legacy2d": "這份舊快照只有二維 UMAP；下次快照更新後即可使用三維。",
+      "help3d": "拖曳或單指滑動旋轉 · 選「平移」或 Shift + 拖曳平移 · Ctrl/⌘ + 捲動或雙指捏合縮放。鍵盤：Alt + 方向鍵旋轉、方向鍵選點、Shift + 方向鍵平移、+ / − 縮放、Home 重設。",
+      "help": "拖曳平移 · Ctrl/⌘ + 捲動縮放 · 點選資料點。鍵盤：方向鍵選點、Shift + 方向鍵平移、+ / − 縮放、Home 重設。",
+      "selectHint": "選取資料點，檢視分類、來源與 UMAP 座標。",
+      "selected": "已選資料點",
+      "clearSelection": "清除資料點選取",
+      "labelNote": "標籤代表空間密度形成的大區域，連線指向區域聚合中心，不指個別文章。分類或來源在整區及中心都達 65% 才單獨命名；混合區顯示主要成分。稀疏點、小群及裁切碎片不標示。占比與點數以完整區域計算，重疊標籤可能省略；有三維資料時以三個座標分群，旋轉不會改變區域成員。空間區域不等同已驗證的語意群集。",
+      "mixedRegion": "混合：{parts}",
+      "inView": "視圖內有 {n} 個點",
+      "articleTitleUnavailable": "未提供新聞標題",
+      "openArticle": "開啟新聞原文",
+      "articleLinkUnavailable": "此快照未提供可用的新聞連結。"
+    },
+    "unknown": "未標註",
+    "other": "其他",
+    "visible": "顯示 {n} / {total} 個樣本點 · 點擊圖例切換群組",
+    "projectionNote": "UMAP 將高維向量縮減至快照的顯示維度，用來觀察局部鄰近關係；圖上距離不代表原始 cosine 相似度，也不是品質分數。抽樣、擬合維度與資料變動會讓座標改變，不宜跨快照或不同擬合比較位置。",
+    "categories": "索引分類分佈",
+    "sources": "索引來源分佈",
+    "fullCorpus": "全索引",
+    "distributionNote": "以全部 {total} 篇文章統計，不受上方抽樣或圖例篩選影響。",
+    "noDistribution": "尚無分佈資料。",
+    "testingEyebrow": "測試與證據",
+    "testingTitle": "三組領域回歸，各自查核。",
+    "openCi": "查看 CI 執行紀錄",
+    "testingIntro": "沿用 pytest 與現有 eval 工具，把資料管線、RAG 品質、Agent 行為分開驗證。測試案例已存在不代表本次已執行；此頁尚未匯入任何執行報告。",
+    "noReport": "尚未匯入執行報告",
+    "evidence": {
+      "ingestion": {
+        "title": "資料管線與索引契約",
+        "scope": "離線檢查文件寫入、欄位 mapping、分類正規化與 ES I/O 契約；使用固定 fixtures。",
+        "gap": "已知缺口：完整的爬取 → 嵌入 → 索引生命週期仍缺真實整合驗證；部分 I/O 測試需啟用真 ES 環境。"
+      },
+      "rag": {
+        "title": "檢索與回答契約",
+        "scope": "分別檢查檢索命中與排序，以及答案的引用和忠實度；eval 工具提供可重跑的查詢與評測流程。",
+        "gap": "已知缺口：凍結排名只能回歸歷史樣本，不代表目前檢索品質；判官仍在校準，unchecked 不應計為通過。"
+      },
+      "agents": {
+        "title": "工具軌跡與多輪對話",
+        "scope": "以固定回放檢查工具、參數與對話軌跡；真 ES 與模型須在其他模式另行執行。",
+        "gap": "已知缺口：既有軌跡 runner 與 mock 回歸測試，尚未證明真實 LLM 多輪對話的端到端品質。"
+      }
+    },
+    "evidenceNote": "此處連結到程式與執行紀錄供查核；沒有把靜態案例數、mock 回歸或尚未校準的 judge 結果當作線上品質通過證據。",
+    "footer": "資料有時間，品質有依據。",
+    "navigation": "資料與測試"
+  },
+  "qaLive": {
+    "eyebrow": "真實模型",
+    "title": "模型回應評測",
+    "realism": "真實模型 · 合成檢索資料",
+    "scope": "手動呼叫實際模型，以固定案例檢查回答與工具行為。檢索使用固定合成資料；不連接真實 ES。進入頁面不會自動啟動。",
+    "unavailable": "此版本的真 LLM 評測服務尚未就緒，請重新讀取狀態或稍後再試。",
+    "busy": "目前已有真 LLM 評測執行中，完成後可再開始。",
+    "cooldown": "還有 {n} 秒可開始下一次真 LLM 評測。",
+    "profile": "評測案例",
+    "cases": "{n} 個案例",
+    "profiles": {
+      "quick": "快速檢查",
+      "dev": "開發集",
+      "holdout": "保留集",
+      "all": "全部案例"
+    },
+    "budget": "估算費用上限（USD）",
+    "budgetNote": "可設定 USD 0.01–{n}。依 token 與公布費率估算，並非供應商帳單的硬性上限；系統另限制請求數與執行時間。",
+    "limits": "模型 {model} · {cases} 個案例 · 最多 {requests} 次請求 · 每次最多 {tokens} 個輸出 token · 最長 {minutes} 分鐘",
+    "pricing": "每百萬 token：輸入 {input}／輸出 {output}；費率核對日期 {date}。",
+    "pricingConfigured": "伺服器設定費率：每百萬 token 輸入 {input}／輸出 {output}。",
+    "acknowledge": "我了解這會呼叫付費模型，並同意以所選案例及估算費用上限開始。",
+    "start": "開始真 LLM 評測",
+    "refresh": "重新讀取狀態",
+    "result": "真 LLM 執行結果",
+    "progress": "已完成 {n}／{total} 個案例",
+    "structural": "結構規則",
+    "structuralCounts": "{passed} PASS · {failed} FAIL",
+    "requests": "實際請求／上限",
+    "tokens": "實際 token 用量",
+    "tokenCounts": "輸入 {input} · 輸出 {output}",
+    "estimatedCost": "已測得用量的估算費用／上限",
+    "reserved": "目前已預留的估算費用：{n}。",
+    "underestimated": "實際用量超過先前預留估算；請以最終帳單確認費用。",
+    "semanticPending": "人工語意審核待完成 · 模型品質尚未判定",
+    "qualityLimit": "執行完成只代表案例已跑完。結構規則未評判完整語意品質；本次沒有語意 judge 分數，人工審核仍為待完成。",
+    "executionError": "執行中止原因",
+    "cancel": "取消評測",
+    "download": "下載完整 JSON 報告",
+    "rulePassed": "結構規則 PASS",
+    "ruleFailed": "結構規則 FAIL",
+    "duration": "{n} 秒",
+    "answer": "實際模型回答",
+    "noAnswer": "此案例未產生回答。",
+    "noCases": "尚無已完成案例；用量與階段會隨執行更新。",
+    "reportNote": "完整報告包含實際回答、來源證據、工具軌跡與用量，供後續人工審核。取消或逾時仍保留已完成案例。",
+    "downloadAgain": "再次下載 JSON",
+    "history": "近期真 LLM 評測",
+    "status": {
+      "queued": "已排隊",
+      "running": "RUNNING",
+      "completed": "評測執行完成",
+      "incomplete": "評測未完整執行",
+      "failed": "評測執行 FAIL",
+      "cancelled": "評測已取消",
+      "timed_out": "評測已逾時"
+    },
+    "phase": {
+      "queued": "等待啟動",
+      "starting": "準備模型與案例",
+      "model": "模型回應中",
+      "tool": "工具 RUNNING",
+      "case_complete": "案例已完成",
+      "finished": "執行已結束"
+    },
+    "errors": {
+      "busy": "目前已有真 LLM 評測執行中，請稍後重試。",
+      "cooldown": "請等候冷卻時間結束再開始。",
+      "unavailable": "真 LLM 評測服務尚未就緒。",
+      "missing": "找不到這次評測，服務可能已重新部署。",
+      "request": "無法讀取評測狀態或報告，請重新讀取。"
+    },
+    "configuration": "本次設定",
+    "model": "使用模型",
+    "settingsLocked": "設定於執行期間鎖定",
+    "resourceLimits": "資源限制",
+    "caseResults": "逐案例結果",
+    "emptyResult": "尚無評測紀錄。設定案例與預算並同意費用後，即可開始。"
+  },
+  "qaLog": {
+    "title": "完整執行 log",
+    "open": "查看完整 log",
+    "close": "收合 log",
+    "separateReport": "包含實際執行輸出；執行結束後，結尾會列出測試結果、失敗原因與尚未驗證的範圍。",
+    "conclusion": "查看測試結論",
+    "scope": "輸出範圍",
+    "entireRun": "整次執行",
+    "follow": "追蹤最新輸出",
+    "download": "下載 TXT",
+    "downloadAgain": "再次下載 TXT",
+    "downloadSnapshot": "TXT 下載快照",
+    "downloadUnknown": "這份 TXT 的完整性狀態未知；無法確認所有輸出是否已保留。",
+    "downloadCapturing": "下載時仍在收集輸出，這份 TXT 是當時快照，尚未包含後續輸出。",
+    "downloadTruncated": "這份 TXT 不完整，部分輸出未保留。",
+    "downloadLegacy": "這份 TXT 僅保留舊紀錄摘要，較早輸出無法還原。",
+    "downloadEnded": "這份 TXT 的輸出已停止新增。",
+    "runningNote": "執行中下載的是目前輸出快照。啟用追蹤後才會自動更新並捲至最新輸出。",
+    "legacy": "舊紀錄僅保留摘要，較早輸出無法還原。",
+    "truncated": "部分輸出未保留；此紀錄與下載均不完整。",
+    "missing": "找不到此執行的 log；紀錄可能已超過保留範圍，或來自尚未封存的舊版服務。",
+    "readError": "無法讀取執行 log；已載入內容仍保留，請重試。",
+    "downloadError": "無法下載執行 log，請再次點擊下載 TXT。",
+    "retry": "重試讀取",
+    "range": "顯示位元組 {start}–{end}／{total}",
+    "loading": "正在讀取 log…",
+    "ended": "輸出已停止新增；完整性另依保留狀態判斷。",
+    "capturing": "仍在收集輸出",
+    "empty": "此範圍目前沒有輸出。",
+    "output": "執行 log 內容",
+    "earlier": "載入較早",
+    "more": "載入更多",
+    "refresh": "更新輸出",
+    "windowNote": "畫面最多顯示 256 KiB，可分頁閱讀；TXT 下載包含所有已保留輸出。",
+    "summary": "最近輸出（摘要）",
+    "stepOpen": "查看此步驟完整 log",
+    "errors": {
+      "log_size_limit": "執行輸出超過保存上限，證據不完整。",
+      "log_storage_error": "日誌儲存失敗，證據不完整。"
+    }
+  },
+  "qaValidation": {
+    "runAll": "執行三組離線回歸",
+    "runLayer": "執行此組",
+    "notRun": "NOT RUN",
+    "scope": "選擇離線回歸、真實 ES / API 整合或真 ES → LLM 端到端流程。各模式分開保留執行證據；選擇模式與開啟頁面都不會自動啟動。",
+    "unavailable": "此版本的驗證服務尚未就緒，分佈圖仍可正常使用。",
+    "busy": "目前已有其他驗證工作執行中，完成後可再試。",
+    "cooldown": "還有 {n} 秒可開始下一次驗證。",
+    "result": "本次執行",
+    "offline": "離線回歸",
+    "progress": "已完成 {n}／{total} 個步驟",
+    "syncInterrupted": "進度更新中斷",
+    "syncRetry": "最後收到的狀態：{status}。系統會自動重試，也可重新讀取狀態；尚未確認執行結果。",
+    "syncMissing": "最後收到的狀態：{status}。服務目前已沒有這次工作的紀錄，執行結果未知。",
+    "stepPending": "NOT RUN；沒有測試結果",
+    "testProgress": "測試進度 {n}／{total}",
+    "currentTest": "目前測試：{name}",
+    "testOutcomes": "已觀測：PASS {passed} · FAIL {failed} · ERROR {errors} · SKIP {skipped}",
+    "collectionErrors": "測試收集錯誤：{n}",
+    "testPhase": {
+      "collecting": "正在收集測試",
+      "running": "RUNNING",
+      "finished": "測試程序已結束"
+    },
+    "cancel": "取消執行",
+    "refresh": "重新讀取狀態",
+    "counts": "{tests} 個測試 · FAIL／ERROR {failed} · SKIP {skipped}",
+    "log": "查看執行紀錄",
+    "truncated": "紀錄過長，僅保留最後一段。",
+    "unmeasured": "尚未取得測試報告",
+    "qualityLimit": "結果只代表這次離線回歸；沒有執行真實 ES 整合、真實模型或人工語意品質評測，不能當作線上品質通過證據。",
+    "history": "近期執行",
+    "batchStatus": "整批狀態：{status}",
+    "suites": {
+      "all": "三組離線回歸",
+      "ingestion": "資料管線與索引",
+      "rag": "檢索與回答契約",
+      "agents": "工具與對話軌跡"
+    },
+    "status": {
+      "pending": "NOT RUN",
+      "queued": "已排隊",
+      "running": "RUNNING",
+      "completed": "離線回歸 PASS",
+      "failed": "回歸 FAIL",
+      "cancelled": "已取消",
+      "timed_out": "已逾時",
+      "incomplete": "未完整執行"
+    },
+    "errors": {
+      "busy": "目前已有驗證工作執行中，請稍後重試。",
+      "cooldown": "請等候冷卻時間結束再開始。",
+      "unavailable": "驗證服務尚未就緒。",
+      "missing": "找不到這次工作，服務可能已重新部署。",
+      "request": "無法讀取驗證狀態，請重新讀取。",
+      "turnstile": "安全驗證未完成，請重試。"
+    },
+    "workbenchTitle": "驗證與驗收",
+    "validationScope": "驗證範圍",
+    "scopeAndGaps": "範圍與已知缺口",
+    "latestRun": "本次執行",
+    "emptyResult": "選擇模式與範圍並明確啟動後，這裡才會顯示本次實際取得的進度與證據。",
+    "chooseMode": "驗證模式",
+    "runMode": "執行此模式",
+    "modeReason": "此模式尚未就緒：{reason}",
+    "modes": {
+      "offline_regression": {
+        "title": "離線回歸",
+        "scope": "固定 fixtures 的三組回歸：資料管線、RAG、代理行為。不連接真 ES，不呼叫付費模型。"
+      },
+      "es_integration": {
+        "title": "真 ES / API 整合",
+        "scope": "在隔離測試索引執行真實 Elasticsearch 與 API 契約，觀測讀寫與清理結果；不呼叫付費模型。"
+      },
+      "real_es_llm_e2e": {
+        "title": "真 ES → LLM E2E",
+        "scope": "透過真實 ES 與正式聊天 API 執行模型、工具、判官及多輪流程。這會呼叫付費服務，須先確認預算與費用。"
+      }
+    },
+    "fixedPlan": "固定執行流程",
+    "stages": {
+      "isolatedEs": "準備隔離 ES 測試資料並觀測真實檢索。",
+      "api": "執行 API 讀寫契約，保存實際回應與檢查。",
+      "storage": "驗證持久化與測試資料清理，保留失敗證據。",
+      "realChain": "執行真實 ES → 模型 → 工具的聊天流程與多輪對話。",
+      "guard": "觀測 guard、引用、來源與持久化；語意品質另待人工審核。"
+    },
+    "selectionIsNotEvidence": "這是待執行範圍。選擇模式不代表服務已連線或檢查已通過；以下列實際執行證據為準。",
+    "budgetNote": "伺服器上限 USD {n}；整鏈保守預留 USD {reserve}，預算不得低於預留。這是用量估算，並非供應商帳單硬上限。",
+    "models": "主模型 {main} · 判官 {judge} · 嵌入 {embedding}",
+    "pricing": {
+      "main": "主模型",
+      "judge": "判官",
+      "embedding": "嵌入"
+    },
+    "rate": "每百萬 token：輸入 {input}／輸出 {output}",
+    "executionLimits": "固定 {turns} 輪 · 最長 {seconds} 秒；取消後保留已完成證據。",
+    "acknowledge": "我了解這會執行真 ES → LLM 流程並產生模型費用，同意以所示設定與預算開始。",
+    "realStatus": {
+      "pending": "NOT RUN",
+      "queued": "已排隊",
+      "running": "RUNNING",
+      "completed": "實測流程已完成",
+      "incomplete": "實測未完整執行",
+      "failed": "實測流程 FAIL",
+      "cancelled": "已取消",
+      "timed_out": "已逾時"
+    },
+    "checkStatus": {
+      "passed": "PASS",
+      "failed": "FAIL"
+    },
+    "evidence": "檢視實測證據",
+    "stepEvidence": "檢視步驟證據",
+    "noChecks": "尚無實測檢查結果",
+    "covered": "本次已觀測：",
+    "gaps": "尚未涵蓋：",
+    "realQualityLimit": "執行完成僅描述這次流程與所列檢查。模型品質未判定，人工語意審核仍待完成；未執行、缺失或中止的步驟不視為通過。",
+    "turnstile": "啟動前完成安全驗證",
+    "turnstileUnavailable": "安全驗證尚未設定，無法啟動此模式。",
+    "turnstileFailed": "安全驗證未完成，請重試。"
+  },
+  "qaEvidence": {
+    "title": "逐項驗證結果",
+    "intro": "先看每一項檢查了什麼、結果如何；需要追查時，再展開原始檢查與執行輸出。",
+    "resultMeaning": "PASS 表示本項已執行的檢查通過；FAIL 表示有檢查未通過或執行錯誤；SKIP／NOT RUN 不算通過。模型答案品質仍需另外審核。",
+    "checkCountHint": "檢查數是這個步驟包含的細項數，不是品質分數。",
+    "columns": {
+      "item": "檢查了什麼",
+      "status": "結果",
+      "count": "細項數",
+      "details": "詳細說明"
+    },
+    "detailsAction": "查看說明",
+    "technicalDetails": "原始檢查與執行輸出",
+    "rawDetails": "查看原始代碼",
+    "unknownStepDescription": "此項尚無白話說明。可展開技術明細，查看原始名稱、檢查結果與執行輸出。",
+    "coveredTitle": "這次已檢查的範圍",
+    "gapsTitle": "這次還不能確認的部分",
+    "unknownBoundary": "此紀錄包含尚無白話說明的範圍代碼，請展開原始代碼查看。",
+    "resultCompleted": "本項已完成，細項結果列於技術明細；這不代表模型答案品質已獲確認。",
+    "resultFailed": "本項有檢查未通過或執行錯誤，請查看技術明細。",
+    "resultRunning": "本項正在執行，完成後才有完整結果。",
+    "resultPending": "本項尚未執行，不能視為通過。",
+    "resultIncomplete": "本項尚未完整執行，已取得的結果仍可查看；未完成部分不算通過。",
+    "resultCancelled": "本項已取消，已取得的結果仍可查看；未完成部分不算通過。",
+    "resultTimedOut": "本項逾時結束，已取得的結果仍可查看；未完成部分不算通過。",
+    "stages": {
+      "indexer": {
+        "title": "資料索引",
+        "description": "以固定測試資料檢查索引程式的行為，不會把資料寫入真實新聞索引。"
+      },
+      "crawler": {
+        "title": "新聞爬取",
+        "description": "以固定測試資料檢查爬蟲的解析與資料處理，不代表已完成真實網站的擷取流程。"
+      },
+      "storage": {
+        "title": "資料持久化",
+        "description": "以固定資料與模擬讀寫檢查對話儲存、分類名稱及分類合併規則，不會連接真實資料庫。"
+      },
+      "retrieval": {
+        "title": "檢索與回答",
+        "description": "以固定資料檢查檢索查詢、向量介面、引用及評分防護規則，不代表真實模型的答案品質已通過。"
+      },
+      "retrievalEvaluator": {
+        "title": "檢索評估",
+        "description": "以固定案例檢查檢索分析、召回門檻與答案忠實度評分工具的計算和判定邏輯。"
+      },
+      "agentBehavior": {
+        "title": "工具與對話",
+        "description": "以固定案例檢查代理可用範圍、資料與指令注入防護、對話輪次及執行介面，不會呼叫付費模型。"
+      },
+      "trajectoryEvaluator": {
+        "title": "軌跡評估",
+        "description": "以固定執行紀錄檢查代理步驟的評分邏輯，不代表真實模型已依預期完成任務。"
+      },
+      "identityAccess": {
+        "title": "登入身分與資料庫權限",
+        "description": "確認目前使用者身分、QA 索引存取權限，以及正式環境資料和管理權限受到限制。"
+      },
+      "newsData": {
+        "title": "新聞、分類與向量資料",
+        "description": "讀取真實新聞資料，檢查索引欄位、向量維度與數值，以及新聞 API 的資料和分類格式；不評估搜尋相關性。"
+      },
+      "recordRecommendation": {
+        "title": "點擊紀錄與推薦回應",
+        "description": "確認點擊紀錄以本次指定 ID 正確儲存，並檢查推薦 API 的回應格式；不評估推薦內容品質。"
+      },
+      "conversationStorage": {
+        "title": "固定對話的儲存與讀回",
+        "description": "以固定內容寫入兩輪對話，再從聊天 API 讀回比對。這是儲存測試，不會呼叫模型產生答案。"
+      },
+      "chatTurn1": {
+        "title": "第一輪模型檢索與回答",
+        "description": "呼叫真實模型檢索新聞並回答，檢查串流完成、引用來源、系統判官、答案儲存與用量證據。通過仍需人工確認答案品質。"
+      },
+      "chatTurn2": {
+        "title": "第二輪追問與回答",
+        "description": "承接第一輪主題，呼叫真實模型再次檢索並回答，檢查引用、系統判官、輪次、答案儲存與用量證據。通過仍需人工審核。"
+      },
+      "feedbackHistory": {
+        "title": "回饋儲存與歷史紀錄",
+        "description": "確認回饋綁定本次使用者、對話與第二輪答案，並檢查歷史清單 API 的回應格式。"
+      },
+      "cleanup": {
+        "title": "清理本次測試資料",
+        "description": "僅清理本次紀錄且仍屬於本次使用者的測試文件，再確認已移除；資料歸屬或寫入結果不明時保留失敗證據。"
+      }
+    },
+    "boundaryCodes": {
+      "modelQuality": "尚未評估真實模型的回答品質。",
+      "serviceIntegration": "尚未執行真實資料庫與 API 的整合驗證。",
+      "humanReview": "尚未由人工審核答案是否正確、完整且有來源依據。",
+      "crawlerIngestion": "尚未實跑從網站擷取新聞到寫入索引的完整流程。",
+      "publicIngress": "尚未透過外部使用者的公開連線路徑驗證服務。",
+      "unconfirmedMutation": "部分資料寫入或刪除的結果尚未確認，需要先檢查與清理測試資料。"
+    }
+  },
+  "qaWorkbench": {
+    "navigation": "資料與測試導覽",
+    "closeNavigation": "關閉導覽",
+    "overview": "資料總覽",
+    "vectors": "向量探索",
+    "validation": "驗證與驗收",
+    "live": "真 LLM 評測",
+    "documents": "索引文件",
+    "missing": "未嵌入",
+    "sample": "向量抽樣",
+    "sampleHint": "分佈圖使用快照中的向量樣本；本頁統計使用全索引。",
+    "exploreVectors": "進入向量探索",
+    "inspector": "圖表資訊",
+    "sampleLegend": "抽樣圖例",
+    "legendHint": "切換分類可顯示或隱藏對應點；全索引統計不受篩選影響。",
+    "regionHint": "標示區域的主要組成；混合區域顯示主要比例。",
+    "projectionDetails": "分佈圖說明",
+    "selectPoint": "點選圖中的資料點查看新聞與連結。",
+    "executionStatus": "執行狀態",
+    "viewValidation": "查看驗證",
+    "qualityPending": "模型品質尚未判定",
+    "statusReadError": "無法更新執行狀態",
+    "lastKnownStatus": "上次狀態：{status}",
+    "notRun": "NOT RUN",
+    "tests": "{n} 個測試",
+    "threeDimensions": "三維 UMAP",
+    "twoDimensions": "二維投影",
+    "release": {
+      "title": "驗證工作台",
+      "environment": "目前環境",
+      "environmentQa": "QA 測試環境",
+      "currentVersion": "目前部署版本",
+      "executionVersion": "這次執行版本",
+      "contextHint": "此工作台固定使用 QA 測試環境；版本由目前部署的程式決定，這裡僅供查看。",
+      "qaOnly": "僅限隔離 QA 環境",
+      "version": "版本 (SHA)",
+      "versionUnknown": "尚未取得",
+      "copyVersion": "複製完整版本 SHA",
+      "copied": "已複製版本 SHA",
+      "copyFailed": "無法複製，請手動選取版本 SHA",
+      "preview": "設計示意 · 非即時數據",
+      "readiness": {
+        "blocked": "發布證據尚未完整",
+        "ready": "本次驗證範圍已通過",
+        "running": "正在取得驗證證據",
+        "unknown": "目前無法判定發布證據",
+        "loading": "正在讀取驗證狀態"
+      },
+      "summary": {
+        "blocked": "本次範圍仍有尚未通過或尚未取得的驗證證據。",
+        "offlinePassed": "程式回歸已通過，服務整合尚未執行。",
+        "ready": "程式回歸與服務整合皆已通過目前版本的驗證。",
+        "running": "保留目前執行進度，完成後會更新驗證結果。",
+        "unknown": "請重新讀取狀態，確認版本與執行紀錄。",
+        "loading": "正在同步版本、可用檢查與最近執行紀錄。"
+      },
+      "nextHint": "依設定的驗證範圍，補齊目前版本所需的證據。",
+      "readyHint": "此結論僅涵蓋本次範圍；延伸品質驗證仍需另行確認。",
+      "actions": {
+        "offline": "執行程式回歸（免費）",
+        "integration": "執行服務整合（免費）",
+        "resume": "查看執行進度與 log",
+        "details": "查看這次檢查結果",
+        "reload": "重新讀取驗證狀態",
+        "waiting": "等待可用的檢查",
+        "configureRag": "設定 RAG 整鏈驗證",
+        "configureModel": "設定模型評測"
+      },
+      "actionNotes": {
+        "offline": "使用固定資料與契約，檢查程式行為。",
+        "integration": "連接真實 ES 與 API，驗證端到端流程與回應結果。",
+        "resume": "查看目前步驟、逐項結果與完整執行 log。",
+        "details": "先看檢查目的與結果，需要時再展開完整紀錄。",
+        "reload": "重新同步狀態，保留原有執行紀錄。"
+      },
+      "scopeTitle": "本次驗證範圍",
+      "scopeHint": "依設定的驗證模式檢查是否已有足夠的發布證據。",
+      "columns": {
+        "item": "檢查項目",
+        "status": "狀態",
+        "detail": "重點說明",
+        "scope": "本次範圍",
+        "note": "備註"
+      },
+      "modes": {
+        "offline": "程式回歸",
+        "integration": "服務整合",
+        "rag": "RAG 整鏈",
+        "model": "模型評測",
+        "corpus": "真實語料品質"
+      },
+      "offlineScope": "固定資料與契約檢查",
+      "offlineNote": "包含資料管線、RAG、\n代理行為等。",
+      "integrationDetail": "資料庫與服務連線檢查",
+      "integrationScope": "本次驗證需執行",
+      "integrationNote": "連接真實 ES 與 API，\n驗證端到端流程與回應結果。",
+      "passedCount": "{count} passed",
+      "noMeasuredCount": "尚無可計數的實測結果",
+      "optionalTitle": "延伸品質驗證 · 尚未納入本次範圍",
+      "optionalHint": "需另外估算模型費用，並取得同意後執行。",
+      "optionalNote": "先設定案例、模型與費用；開啟設定不會執行付費測試。",
+      "latestTitle": "最近一次驗證結果",
+      "latestHint": "先看結果狀態，再查看各項檢查說明。",
+      "evidenceLink": "查看檢查說明與結果",
+      "evidenceLinkAccessible": "查看檢查說明、逐項結果與完整 log",
+      "staleEvidenceHint": "這份結果來自其他程式版本，請完成目前版本的檢查後再判斷。",
+      "evidenceUnknown": "尚無可顯示的執行證據",
+      "evidenceEmpty": "先執行程式回歸，取得逐項結果與完整執行 log。",
+      "dateUnknown": "執行時間未知",
+      "countsUnknown": "尚無實測計數",
+      "offlineLimit": "離線通過不代表真實模型或人工語意品質通過。",
+      "scopeLimit": "執行證據僅代表該次驗證範圍，不自動代表目前版本可以發布。",
+      "syncError": "部分驗證狀態無法讀取；已保留先前證據，請重新讀取。",
+      "reason": {
+        "not_run": "尚未執行",
+        "partial_scope": "執行範圍未完整涵蓋",
+        "version_unknown": "無法確認執行版本",
+        "version_mismatch": "執行版本與目前版本不同",
+        "unmeasured": "尚無實測結果",
+        "failed_checks": "有檢查未通過",
+        "skipped_checks": "有必要檢查尚未完成",
+        "incomplete": "驗證尚未完成",
+        "sync_error": "無法同步執行狀態",
+        "unavailable": "目前環境尚未提供此檢查",
+        "cooldown": "冷卻中，約 {seconds} 秒後可重試",
+        "busy": "已有驗證執行中",
+        "running": "執行中，可查看進度與 log",
+        "passed": "目前版本的驗證已通過",
+        "ready": "目前範圍的必要檢查已通過",
+        "corpus_drift": "來源語料已變更，結果過期"
+      },
+      "integrationNextHint": "請先執行服務整合，以取得本次範圍所需的真實連線驗證結果。",
+      "latestModeHint": "最近一次「{mode}」的執行結果。"
+    },
+    "history": {
+      "title": "執行紀錄",
+      "intro": "集中查看近期驗證結果與完整執行輸出。",
+      "retention": "每位使用者保留最近 20 筆驗證與 5 筆模型評測；執行狀態、報告與完整 log 自動保存於 QA 主機，重啟或重建後可讀回。審核證據另行保存；需要更長期留存時請下載備份。",
+      "search": "搜尋執行紀錄",
+      "searchHint": "搜尋工作 ID、版本或模型",
+      "mode": "驗證類型",
+      "allModes": "所有類型",
+      "status": "結果狀態",
+      "allStatuses": "所有狀態",
+      "time": "執行時間（台北）",
+      "run": "工作與範圍",
+      "revision": "執行版本",
+      "measured": "實測結果",
+      "actions": "證據",
+      "details": "查看結果",
+      "logs": "完整 log",
+      "loading": "正在讀取執行紀錄…",
+      "error": "部分紀錄無法更新；目前顯示上次讀取的結果，請重新讀取。",
+      "empty": "尚無保留中的執行紀錄。",
+      "noMatches": "沒有符合篩選條件的紀錄。",
+      "noVersion": "版本未記錄",
+      "noTime": "時間未記錄",
+      "noMeasurement": "尚無實測計數",
+      "semanticPending": "模型語意品質尚待審核"
+    },
+    "shell": {
+      "workbench": "驗證工作台",
+      "data": "資料探索",
+      "back": "返回驗證工作台",
+      "activeHistory": "目前另有驗證執行中，已保留其進度；請完成或取消後再查看其他執行。"
+    }
+  },
+  "qaFlow": {
+    "center": "驗證中心",
+    "verificationTasks": "驗證任務",
+    "journey": "驗證流程",
+    "steps": {
+      "choose": "選擇驗證",
+      "configure": "設定範圍",
+      "run": "執行觀測",
+      "evidence": "檢視證據"
+    },
+    "chooseTitle": "你想驗證什麼？",
+    "chooseIntro": "從本次要確認的目標開始，設定範圍後再執行，最後檢視結果與證據。",
+    "costConsent": "需確認費用",
+    "noModelCost": "無模型費用",
+    "selected": "已選擇：{name}",
+    "configure": "下一步：設定測試範圍",
+    "noAutoStart": "選擇任務不會執行測試；下一步可確認範圍與執行條件。",
+    "recent": "最近執行",
+    "recentHint": "各任務保留執行紀錄；切換頁面仍會持續追蹤進度。",
+    "viewRecent": "檢視任務與執行紀錄",
+    "activeNotice": "已有任務執行中，可返回查看進度。",
+    "tasks": {
+      "offline_regression": {
+        "title": "程式回歸",
+        "description": "用固定資料檢查資料管線、檢索契約、工具與多輪對話。",
+        "scope": "可一次執行全部測試，或選擇資料管線、RAG、代理行為其中一組。每一步保留測試數與日誌。",
+        "limit": "在 QA 服務執行固定資料回歸；尚未驗證真實 ES、真實模型或人工語意品質。"
+      },
+      "es_integration": {
+        "title": "服務整合",
+        "description": "連接隔離的真實 ES 與 API，確認儲存、檢索與清理流程。",
+        "scope": "依固定計畫檢查索引、檢索、API 回應與測試資料清理，保留每一步的檢查證據。",
+        "limit": "使用隔離測試資料；不呼叫付費模型，也不代表回答品質已驗收。"
+      },
+      "real_es_llm_e2e": {
+        "title": "RAG 整鏈",
+        "description": "從真 ES 抽一篇新聞、跑兩輪對話，檢查 RAG 整條鏈路。",
+        "scope": "驗證 ES → API → 模型／工具 → 評估的整條鏈路。先確認服務條件、預留費用與執行同意。",
+        "limit": "會產生模型費用。單篇兩輪僅是 smoke，不能代表完整真實語料品質。"
+      },
+      "model_evaluation": {
+        "title": "模型評測",
+        "description": "在固定合成檢索情境下，檢查真實模型的回答與工具行為。",
+        "scope": "選擇評測案例與預算，取得實際回答、工具軌跡、結構檢查、token 與估算費用。",
+        "limit": "會產生模型費用；使用合成檢索資料，不連接真實 ES，語意品質仍需人工審核。"
+      },
+      "real_corpus_quality": {
+        "title": "真實語料品質評測",
+        "description": "使用版本固定的真新聞題庫，經目前的真 ES 檢索，逐題核對回答與來源。結果與合成回歸、RAG 整鏈驗證分開報告。",
+        "scope": "固定問題、預期事實、來源內容指紋與新聞時間。執行前比對 ES 索引、mapping、embedding 與文章內容；來源變更會阻擋或標記過期。題庫載入成功不代表已執行或品質通過。",
+        "limit": "本區不合併合成回歸的結構分數，也不以單篇兩輪 RAG smoke 代表題庫通過。未執行案例與待審案例仍是缺口。"
+      }
+    }
+  },
+  "qaFlowValidation": {
+    "eyebrow": "驗證工作區",
+    "titles": {
+      "offline_regression": "程式回歸",
+      "es_integration": "服務整合",
+      "real_es_llm_e2e": "RAG 整鏈",
+      "model_evaluation": "模型評測"
+    },
+    "workspace": "驗證工作區階段",
+    "settings": "範圍與設定",
+    "viewProgress": "查看執行進度",
+    "viewLatest": "查看最近證據",
+    "confirmScope": "確認驗證範圍",
+    "paidHint": "確認執行流程、預算與費用同意後，再開始驗證。",
+    "freeHint": "明確啟動後才會執行，不呼叫付費模型。",
+    "scopeLabel": "測試範圍",
+    "pricingDetails": "模型與費率明細",
+    "pricingRequired": "完整鏈路費率尚未設定，暫時不能執行此驗證。",
+    "modeUnavailable": "目前服務尚未備妥此驗證。",
+    "unavailableHint": "服務條件備妥前無法啟動，可先查看其他驗證項目。",
+    "technicalDetails": "技術細節",
+    "start": {
+      "offline_regression": "開始程式回歸",
+      "es_integration": "開始服務整合",
+      "real_es_llm_e2e": "開始 RAG 整鏈驗證"
+    },
+    "explicitStart": "開啟頁面或調整設定都不會自動開始執行。",
+    "loading": "正在讀取服務最新狀態…",
+    "activeRun": "目前工作正在執行，結束前會鎖定設定。",
+    "budgetRequired": "請填入服務上限內，且不低於保守預留的有效預算。",
+    "consentRequired": "請先勾選上方費用同意，再開始執行。",
+    "observedCounts": "實際觀測的測試或檢查結果",
+    "executionEvidence": "驗證證據",
+    "checkItem": "檢查項目",
+    "result": "結果",
+    "tests": "測試數",
+    "checks": "檢查數",
+    "viewEvidence": "查看證據與執行紀錄",
+    "waitingForSteps": "正在等待服務回報執行步驟，目前尚未確認結果。",
+    "notRunHint": "明確啟動後，才會顯示進度與執行證據。",
+    "nextStep": "下一步",
+    "downloadReport": "下載完整 JSON 報告",
+    "configureAgain": "設定下一次執行",
+    "continueTo": "繼續：{mode}",
+    "whatYouGet": "這次會取得什麼",
+    "deliverables": {
+      "progress": "各執行步驟的實際進度",
+      "evidence": "實測檢查、回應與執行紀錄",
+      "report": "完成保存後可下載 JSON 報告"
+    },
+    "scopeLimits": "本次驗證範圍",
+    "chooseAnother": "選擇其他驗證 →",
+    "totalTests": "{n} 個測試",
+    "viewStepEvidence": "查看紀錄",
+    "rawStepName": "原始步驟名稱",
+    "stepTitles": {
+      "indexer": "資料索引",
+      "crawler": "新聞爬取",
+      "storage": "資料持久化",
+      "retrieval": "檢索與回答",
+      "retrieval-evaluator": "檢索評估",
+      "agent-behavior": "工具與對話",
+      "trajectory-evaluator": "軌跡評估"
+    }
+  },
+  "qaFlowLive": {
+    "workspaceViews": "模型評測工作區檢視",
+    "settingsView": "測試設定",
+    "executionView": "執行與證據",
+    "evidenceView": "結果與證據",
+    "whatYouGet": "這次會取得什麼",
+    "answersTitle": "模型實際回答",
+    "answersNote": "逐案例檢視模型在固定合成檢索情境中的真實回答。",
+    "tracesTitle": "工具呼叫軌跡",
+    "tracesNote": "完整 JSON 報告保留工具呼叫、參數與來源證據，供後續審核。",
+    "rulesTitle": "結構規則 PASS / FAIL",
+    "rulesNote": "逐案例檢查回答與工具行為，並保留未符合規則的原因。",
+    "usageTitle": "token 與估算費用",
+    "usageNote": "追蹤實際請求、token 使用量與這次執行的估算費用。",
+    "semanticNote": "執行完成與結構 PASS 尚不足以判定回答品質，仍需檢視實際回答與來源證據。",
+    "notRunNote": "尚未產生執行紀錄。設定案例、確認費用後才會開始。",
+    "loading": "正在讀取服務目前的限制…",
+    "chooseProfile": "請先選擇可用的評測案例集。",
+    "invalidBudget": "請輸入 USD 0.01 至 {n} 的預算。",
+    "consentRequired": "勾選上方費用同意後即可開始。",
+    "ready": "已可開始。執行將呼叫設定的模型並產生 API 費用。",
+    "nextStep": "下一步",
+    "runningNote": "評測正在執行。請查看實際進度；取消後仍會保留已取得的證據。",
+    "reviewNote": "先檢視失敗案例與實際回答，再下載完整證據，決定下一項驗證。",
+    "prepareRun": "設定另一輪評測",
+    "continueChain": "繼續：RAG 整鏈",
+    "scopeTitle": "本次驗證範圍",
+    "syntheticLimit": "檢索使用固定合成資料，這次尚未驗證真實 Elasticsearch 語料。切換工作區不會自動執行。"
+  },
+  "qaFaithfulShell": {
+    "history": "執行紀錄",
+    "account": "帳號選單",
+    "breadcrumb": "驗證位置",
+    "taipeiTime": "台北時間"
+  },
+  "qaSemanticReview": {
+    "completedAi": "AI 語意審核已完成",
+    "completedHuman": "人工語意審核已完成",
+    "pending": "語意審核待完成",
+    "counts": "{passed} 通過 · {failed} 未通過",
+    "reviewer": "審核者：{name} · {time}（台北）",
+    "coverage": "已審核 {reviewed}／{observed} 個已產生案例",
+    "planned": "原定 {planned} 題；{unexecuted} 題尚未執行",
+    "completedNote": "審核結果只涵蓋已產生的案例；未執行題目、結構失敗與版本限制仍保留。展開下方案例可查看四項判定與未通過原因。",
+    "import": "匯入語意審核",
+    "importHint": "請選擇這筆執行的審核 JSON；原始報告或逐題指紋不符時會拒絕匯入。這項操作不會呼叫模型。",
+    "download": "下載審核紀錄",
+    "archiveImport": "匯入已審核執行紀錄",
+    "archiveHint": "恢復原始執行報告與審核結果，不會重跑模型或產生費用。",
+    "imported": "匯入的歷史執行紀錄",
+    "importedNote": "保留原執行版本與結果；匯入不代表目前版本已重新驗證。",
+    "importing": "正在核對並保存審核證據…",
+    "saved": "審核結果已保存。",
+    "importError": "無法匯入審核。請確認檔案與這筆執行相符、案例評分完整，並重新嘗試。",
+    "fileError": "檔案不是有效的審核 JSON，或檔案大小超過限制。",
+    "storageError": "審核證據無法保存；本次尚未完成回填。",
+    "failedReview": "這筆語意審核有未通過案例，仍需修正並重新驗證。",
+    "reviewedLimit": "本次已保存審核結果與理由；請依未通過案例、未執行範圍與版本差異判斷下一步。",
+    "caseResult": "逐題語意審核",
+    "casePass": "語意 PASS",
+    "caseFail": "語意 FAIL",
+    "dimensions": {
+      "intent": "意圖",
+      "grounding": "來源支持",
+      "completeness": "完整性",
+      "language": "語言"
+    }
+  },
+  "qaEvaluationScope": {
+    "title": "評測目的與範圍",
+    "summary": "模型與 Agent 配置的行為回歸 · 合成檢索資料",
+    "purpose": "驗證模型在 QA Workbench 的 Agent 配置下，能否依問題選工具、引用資料並完成回答；用固定案例檢查修改後是否退步。",
+    "subjectTitle": "受測對象",
+    "subjectNote": "目前模型＋QA Workbench 的提示詞、工具定義與 Agent 執行流程（harness）。單次結果反映這組配置。",
+    "methodTitle": "測試情境",
+    "methodNote": "真實呼叫模型，檢索改用固定合成資料。案例涵蓋工具選擇、時間條件、引用、多輪追問與異常處理。",
+    "resultTitle": "結果怎麼看",
+    "resultNote": "自動規則 PASS 只代表該案例規則通過；回答正確性與來源支持仍需逐案審核。",
+    "limit": "本項不驗證真實 ES 的檢索品質，也未涵蓋完整線上服務流程；整鏈行為請看「RAG 整鏈驗證」。"
+  },
+  "qaFaithfulLive": {
+    "intro": "在固定情境下，驗證模型與 QA Workbench 的 Agent 配置是否配合正確。",
+    "configuration": "評測設定",
+    "fixedModel": "固定模型",
+    "modelNote": "固定合成資料評測，不連接真實 ES。",
+    "noRealEs": "不連接真實 ES",
+    "allProfiles": "全部",
+    "budgetNote": "可設定 0.01 – {n} 美元。",
+    "paid": "此服務需付費",
+    "acknowledge": "我同意本次執行將會產生費用（依上述上限估算）",
+    "acknowledgeNote": "費用依用量與公布費率估算，不是供應商帳單硬上限；停止前可能已有請求送出。",
+    "start": "確認並開始評測",
+    "answersTitle": "模型實際回答",
+    "answersNote": "取得模型在合成情境下的真實回答內容。",
+    "tracesTitle": "工具呼叫軌跡",
+    "tracesNote": "記錄模型的工具 / API 呼叫流程與參數。",
+    "rulesTitle": "結構規則 PASS / FAIL",
+    "rulesNote": "檢查工具與參數、時間條件、引用、指定事實及終止狀態等案例規則，標示 PASS / FAIL。",
+    "usageTitle": "token 與估算費用",
+    "usageNote": "統計實際 token 使用量，並計算本次估算費用。",
+    "semanticTitle": "回答品質仍需逐案審核",
+    "semanticNote": "請逐題核對回答是否切題、內容是否正確，以及引用是否支持主張；自動規則通過尚不足以判定語意品質。",
+    "notRunNote": "尚未產生執行紀錄",
+    "resourceLink": "查看資源限制",
+    "emptyHistory": "尚無評測執行紀錄。"
+  },
+  "qaFaithfulValidation": {
+    "rerun": "重新執行回歸",
+    "offlineSubtitle": "固定測試資料與契約檢查 · 無模型費用",
+    "stepsProgress": "{n} / {total} 步驟",
+    "executionLog": "執行紀錄",
+    "viewLog": "查看摘要",
+    "scopeHeading": "本次驗證範圍",
+    "offlineScope": "這次尚未驗證真實 ES、真實模型或人工語意品質。",
+    "titles": {
+      "completed": "程式回歸完成",
+      "running": "程式回歸執行中",
+      "failed": "程式回歸未通過",
+      "timed_out": "程式回歸已逾時",
+      "cancelled": "程式回歸已取消",
+      "unknown": "執行結果尚未確認"
+    }
+  },
+  "qaFaithfulFlow": {
+    "landingTitle": "驗證與驗收",
+    "landingIntro": "透過結構化的驗證流程，確認 RAG、API、工具與模型整合是否符合預期。",
+    "chooseHint": "選擇最符合本次目標的驗證模式，我們會引導你完成後續設定與執行。",
+    "scopeIntro": "本次將驗證以下範圍：",
+    "recent": "查看最近執行",
+    "modelSteps": {
+      "choose": {
+        "title": "設定案例",
+        "hint": "確認模型與測試集"
+      },
+      "configure": {
+        "title": "確認費用",
+        "hint": "估算並同意執行"
+      },
+      "run": {
+        "title": "執行觀測",
+        "hint": "呼叫模型並記錄"
+      },
+      "evidence": {
+        "title": "檢視回答",
+        "hint": "查看結果與軌跡"
+      }
+    },
+    "evidenceSteps": {
+      "choose": "選擇驗證",
+      "configure": "確認範圍",
+      "run": "執行觀測",
+      "evidence": "檢視證據"
+    },
+    "descriptions": {
+      "offline_regression": "固定資料與契約檢查，\n包含資料管線、RAG、代理行為等。",
+      "es_integration": "真實 ES 與 API，\n驗證端到端流程與回應結果。",
+      "real_es_llm_e2e": "從真 ES 抽一篇新聞、跑兩輪對話，檢查 RAG 整條鏈路。",
+      "model_evaluation": "真實模型、固定合成檢索資料，\n以案例檢查回答與工具行為。",
+      "real_corpus_quality": "使用版本固定的真新聞題庫，經目前的真 ES 檢索，逐題核對回答與來源。結果與合成回歸、RAG 整鏈驗證分開報告。"
+    },
+    "scopes": {
+      "offline_regression": [
+        {
+          "title": "資料管線與索引",
+          "body": "檢查資料匯入、索引建立與更新流程。"
+        },
+        {
+          "title": "檢索與回答契約",
+          "body": "驗證檢索結果、回應格式與契約是否符合規範。"
+        },
+        {
+          "title": "工具與多輪對話",
+          "body": "檢查工具調用與多輪對話的行為與狀態管理。"
+        }
+      ],
+      "es_integration": [
+        {
+          "title": "隔離測試資料",
+          "body": "準備真實 ES 測試索引與固定測試資料。"
+        },
+        {
+          "title": "服務與 API 契約",
+          "body": "檢查實際讀寫、檢索與 API 回應。"
+        },
+        {
+          "title": "清理與執行證據",
+          "body": "確認測試資料清理，保留逐步結果與紀錄。"
+        }
+      ],
+      "real_es_llm_e2e": [
+        {
+          "title": "真實檢索與模型",
+          "body": "從隔離 ES 經聊天 API 執行模型與工具。"
+        },
+        {
+          "title": "費率與預算確認",
+          "body": "確認費率、費用上限與執行同意後才開始。"
+        },
+        {
+          "title": "完整鏈路與證據",
+          "body": "觀測多輪流程；語意品質仍須檢視來源與人工審核。"
+        }
+      ],
+      "model_evaluation": [
+        {
+          "title": "固定合成情境",
+          "body": "使用固定檢索資料，不連接真實 ES。"
+        },
+        {
+          "title": "評測案例與費用",
+          "body": "選擇案例並確認預算與費用同意。"
+        },
+        {
+          "title": "模型回答與工具",
+          "body": "取得真實回答、工具軌跡與用量，語意品質待人工審核。"
+        }
+      ],
+      "real_corpus_quality": [
+        {
+          "title": "版本固定的真新聞題庫",
+          "body": "固定問題、預期事實、來源內容指紋與新聞時間。執行前比對 ES 索引、mapping、embedding 與文章內容；來源變更會阻擋或標記過期。題庫載入成功不代表已執行或品質通過。"
+        },
+        {
+          "title": "來源命中檢查",
+          "body": "題庫與預期事實固定；實際回答使用當下的 news_read 檢索，不把封存來源當作檢索結果回放。"
+        },
+        {
+          "title": "回答語意品質",
+          "body": "本區不合併合成回歸的結構分數，也不以單篇兩輪 RAG smoke 代表題庫通過。未執行案例與待審案例仍是缺口。"
+        }
+      ]
+    }
+  },
+  "qaHealth": {
+    "title": "系統健康",
+    "preview": "設計示意・非即時資料",
+    "subtitle": "優先處理影響功能的異常。",
+    "environment": "環境",
+    "version": "版本",
+    "updated": "更新",
+    "refresh": "重新載入示意資料",
+    "refreshed": "已重新載入示意資料；觀測時間固定，未執行真實健康檢查。",
+    "summary": "健康概況",
+    "summaryItems": {
+      "service": {
+        "title": "服務正常",
+        "description": "5 個模組運作正常"
+      },
+      "data": {
+        "title": "資料需關注",
+        "description": "1 個模組更新落後"
+      },
+      "quality": {
+        "title": "回答品質待審查",
+        "description": "尚無已審查的品質證據"
+      }
+    },
+    "issues": "待處理問題",
+    "modulesLabel": "模組",
+    "moduleFilter": "篩選模組",
+    "currentIssues": "異常與待確認",
+    "allModules": "所有模組",
+    "viewAll": "查看全部模組",
+    "healthyModules": "正常模組",
+    "collector": "健康資料收集器",
+    "status": {
+      "healthy": "正常",
+      "warning": "需關注",
+      "stale": "資料過期",
+      "critical": "異常",
+      "unknown": "未量測"
+    },
+    "healthIndex": "健康指數",
+    "rules": "指數規則",
+    "rulesDescription": "尚未建立正式評分規則，因此不顯示數字分數。請依觀測值、門檻、資料時間與覆蓋率判讀；缺少或過期的觀測不算通過，服務指標也不代表回答品質。",
+    "evidence": "查看完整觀測證據",
+    "evidenceTitle": "觀測證據",
+    "evidenceHint": "以下是選定模組的合成資料，供檢視頁面元素與資料呈現方式，並非真實服務結果。",
+    "close": "關閉觀測證據",
+    "download": "下載示意 JSON",
+    "threshold": "門檻",
+    "minimum": "以上",
+    "pending": "待處理",
+    "observed": "觀測時間",
+    "articles": "篇",
+    "minutes": "分鐘",
+    "milliseconds": "ms",
+    "percent": "%",
+    "errors": "次錯誤",
+    "measured": "觀測值",
+    "time": "時間",
+    "chartTitle": "最舊待處理文章的等待時間",
+    "mockChart": "模擬資料",
+    "chartDescription": "示意趨勢：等待時間由 6 分鐘升至 38 分鐘；門檻為 20 分鐘。可展開資料表查看每個觀測值。",
+    "chartValues": "查看圖表數值",
+    "noHistory": "此模組尚無趨勢示意",
+    "staleHistory": "觀測資料已過期",
+    "noHistoryHint": "不以空白圖表或舊觀測推定服務健康。",
+    "lastSuccess": "最後成功",
+    "window": "檢查視窗",
+    "lastHour": "最近 60 分鐘",
+    "source": "觀測來源",
+    "timeline": "事件時間線",
+    "rootCausePending": "尚無足夠證據確認根因。",
+    "qualitySeparate": "服務狀態與回答品質分開評估。",
+    "unknownNote": "未量測與資料過期，不視為通過。",
+    "sources": {
+      "pipeline": "排程與積壓紀錄（示意）",
+      "heartbeat": "收集器心跳（示意）",
+      "synthetic": "頁面探測（示意）",
+      "requests": "請求指標（示意）",
+      "search": "查詢指標（示意）"
+    },
+    "modules": {
+      "indexer": {
+        "group": "資料管線",
+        "short": "更新落後",
+        "list": "最舊積壓 38 分鐘 ｜ 13:54 開始",
+        "title": "最新新聞向量更新延遲",
+        "impact": "最新新聞可能暫時無法透過向量搜尋找到；既有新聞與關鍵字搜尋仍可使用。",
+        "metric": "最舊積壓",
+        "event0": "最近一次成功完成，Indexer 已更新新聞向量。",
+        "event1": "觀測到等待時間超過 20 分鐘，開始判定為異常。",
+        "event2": "最新觀測：等待 38 分鐘，仍持續累積中。"
+      },
+      "collector": {
+        "group": "監控管線",
+        "short": "資料過期",
+        "list": "6 分鐘未更新 ｜ 14:26 最後觀測",
+        "title": "健康觀測資料停止更新",
+        "impact": "收集器心跳已過期。最後一次觀測無法證明目前服務健康；需先恢復監控資料再判定。",
+        "metric": "距最後心跳",
+        "event0": "收到最近一次收集器心跳。",
+        "event1": "超過 2 分鐘心跳門檻，觀測資料標記為過期。",
+        "event2": "仍未收到新資料，不沿用先前健康判定。"
+      },
+      "frontend": {
+        "group": "使用者入口",
+        "short": "",
+        "list": "頁面探測 186 ms",
+        "title": "Frontend 頁面可用",
+        "impact": "頁面與靜態資源探測正常。本示意僅呈現頁面可用性，不代表所有使用者旅程已驗證。",
+        "metric": "頁面探測延遲",
+        "event0": "最近一次頁面與靜態資源探測完成。"
+      },
+      "agent": {
+        "group": "應用服務",
+        "short": "",
+        "list": "完整回應成功率 99.4%",
+        "title": "Agent API 回應正常",
+        "impact": "請求完整回應成功率達到示意門檻；回答內容與來源品質仍需獨立審查。",
+        "metric": "完整回應成功率",
+        "event0": "讀取完整回應與串流結果指標。"
+      },
+      "es": {
+        "group": "資料儲存",
+        "short": "",
+        "list": "查詢 p95 42 ms",
+        "title": "Elasticsearch 查詢正常",
+        "impact": "查詢延遲在示意門檻內；資料完整性與向量模型一致性仍需各自量測。",
+        "metric": "查詢 p95",
+        "event0": "最近一次新聞索引查詢探測完成。"
+      },
+      "crawler": {
+        "group": "資料管線",
+        "short": "",
+        "list": "上次成功 8 分鐘前",
+        "title": "Crawler 持續更新",
+        "impact": "抓取工作在預期時間內完成；來源覆蓋率與新聞內容正確性需另行驗證。",
+        "metric": "距最後成功",
+        "event0": "最近一次抓取排程成功完成。"
+      },
+      "llm": {
+        "group": "外部依賴",
+        "short": "",
+        "list": "最近 15 分鐘無呼叫錯誤",
+        "title": "LLM API 呼叫正常",
+        "impact": "近期呼叫未記錄錯誤；這不代表模型回答正確，也不代表已執行品質評測。",
+        "metric": "最近 15 分鐘錯誤",
+        "event0": "最近一次模型呼叫指標更新。"
+      }
+    },
+    "observationCoverage": "有效觀測",
+    "countLabels": {
+      "healthy": "正常",
+      "warning": "需關注",
+      "unknown": "待確認",
+      "critical": "異常"
+    },
+    "groupNames": {
+      "service": "服務",
+      "data": "資料"
+    },
+    "groupStates": {
+      "healthy": "正常",
+      "warning": "需關注",
+      "stale": "待確認",
+      "critical": "異常"
+    },
+    "groupCoverage": "{n}/{total} 個模組具有效觀測",
+    "groupWarnings": "{n} 個需關注",
+    "notMeasured": "尚未量測",
+    "qualityShort": "品質待審",
+    "reviewNotMeasured": "尚無已審查結果",
+    "observationNote": "{modules}尚無有效觀測；各組摘要僅反映列出的觀測時間。",
+    "notScored": "尚未計分",
+    "thresholdRatio": "目前為門檻的 {ratio} 倍",
+    "lastQuarterHour": "最近 15 分鐘",
+    "backToIssues": "返回模組清單",
+    "shortPreview": "示意資料",
+    "evidenceViews": "證據呈現方式",
+    "evidenceTabs": {
+      "summary": "檢查摘要",
+      "raw": "原始資料"
+    },
+    "evidenceReasons": {
+      "indexer": "最舊文章已等待 {value}，超過 {threshold} 的門檻；目前有 {pending} 篇等待處理。",
+      "collector": "最後心跳為 {time}，已中斷 {value}，超過 {threshold} 的門檻。缺少新觀測，無法確認目前狀態。",
+      "frontend": "頁面探測耗時 {value}，在 {threshold} 的示意門檻內。",
+      "agent": "完整回應成功率為 {value}，達到 {threshold} 的示意門檻；回答品質仍需審查。",
+      "es": "查詢 p95 為 {value}，在 {threshold} 的示意門檻內。",
+      "crawler": "距離上次成功抓取為 {value}，在 {threshold} 的示意門檻內。",
+      "llm": "最近 15 分鐘記錄 {value}，在 {threshold} 的示意門檻內；未執行品質評測。"
+    },
+    "live": {
+      "observed": "QA 觀測資料",
+      "versionUnknown": "未識別",
+      "scope": "檢查範圍：目前 QA 實例與已掛載的共用資料作業紀錄。",
+      "refresh": "重新讀取觀測",
+      "retry": "重新讀取",
+      "loading": "讀取健康觀測…",
+      "retained": "保留上次數值並標記為過期；不沿用先前的健康判定。",
+      "expired": "觀測已超過有效期或時間尚未同步，請重新讀取。",
+      "qualityUnmeasured": "回答品質未量測",
+      "qualityShort": "品質未量測",
+      "noHistory": "尚未累積歷史觀測",
+      "noEvents": "尚無可顯示的觀測事件。",
+      "evidenceHint": "此處呈現唯讀觀測值與來源時間。缺少探測、過期資料及作業失敗會分開標示。",
+      "download": "下載觀測 JSON",
+      "groupNames": {
+        "service": "QA 服務",
+        "data": "資料作業"
+      },
+      "errors": {
+        "unavailable": "目前無法讀取健康觀測。",
+        "invalid": "健康觀測格式無效，無法判定狀態。",
+        "authentication": "請重新登入獲授權的 QA 帳號。"
+      },
+      "windows": {
+        "instant": "本輪唯讀觀測",
+        "last_job": "最近一次作業紀錄",
+        "unmeasured": "尚未量測"
+      },
+      "metrics": {
+        "not_measured": "未取得觀測值",
+        "response_check": "QA API 回應檢查",
+        "read_probe_duration": "新聞索引讀取耗時",
+        "job_report_age": "距作業回報時間",
+        "assembly_duration": "觀測收集耗時",
+        "frontend_response_duration": "QA 入口回應耗時",
+        "llm_success_rate": "近期模型請求成功率"
+      },
+      "details": {
+        "errors": "作業錯誤數",
+        "skipped_embed_error": "嵌入失敗文件數",
+        "retry_pending": "待重試文件數",
+        "http_status": "HTTP 狀態碼",
+        "frontend_revision": "入口版本",
+        "request_count": "觀測請求數",
+        "completed_count": "可分類完成數",
+        "success_count": "成功數",
+        "error_count": "API／連線失敗數",
+        "timeout_count": "逾時數",
+        "rate_limit_count": "限流數",
+        "cancelled_count": "取消數（不計成功率）",
+        "unclassified_count": "未分類數（不計成功率）",
+        "mean_duration_ms": "平均請求耗時",
+        "last_success_at": "最後成功時間",
+        "window_seconds": "觀測視窗（秒）",
+        "window_limited": "視窗資料受限"
+      },
+      "titles": {
+        "frontend": "Frontend 入口探測",
+        "agent": "目前 QA API 回應",
+        "es": "Elasticsearch 唯讀查詢",
+        "crawler": "Crawler 作業回報",
+        "indexer": "Indexer 作業回報",
+        "llm": "LLM 請求觀測",
+        "collector": "健康觀測收集"
+      },
+      "impacts": {
+        "frontend": "檢查公開 QA 入口的 HTTP 回應、QA 頁面識別與耗時；不代表瀏覽器互動或回答品質已通過。",
+        "agent": "僅表示目前 QA API 能回應健康請求；聊天端到端與回答品質需另外驗證。",
+        "es": "檢查新聞索引能否完成唯讀查詢，以及所有 shard 是否成功。",
+        "crawler": "讀取最近一次抓取作業紀錄；來源覆蓋率與新聞內容品質仍需另行量測。",
+        "indexer": "讀取最近一次嵌入作業紀錄。失敗與待重試數不會視為通過；向量完整性與模型一致性需另行驗證。",
+        "llm": "被動讀取最近 15 分鐘 QA 模型 SDK 的實際請求結果，包含每小時固定短對話；成功率只計可分類的完成結果，取消與未分類另外列出。載入此頁不會呼叫模型，也不驗證回答品質。",
+        "collector": "收集目前 QA 實例可讀取的查詢結果與作業紀錄。"
+      },
+      "sources": {
+        "not_connected": "尚未接入",
+        "qa_request": "目前 QA 請求",
+        "news_read_probe": "新聞索引唯讀查詢",
+        "crawler_summary": "Crawler 作業摘要",
+        "indexer_summary": "Indexer 作業摘要",
+        "health_assembly": "本輪觀測收集",
+        "qa_frontend_http": "公開 QA 入口唯讀探測",
+        "qa_llm_passive": "QA 模型請求紀錄"
+      },
+      "reasonShort": {
+        "not_connected": "尚未接入探測",
+        "api_responded": "QA API 已回應",
+        "read_probe_ok": "唯讀查詢完成",
+        "read_probe_failed": "唯讀查詢未完整完成",
+        "collection_completed": "觀測收集完成",
+        "job_reported": "作業回報成功",
+        "job_failed": "作業失敗或仍有待重試",
+        "old_artifact": "作業紀錄過期",
+        "missing_artifact": "未取得作業紀錄",
+        "invalid_artifact": "作業紀錄無效",
+        "future_artifact": "作業時間超前，無法判定",
+        "frontend_entry_ok": "QA 入口回應符合契約",
+        "frontend_entry_failed": "QA 入口探測失敗",
+        "invalid_probe_target": "入口探測設定待確認",
+        "llm_no_recent_requests": "無可用的近期請求紀錄",
+        "llm_inconclusive": "觀測不足以判定",
+        "llm_requests_ok": "近期模型請求成功",
+        "llm_requests_failed": "近期模型請求有失敗",
+        "llm_observation_unavailable": "請求觀測暫時無法讀取"
+      },
+      "reasons": {
+        "not_connected": "尚未接入此元件的探測來源，無法判定健康狀態。",
+        "api_responded": "目前 QA API 已回應本次健康請求，不代表聊天或回答品質通過。",
+        "read_probe_ok": "新聞索引已完成唯讀查詢，且所有 shard 均成功。",
+        "read_probe_failed": "新聞索引查詢未完整成功，可能逾時、部分失敗或連線失敗；未公開底層錯誤細節。",
+        "collection_completed": "本輪唯讀觀測已完成收集，未啟動作業或模型呼叫。",
+        "job_reported": "作業摘要回報成功，且沒有已知錯誤或待重試文件。",
+        "job_failed": "作業摘要回報失敗，或仍有錯誤／待重試文件；請查看下方計數。",
+        "old_artifact": "作業紀錄已超過時效門檻；舊紀錄不能證明目前正常。",
+        "missing_artifact": "未取得唯讀作業摘要；請確認該觀測來源已接入。",
+        "invalid_artifact": "作業摘要缺少必要欄位、內容損壞或超出讀取上限。",
+        "future_artifact": "作業摘要時間超前，暫不採用其健康判定。",
+        "frontend_entry_ok": "QA 入口在期限內回傳正確的頁面識別與資產路徑；JavaScript 執行與互動需另行驗證。",
+        "frontend_entry_failed": "QA 入口未通過回應檢查，可能無法連線、逾時、重新導向或回傳非預期頁面；未公開底層錯誤細節。",
+        "invalid_probe_target": "目前無法驗證設定的 QA 入口，請由維運確認探測來源；尚未發出請求。",
+        "llm_no_recent_requests": "最近 15 分鐘沒有可用的已完成模型請求紀錄。健康頁不會主動呼叫模型，也不據此判定服務正常或故障。",
+        "llm_inconclusive": "近期紀錄含取消、未分類結果或超過保存上限；無法確認完整的供應商健康狀態。",
+        "llm_requests_ok": "最近 15 分鐘可分類的 QA 模型請求均成功。成功率不含取消與未分類結果，也不代表回答品質通過。",
+        "llm_requests_failed": "最近 15 分鐘有模型請求失敗、逾時或限流。下方計數保留各類結果，不推定故障根因。",
+        "llm_observation_unavailable": "模型請求觀測目前不可用；不沿用舊版本或其他模型的健康判定。"
+      },
+      "limited": "資料受限",
+      "complete": "完整",
+      "llmLimited": "近期紀錄超過保存上限，只呈現保留的觀測，健康狀態維持待確認。"
+    },
+    "seconds": "秒",
+    "checks": "次檢查",
+    "history": {
+      "title": "歷史觀測",
+      "window": "歷史時間範圍",
+      "24h": "24 小時",
+      "7d": "7 天",
+      "loading": "讀取歷史觀測中…",
+      "unavailable": "歷史觀測目前無法讀取；即時狀態仍獨立顯示。",
+      "schedule": "每 5 分鐘採樣，保存 7 天。",
+      "count": "此區間共 {count} 筆。",
+      "accumulating": "等待排程採樣；不回填未量測的時間。",
+      "last": "最後採樣",
+      "units": "單位",
+      "chart": "歷史量測與狀態時間線",
+      "gaps": "曲線使用最新量測項目與單位。下方色帶為各次採樣狀態；缺失、過期及版本或量測契約變更處保留斷點。時間為 UTC+8。",
+      "unmeasured": "此區間沒有有效量測，僅保留已記錄的狀態。未量測紀錄不會產生數值曲線。",
+      "single": "目前只有一個有效量測點，待累積更多觀測後顯示趨勢。",
+      "table": "查看採樣數值",
+      "tableNote": "最近 100 筆；圖表涵蓋所選完整區間。",
+      "status": "狀態",
+      "version": "採樣版本",
+      "download": "下載所選區間 JSON",
+      "noMeasurementTitle": "尚無可繪製的有效量測",
+      "sourceNotConnected": "此模組尚未接入探測來源。這些是未量測狀態紀錄，繼續等待不會產生數值曲線，也不代表服務故障。",
+      "invalidSource": "入口探測來源需要維運確認，目前不會產生有效量測。已保存的狀態可在下方查看。",
+      "waitingForFrontendSample": "入口探測已產生本輪結果，等待歷史排程記錄；接入前的未量測紀錄會保留。",
+      "entryVersion": "入口版本",
+      "samplingTitle": "採樣狀態",
+      "lastSuccess": "最後成功採樣",
+      "overdue": "超出五分鐘間隔 {seconds} 秒",
+      "missed": "此區間缺少 {count} 個採樣時段。",
+      "since": "從 {time} 的首筆起計，預留一分鐘供採樣完成。",
+      "samplingScope": "採樣延遲與模組故障分開判定；缺少時段保留空缺，不回填數值。",
+      "samplerOutcomes": {
+        "ok": "上一輪排程成功",
+        "lock_busy": "上一輪因作業鎖忙碌而略過",
+        "failed": "上一輪採樣失敗，模組狀態仍依實際觀測判定",
+        "unavailable": "暫無有效的排程回報"
+      },
+      "waitingForLlmRequest": "目前沒有可繪製的近期模型量測；只在實際請求發生後記錄，不會為了產生曲線呼叫模型。舊狀態仍保留。"
+    },
+    "moduleStates": "模組狀態",
+    "observedIssues": "異常觀測",
+    "unobservedModules": "缺少有效觀測"
+  },
+  "qaTaskWorkbench": {
+    "title": "驗證工作台",
+    "environment": "QA 測試環境",
+    "currentVersion": "目前版本",
+    "unknownVersion": "版本未知",
+    "copyVersion": "複製目前完整版本代碼",
+    "copyRunVersion": "複製這次執行完整版本代碼",
+    "copied": "已複製版本代碼",
+    "copyFailed": "無法複製，請選取版本代碼",
+    "items": "驗證項目",
+    "freeGroup": "基礎驗證 · 免費",
+    "paidGroup": "品質驗證 · 需估算模型費用",
+    "selectTask": "選擇驗證項目",
+    "selectionHint": "這裡只選項目，不會立即執行。",
+    "free": "免費",
+    "paid": "需付費",
+    "noModel": "不呼叫模型",
+    "before": "執行前確認",
+    "available": "隔離測試環境可用",
+    "unavailable": "目前執行條件未就緒，可在設定查看原因",
+    "environmentPending": "尚未取得執行條件",
+    "busy": "另有任務執行中；切換項目會保留進度",
+    "idle": "目前無其他任務執行",
+    "scopeHint": "確認範圍後才開始，部分範圍會單獨標記",
+    "configure": "設定並執行驗證",
+    "explicitStart": "先確認範圍，再明確開始；不會自動執行付費模型。",
+    "planDetails": "查看執行內容",
+    "latest": "最近執行證據",
+    "history": "查看歷史紀錄",
+    "noEvidence": "這個版本尚無此項驗證證據。",
+    "evidenceHint": "執行後可查看逐項檢查、完整 log 與 JSON 報告。",
+    "runVersion": "這次執行版本",
+    "evidence": "查看檢查說明與結果",
+    "evidenceAccessible": "查看檢查說明與結果，並可讀取完整 log",
+    "unmeasured": "尚無可計數的實測結果",
+    "partialHint": "這次只執行部分範圍，不能代替全部回歸通過。",
+    "staleHint": "證據版本與目前版本不同或未知，不能視為目前版本通過。",
+    "plan": "這項驗證會檢查什麼",
+    "summary": "目前證據與下一步",
+    "loading": "正在讀取驗證狀態",
+    "unknown": "目前無法判定發布證據",
+    "blocked": "目前有驗證阻擋",
+    "incomplete": "發布證據尚未完整",
+    "qualitySeparate": "基礎通過與答案品質分開判定。",
+    "currentEvidence": "各項驗證狀態（目前版本）",
+    "next": "建議下一步",
+    "nextHint": "取得目前版本的驗證結果；單項通過仍需補齊其他證據。",
+    "follow": "需要追查時",
+    "modelResult": "查看模型評測結果",
+    "corpusResult": "查看語意與來源證據",
+    "footer": "未執行、舊版本與待審核都不算通過。",
+    "waiting": "等待驗證狀態",
+    "reload": "重新讀取狀態",
+    "resume": "查看執行中的任務",
+    "configureNamed": "設定{name}",
+    "syncError": "部分驗證狀態無法讀取；保留已取得結果。",
+    "backOverview": "返回項目概覽",
+    "statuses": {
+      "STRUCTURAL": "結構通過",
+      "PARTIAL": "部分範圍"
+    },
+    "tasks": {
+      "offline_regression": {
+        "title": "程式回歸",
+        "subtitle": "固定資料與契約的回歸檢查",
+        "description": "使用固定情境檢查資料管線、RAG 與代理行為。這項驗證不連接真實資料庫，也不呼叫付費模型。"
+      },
+      "es_integration": {
+        "title": "服務整合",
+        "subtitle": "真實 Elasticsearch 與 API 契約檢查",
+        "description": "使用隔離的測試資料，連接真實 ES 與服務 API，檢查資料庫與服務連線、資料持久化與 API 回應是否符合契約。"
+      },
+      "real_es_llm_e2e": {
+        "title": "RAG 整鏈",
+        "subtitle": "真實檢索與模型回應的整鏈檢查",
+        "description": "從真實 ES 抽一篇新聞、跑兩輪對話，觀測檢索、模型、工具與回應流程。Smoke 通過仍需另外確認答案品質與來源支持。"
+      },
+      "model_evaluation": {
+        "title": "模型評測",
+        "subtitle": "模型與 Agent 配置的行為回歸",
+        "description": "以固定合成檢索情境檢查真實模型的工具選擇、參數與引用規則。結構檢查通過與語意品質分開判定。"
+      },
+      "real_corpus_quality": {
+        "title": "真實語料品質",
+        "subtitle": "新聞題庫的回答與來源品質評測",
+        "description": "使用版本固定的真新聞題庫與真實 ES，逐題核對回答、工具軌跡與來源。未執行及待審核案例都保留為證據缺口。"
+      }
+    }
+  },
+  "app": {
+    "darkToggle": "切換深淺色"
+  },
+  "side": {
+    "language": "語言"
+  }
+}

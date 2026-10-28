@@ -1,0 +1,4 @@
+/* Portable design tokens for the reusable panel library. */
+.ns.qa-workbench, .ns.qa-workbench *, .ns.qa-workbench *::before, .ns.qa-workbench *::after { box-sizing: border-box; }
+.ns.qa-workbench { --font-serif:serif; --font-sans:system-ui,sans-serif; --font-mono:ui-monospace,monospace; --bg:#f3f3f1; --surface:#fff; --surface-2:#fafaf9; --ink:#1a1a18; --ink-2:#57574f; --ink-3:#9a9a91; --border:#e5e5e1; --border-2:#eee; --accent:#137567; --accent-ink:#fff; --accent-soft:#e4f0ed; --danger:#a8402f; --wb-warning:#ffbd48; --wb-warning-bg:#2b2114; --wb-fail:#f3475d; background:var(--bg); color:var(--ink); font-family:var(--font-sans); min-height:100dvh; letter-spacing:-.003em; -webkit-font-smoothing:antialiased; }
+.ns.qa-workbench[data-mode=dark] { --bg:#111110; --surface:#1a1a19; --surface-2:#1f1f1e; --ink:#ecece8; --ink-2:#a8a89f; --ink-3:#72726b; --border:#292927; --border-2:#222220; --accent:#34a48f; --accent-ink:#08110f; --accent-soft:#16241f; --danger:#cd7060; }

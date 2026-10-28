@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "id": "fictional-manual-runtime-v1",
+  "description": "Fictional source text for demonstrating a real embedding service; no semantic acceptance claim.",
+  "vector_policy": "runtime",
+  "dimensions": 384,
+  "documents": [
+    {"id": "library-hours", "source_id": "manual:demo", "text": "The fictional library opens at 09:00 every morning.", "metadata": {"synthetic": true}}
+  ],
+  "cases": [
+    {"id": "opening-time", "family": "fictional-library", "split": "dev", "query": "When does the fictional library open?", "relevance": {"library-hours": 1}, "expected_source_ids": ["manual:demo"]}
+  ]
+}

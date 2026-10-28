@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "dataset": "corpus.json",
+  "seed": 42,
+  "repeats": 2,
+  "split": "dev",
+  "comparison_axes": ["rag"],
+  "variants": [
+    {
+      "id": "vector",
+      "store": {"type": "memory", "dimensions": 3},
+      "embedding": {"type": "fixture"},
+      "rag": {"type": "vector", "top_k": 2, "metric": "cosine", "exact": true},
+      "model": {"type": "replay", "text": "Synthetic protocol answer: the Helio battery stores solar energy for six hours. [source:lab:solar]"},
+      "harness": {"type": "single_turn", "limits": {}}
+    },
+    {
+      "id": "lexical",
+      "store": {"type": "memory", "dimensions": 3},
+      "embedding": {"type": "fixture"},
+      "rag": {"type": "lexical", "top_k": 2},
+      "model": {"type": "replay", "text": "Synthetic protocol answer: the Helio battery stores solar energy for six hours. [source:lab:solar]"},
+      "harness": {"type": "single_turn", "limits": {}}
+    }
+  ]
+}

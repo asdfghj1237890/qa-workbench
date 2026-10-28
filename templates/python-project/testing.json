@@ -1,0 +1,6 @@
+{
+  "test_root": "tests/",
+  "support_package": "test_support",
+  "lifecycle_actions": [],
+  "observation_modules": ["qa_workbench.testing.observations"]
+}

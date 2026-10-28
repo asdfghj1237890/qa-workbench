@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "dataset": "runtime-corpus.json",
+  "seed": 0,
+  "repeats": 1,
+  "split": "dev",
+  "comparison_axes": [],
+  "description": "Set the real served model, immutable deployment revision, dimensions and TEI_ENDPOINT before executing; Replay generation remains synthetic.",
+  "variants": [
+    {
+      "id": "tei-vector",
+      "store": {"type": "memory", "dimensions": 384},
+      "embedding": {"type": "tei_embeddings", "model": "your-served-model", "model_version": "your-deployment-revision", "dimensions": 384, "endpoint_env": "TEI_ENDPOINT", "billing": "self_hosted", "limits": {"max_requests": 8, "timeout_seconds": 30}},
+      "rag": {"type": "vector", "top_k": 1},
+      "model": {"type": "replay", "text": "The fictional library opens at 09:00. [source:manual:demo]"},
+      "harness": {"type": "single_turn", "limits": {"timeout_seconds": 30, "max_turns": 1, "max_requests": 4}}
+    }
+  ]
+}

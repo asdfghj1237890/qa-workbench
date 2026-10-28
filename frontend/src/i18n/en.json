@@ -1,0 +1,1707 @@
+{
+  "qaCorpus": {
+    "harness": {
+      "costObservation": {
+        "title": "Standard-rate estimate (not an invoice)",
+        "current": "Current run's standard token-rate estimate",
+        "prior": "Gateway-observed estimate for the prior failed request",
+        "total": "Combined standard-rate estimate, including the prior Gateway observation (not an invoice)",
+        "priorAll": "Prior run estimates combined (Gateway observation and standard token rates)",
+        "totalAll": "Cumulative cost estimate including all prior runs (not an invoice)",
+        "noteAll": "The current estimate uses verified answer, judge and embedding token usage. Prior runs retain their original estimate types and evidence. Cache reads, cache writes and remaining input are charged once each. These are not provider invoices and do not release prior retained allocations.",
+        "evidence": "Estimate evidence file SHA-256:",
+        "kinds": {
+          "gateway_estimate": "Gateway-observed estimate",
+          "standard_rate_token_estimate": "Standard token-rate estimate"
+        },
+        "note": "The current estimate uses verified answer, judge and embedding token usage, charging cache reads, cache writes and remaining input once each. The prior amount is a Gateway-observed estimate. These are not provider invoices and do not release the retained prior allocation.",
+        "provenance": "Cost estimate evidence bindings",
+        "report": "Current original report SHA-256:",
+        "diagnosis": "Prior Gateway diagnosis SHA-256:"
+      },
+      "actualCitations": "Sources actually cited in this turn",
+      "noCitations": "No sources were actually cited in this turn.",
+      "combined": {
+        "title": "Original shared authorization budget",
+        "originalCap": "Original aggregate authorization cap",
+        "priorRetained": "Full retained allocation for the prior unknown outcome",
+        "priorCommitted": "Conservative cost upper bound for verified prior requests",
+        "priorUnknown": "Full retained allocation for prior unknown outcomes",
+        "totalAllocationAll": "Cumulative conservative budget allocation upper bound including all prior runs",
+        "totalAllocation": "Conservative total allocation upper bound including the prior failed request",
+        "runCap": "Current run cap",
+        "remaining": "Remaining allocation after combined reservations",
+        "policy": "The original cap includes the prior unknown allocation and the current run cap. Total allocation combines the conservative cost upper bound of verified current requests, current unknown and in-flight reservations, and the full prior reservation. It is not a provider invoice. The prior reservation is not released into the current allocation or counted as zero cost; these are not two new authorizations.",
+        "policyAll": "The original authorization is shared by the conservative upper bound for verified prior requests, full reservations for prior unknown outcomes and the current run cap. Cumulative allocation also includes current verified, unknown and in-flight amounts. It is not a provider invoice; prior allocations are neither refunded nor authorized again.",
+        "provenance": "Prior allocation evidence",
+        "priorRun": "Prior run ID:",
+        "priorReport": "Prior original report SHA-256:",
+        "priorCheckpoint": "Prior dispatch checkpoint SHA-256:"
+      },
+      "noRetrieval": "No actual tool retrieval result was obtained. The execution condition was not met; model retrieval quality remains undetermined.",
+      "noRetrievalShort": "No retrieval result obtained",
+      "noRetrievalSummary": "No retrieval observation / undetermined",
+      "notRunCases": "Unexecuted cases · {n} (expand details)",
+      "notRunCase": "Not run; no score",
+      "missingTurns": "Unexecuted turns: {turns}; no answer or score for these turns.",
+      "attempted": "Attempted {done}/{total} cases · {unexecuted} not run",
+      "completedAnswers": "Completed answers: {n} turns",
+      "assessedCoverage": "Semantically assessable coverage: {n}/{total} cases",
+      "notAssessable": "Not assessable",
+      "reviewNotAssessable": "AI record review completed: {n} cases not assessable; model quality remains undetermined",
+      "reviewCompleted": "AI inspected {observed} execution records; {assessed}/{total} cases were semantically assessable",
+      "reviewSemanticCompleted": "AI semantic review completed: {assessed}/{total} cases assessed",
+      "rerunLimit": "This bank was used in prior error analysis. This run retests the same bank after fixes and does not constitute acceptance on an unseen holdout set.",
+      "title": "Standalone application evaluation · real ES",
+      "scope": "An isolated process directly ran the current application prompt, tools and answer guard with real ES and paid models. Results apply only to this bank and the recorded source contents.",
+      "excluded": "Not measured: Firebase login, Turnstile, HTTP API identity isolation, HTTP/SSE delivery, chat and usage persistence, or production deployment.",
+      "sourceRevision": "Local source revision and content fingerprint",
+      "sourceFiles": "The Git SHA identifies the local base revision, not a deployment. Aggregate SHA-256 of the actual executed source files:",
+      "costTitle": "Shared run cost ledger",
+      "costCap": "Authorized aggregate cap",
+      "costCommitted": "Conservative cost upper bound for verified requests",
+      "costUnknown": "Retained allocation for unknown outcomes",
+      "costInflight": "Reserved allocation for in-flight requests",
+      "costAvailable": "Remaining allocation recorded by the ledger",
+      "costRequests": "Dispatched requests (answer/judge/embedding)",
+      "costLimit": "Verified usage and conservative rates establish an upper bound, not a provider invoice. Unknown outcomes retain their reservations rather than counting as zero. This run will not automatically resume or reuse the remaining allocation.",
+      "costDetails": "Per-request usage and allocation details",
+      "durability": "This run is dispatched once. If the connection or completed report is missing, the entire authorized allocation is retained as possibly spent. No automatic redispatch or resume occurs.",
+      "answerEvidence": "This turn's actual tool results, raw answer, guard and usage",
+      "referenceLimit": "context_snapshot records this turn's application source state; tool article text retains the existing length limits. Actual tool outputs establish model visibility, not the full archived article. No API/SSE or persistence evidence was generated.",
+      "readOnly": "This local read-only record provides the original report and attached review. Starting, resuming or redispatching models and uploading reviews are unavailable."
+    },
+    "splits": {
+      "all": "All questions",
+      "dev": "Development",
+      "holdout": "Holdout"
+    },
+    "title": "Real corpus quality evaluation",
+    "intro": "Run a versioned real news question bank through current Elasticsearch retrieval, checking each answer against its sources. Report it separately from synthetic regression and the RAG smoke test.",
+    "scopeTitle": "What does this evaluate?",
+    "scope": "Questions, expected facts, source fingerprints and news dates are fixed. ES index, mapping, embedding and article content are checked before execution; drift blocks execution or marks results stale. Loading a bank does not establish execution or quality.",
+    "smokeLimit": "Synthetic regression detects prompt, tool and model behavior regressions. The existing RAG chain selects one article and runs two turns as a smoke test. The real news bank adds broader answer and source quality coverage; all three complement each other.",
+    "bankTitle": "Versioned real news question bank",
+    "bankCount": "{cases} two-turn cases · {documents} source articles",
+    "bankHash": "Bank SHA-256",
+    "sourceHash": "Original sources SHA-256",
+    "newsWindow": "News date window",
+    "captured": "Source capture time (Taipei)",
+    "coverage": {
+      "categories": "Topic coverage (cases)",
+      "sources": "News source coverage (articles)",
+      "task_types": "Task type coverage (cases)",
+      "splits": "Development / holdout (cases)"
+    },
+    "taskTypeSummary": "Task details · {types} task types / {cases} cases",
+    "taskTypes": {
+      "attributed_accounting_argument": "Attributed accounting arguments",
+      "attribution_and_uncertainty": "Attribution and uncertainty",
+      "relationship_timeline": "Relationship timeline",
+      "attributed_claims_and_post_separation_changes": "Attributed claims and changes after separation",
+      "work_schedule_proposals": "Work schedule proposals",
+      "comparison_of_reported_perspectives": "Comparison of reported perspectives",
+      "family_timeline": "Family timeline",
+      "career_and_recent_status": "Career and recent status",
+      "attributed_personal_experience": "Attributed personal experience",
+      "reported_schedule_and_priorities": "Reported schedule and priorities",
+      "investigation_sequence_and_status": "Investigation sequence and status",
+      "competing_accounts_and_attribution": "Competing accounts and attribution",
+      "career_milestones": "Career milestones",
+      "leadership_sequence_and_legal_status": "Leadership changes and legal status",
+      "attribution_and_forecast_limits": "Attribution and forecast limits",
+      "reported_causes_and_financial_estimates": "Reported causes and financial estimates",
+      "incident_sequence": "Sequence of events",
+      "investigation_status_and_attribution": "Investigation status and attribution",
+      "reported_speech_and_outcome_limits": "Reported statements and limits on outcomes",
+      "reported_naming_precedents_and_regional_display": "Naming precedents and regional display",
+      "score_progression_and_record_scope": "Score progression and record scope",
+      "player_contributions": "Player contributions",
+      "incident_facts_and_unknowns": "Incident facts and unknowns",
+      "comparison_of_local_impacts": "Comparison of local impacts"
+    },
+    "provenance": "ES and embedding provenance",
+    "mapping": "Mapping SHA-256",
+    "fixedVsLive": "The bank and expected facts are fixed. Answers use current news_read retrieval; archived source text is not replayed as retrieved results.",
+    "configure": "Configure real corpus evaluation",
+    "bank_missing": "This QA environment has no real news bank available. A bank and complete evaluation records kept only locally are not shown here; their execution or quality status cannot be determined from this page.",
+    "bank_invalid": "The bank, version or source fingerprint could not be verified. Execution is disabled.",
+    "unavailable": "Real corpus evaluation is unavailable. Check the bank, model rates and service configuration.",
+    "model": "Answer model: {model} · Embedding: {embedding}",
+    "reserve": "The full bank conservatively reserves US$ {reserve}; the run budget can be at most US$ {ceiling}. A lower budget may complete only part of the bank. This is a usage estimate, not a hard provider invoice cap.",
+    "judgeLimit": "Generated answers are not automatically accepted as semantic quality passes. Import a case-level review after execution.",
+    "consent": "I consent to live ES and paid model use within this budget. Importing reviews and viewing reports do not rerun models.",
+    "start": "Start real corpus quality evaluation",
+    "split": "Bank split",
+    "notRun": "Not run",
+    "notEvidence": "Loading a bank, rates or selected settings does not provide measured quality evidence.",
+    "result": "This real corpus evaluation",
+    "executionBank": "Bank used by this result:",
+    "otherBank": "The service now has a different bank. The original results below do not establish a pass for the new bank.",
+    "selectedScope": "Selected {selected} of {bank} bank cases; {unselected} are outside this run. Any pass applies only to the selected cases.",
+    "executed": "Executed {done}/{total} cases · {unexecuted} not executed",
+    "executedAt": "Execution time (Taipei):",
+    "retrieval": "Actual tool retrieval checks",
+    "semantic": "Answer semantic quality",
+    "resultCounts": "{passed} passed · {failed} failed",
+    "pending": "Semantic review pending · quality not determined",
+    "metricScope": "Recall measures coverage of this question's fixed expected sources in the union of actual tool retrieval results, not recall across all ES news. MRR averages reciprocal rank per actual retrieval call; each input and returned ranking is retained. Final answer source coverage, retrieval and semantic grounding are reported separately.",
+    "recall": "Expected-source Recall (union across calls)",
+    "mrr": "MRR (mean tool-call RR)",
+    "orderedIds": "This tool call's returned source order:",
+    "finalSourceCoverage": "Final answer source item coverage",
+    "finalSourceLimit": "This measures sources listed in final answers, not ES retrieval ranking. A citation does not establish answer grounding.",
+    "qualityLimit": "Synthetic structural scores are not combined here. A single-article, two-turn RAG smoke test cannot establish a bank pass. Unexecuted and unreviewed cases remain gaps.",
+    "reviewImportHint": "Review JSON must match this report and every case hash, covering all observed cases. Importing does not call ES or paid models.",
+    "expectedFacts": "Expected facts and source excerpts",
+    "expectedSources": "Expected news sources",
+    "observedAnswers": "Observed questions and answers",
+    "noAnswer": "No answer was produced for this turn.",
+    "turn": "Turn {n}",
+    "answerEvidence": "Final source items, citations, post-run reference text and usage",
+    "actualToolTrace": "Actual model tool arguments and results",
+    "referenceLimit": "Sources contain reference text fetched separately from ES after execution. They do not establish what the model read; use the SDK tool arguments and results for that evidence.",
+    "groundingScope": "Grounding must be checked against tool results actually received by the model. Expected facts and post-run full text cannot support claims the model never saw.",
+    "traceIncomplete": "Actual tool evidence is missing or truncated, so complete source grounding cannot be established.",
+    "expectedIds": "Expected sources:",
+    "foundIds": "Observed sources:",
+    "rowHash": "Case SHA-256",
+    "historyMeasurement": "Open details for source match and semantic results; excluded from structural test totals.",
+    "historyHint": "A versioned real news bank, reported separately from synthetic regression and the RAG smoke test.",
+    "status": {
+      "queued": "Queued",
+      "running": "Running",
+      "completed": "Execution completed",
+      "incomplete": "Incomplete execution",
+      "failed": "Execution failed",
+      "cancelled": "Cancelled",
+      "timed_out": "Timed out",
+      "stale": "Corpus changed · stale evidence"
+    },
+    "errors": {
+      "request": "Could not read or validate evaluation data. Refresh to retry.",
+      "busy": "Another verification is active, or this review conflicts with the current record.",
+      "missing": "This account's evaluation record was not found.",
+      "unavailable": "The service, pricing or question bank is unavailable.",
+      "stale": "ES corpus fingerprints differ from the bank. Execution was blocked.",
+      "turnstile": "Complete the security verification before starting.",
+      "review": "The review is incomplete or does not match this report and its case hashes.",
+      "storage": "The review could not be saved.",
+      "file": "The review file is invalid or exceeds the size limit."
+    }
+  },
+  "qaRunFlow": {
+    "decisionTitle": "Release decision",
+    "states": {
+      "running": "Running · release decision pending",
+      "blocked": "Release blockers found",
+      "incomplete": "Release readiness is not established",
+      "ready": "Basic release checks passed"
+    },
+    "summaries": {
+      "running": "Tests are still running. Follow progress below; current counts are not final results.",
+      "syncIssue": "The latest execution state is unavailable. Refresh before using this evidence for a release decision.",
+      "blocked": "Observed failures or errors need attention. Review the blockers, fix them, and rerun the affected checks.",
+      "incomplete": "Available evidence is insufficient for a release decision. Complete the required checks and revision information listed below.",
+      "ready": "Complete measured code regression and service integration checks passed for the current revision. This decision covers basic release checks only."
+    },
+    "basicScope": "Basic release readiness requires complete code regression and service integration checks on the same full revision. Skips, missing measurements, and older revisions do not count as passes.",
+    "qualityScope": "RAG and model answer quality requires separate verification. Basic PASS does not establish answer correctness or semantic approval.",
+    "blockersTitle": "Blockers",
+    "missingTitle": "Missing verification",
+    "pendingBlockers": "Blockers cannot be finalized until execution completes.",
+    "noneBlockers": "No failures have been observed. Review the remaining verification gaps alongside this result.",
+    "tasks": {
+      "offline_regression": "Code regression",
+      "es_integration": "Service integration",
+      "real_es_llm_e2e": "RAG end-to-end verification",
+      "model_evaluation": "Model evaluation",
+      "real_corpus_quality": "Real corpus quality"
+    },
+    "reasons": {
+      "failed_checks": "{task} has FAIL or ERROR results. Fix and rerun the checks.",
+      "incomplete": "{task} did not finish completely; it may have been cancelled, timed out, or interrupted.",
+      "skipped_checks": "{task} still has SKIP results, leaving required checks unverified.",
+      "unmeasured": "{task} lacks complete measured results. A finished execution does not establish PASS.",
+      "version_unknown": "{task} lacks full revision information and cannot be bound to the current revision.",
+      "version_mismatch": "{task} used a different revision. Verify again on the currently deployed revision.",
+      "partial_scope": "{task} covered only part of the required scope. Complete a full-scope run.",
+      "sync_error": "The latest state of {task} could not be read. Refresh to confirm it."
+    },
+    "missing": {
+      "offline_regression": "Complete code regression for the current revision.",
+      "es_integration": "Complete service integration for the current revision.",
+      "humanReview": "Semantic review of answer quality and source grounding has not passed. Add live-run and review evidence when RAG or model quality is required.",
+      "unknownBoundary": "This result does not establish its verification boundary. Confirm the covered scope."
+    },
+    "configuration": "Test settings",
+    "settings": "Configure and start",
+    "running": "Running",
+    "results": "Test results",
+    "backToSettings": "Back to settings",
+    "backToWorkbench": "Choose a task in the workbench",
+    "evidenceDetails": "Check details and evidence",
+    "resultActions": "Result actions",
+    "runningActions": "Execution actions",
+    "executionStatus": "Execution status",
+    "selectMissing": "Use the missing checks above to choose a task in the workbench. Paid tests still require reviewing settings before starting."
+  },
+  "qa": {
+    "environment": "Independent test environment",
+    "title": "Sign in to QA Workbench QA",
+    "description": "Sign in with your Google account to test news browsing and chat.",
+    "google": "Sign in with Google",
+    "signingIn": "Signing in…",
+    "restoring": "Checking your sign-in…",
+    "logout": "Sign out",
+    "unavailable": "QA sign-in is not configured yet. Please try again later.",
+    "publicSite": "Return to the public site",
+    "errors": {
+      "denied": "This Google account is not authorized for QA. Use an invited account.",
+      "expired": "Your sign-in has expired. Please sign in again.",
+      "network": "Could not verify your sign-in. Please try again later.",
+      "unavailable": "The sign-in service is temporarily unavailable.",
+      "popupBlocked": "Your browser blocked the sign-in popup. Allow popups and try again.",
+      "cancelled": "The sign-in popup was closed. You are not signed in.",
+      "loginFailed": "Google sign-in failed. Please try again later.",
+      "logoutFailed": "This page signed out, but could not clear the Google session. Reload to confirm."
+    },
+    "signedIn": "Google account",
+    "privacyIdentity": "QA uses Firebase for Google sign-in. Your Google identity separates chats and saved articles; your verified email is checked for access.",
+    "privacyIsolation": "QA is an independent test environment, separate from the public site’s anonymous data. Do not enter personal or sensitive information."
+  },
+  "observatory": {
+    "observatory": "Data & quality observatory",
+    "back": "Back to news",
+    "eyebrow": "Data snapshot",
+    "title": "A closer look at the data.",
+    "subtitle": "The index, its vector space, and the evidence behind each layer of testing.",
+    "loading": "Reading snapshot…",
+    "refresh": "Reload snapshot",
+    "schedule": "Configured schedule: daily at 05:20 (UTC+8). Showing the latest successfully generated snapshot.",
+    "unavailable": "Snapshot not ready",
+    "unavailableHint": "No readable snapshot is available yet. Charts appear after the daily job successfully produces one.",
+    "error": "Could not read the snapshot",
+    "errorHint": "Please try again. Reloading reads the existing snapshot; it does not start indexing or vector computation.",
+    "retry": "Try again",
+    "stale": "This snapshot needs an update",
+    "staleReasons": {
+      "age": "Older than the daily refresh interval. Check the generation time.",
+      "configuration": "The index or embedding configuration changed. Waiting for a new snapshot.",
+      "future_timestamp": "The snapshot is dated in the future. Check the scheduler clock."
+    },
+    "index": "INDEX",
+    "generated": "GENERATED",
+    "total": "Indexed articles",
+    "totalHint": "Article documents only",
+    "vectors": "Vectors for the active model",
+    "field": "Field: {field}",
+    "coverage": "Vector coverage",
+    "missing": "{n} articles without an active-model vector",
+    "model": "Embedding model",
+    "dimensions": "{n} dimensions",
+    "vectorSpace": "Vector space",
+    "projection": "Embedding distribution",
+    "colorBy": "Color points by",
+    "byCategory": "Category",
+    "bySource": "Source",
+    "categoryGroups": {
+      "politics": "Politics",
+      "world": "World",
+      "crossStrait": "Cross-strait",
+      "society": "Society",
+      "business": "Business",
+      "technology": "Technology",
+      "entertainment": "Entertainment",
+      "sports": "Sports",
+      "lifestyle": "Lifestyle",
+      "other": "Other"
+    },
+    "sampled": "Sample of {n} / {total} vectors ({ratio})",
+    "allProjected": "Projecting {n} / {total} vectors ({ratio}, all)",
+    "halfSample": "Half of all embeddings; odd totals round up",
+    "emptyIndex": "The index has no articles yet. No distribution is available.",
+    "insufficient": "There are not enough usable vectors to display a projection yet.",
+    "scatterDescription": "Embedding projection showing {n} points from {total} vectors. Rotate, pan, zoom, or select a point.",
+    "legend": "Toggle plot groups (counts describe the sample)",
+    "plot": {
+      "controls": "Explore the projection",
+      "zoomIn": "Zoom in",
+      "zoomOut": "Zoom out",
+      "zoomLevel": "Projection zoom",
+      "reset": "Reset view",
+      "labels": "Group labels",
+      "xyPlane": "XY plane",
+      "rotate": "Rotate",
+      "pan": "Pan",
+      "true3d": "3D UMAP · three fitted coordinates from the current snapshot.",
+      "xyNote": "XY plane of the same 3D UMAP; this is not a separate 2D fit. Labels retain their 3D region memberships.",
+      "legacy2d": "This older snapshot contains only 2D UMAP. 3D becomes available after the next snapshot update.",
+      "help3d": "Drag or one-finger swipe to rotate · choose Pan or Shift + drag to pan · Ctrl/⌘ + scroll or two-finger pinch to zoom. Keyboard: Alt + arrows rotate, arrows select points, Shift + arrows pan, + / − zoom, Home resets.",
+      "help": "Drag to pan · Ctrl/⌘ + scroll to zoom · tap or click a point. Keyboard: arrows select points, Shift + arrows pan, + / − zoom, Home resets.",
+      "selectHint": "Select a point to inspect its category, source and UMAP coordinates.",
+      "selected": "Selected point",
+      "clearSelection": "Clear point selection",
+      "labelNote": "Labels summarize large spatial density regions at aggregate centers, not individual articles. A single category or source requires at least 65% of the region and its center; mixed regions show their main components. Sparse points, small regions and cropped fragments are not labeled. Percentages and counts describe the full region; some labels are hidden to avoid overlap. With 3D data, regions use all three coordinates and stay fixed during rotation. Spatial regions are not validated semantic clusters.",
+      "mixedRegion": "Mixed: {parts}",
+      "inView": "{n} points in view",
+      "articleTitleUnavailable": "News title unavailable",
+      "openArticle": "Open original article",
+      "articleLinkUnavailable": "No usable article link is available in this snapshot."
+    },
+    "unknown": "Missing",
+    "other": "Other",
+    "visible": "Showing {n} / {total} sample points · click the legend to toggle groups",
+    "projectionNote": "UMAP reduces high-dimensional vectors to the snapshot's display dimensions to show local neighborhoods. Plot distances are neither original cosine similarities nor quality scores. Sampling, fit dimensions and corpus changes can move coordinates; avoid comparing positions across snapshots or fits.",
+    "categories": "Categories in the index",
+    "sources": "Sources in the index",
+    "fullCorpus": "FULL INDEX",
+    "distributionNote": "Counts cover all {total} articles, independently of sampling and legend filters above.",
+    "noDistribution": "No distribution data yet.",
+    "testingEyebrow": "Tests & evidence",
+    "testingTitle": "Three domain regression groups, verified separately.",
+    "openCi": "View CI runs",
+    "testingIntro": "The existing pytest harness and eval tools separate ingestion contracts, RAG quality, and agent behavior. Existing test cases do not prove a current run; no execution reports have been imported into this page.",
+    "noReport": "No execution report imported",
+    "evidence": {
+      "ingestion": {
+        "title": "Ingestion & index contracts",
+        "scope": "Offline document writes, field mappings, category normalization and ES I/O contracts using fixed fixtures.",
+        "gap": "Known gap: the full crawl → embed → index lifecycle still lacks real integration verification. Some I/O tests require an enabled real ES environment."
+      },
+      "rag": {
+        "title": "Retrieval and answer contracts",
+        "scope": "Evaluate retrieval hits and rankings separately from answer citations and faithfulness, using rerunnable query and evaluation tools.",
+        "gap": "Known gap: frozen rankings regress historical examples, not current retrieval quality. The judge is still under calibration; unchecked must never count as passed."
+      },
+      "agents": {
+        "title": "Tool traces & multiple turns",
+        "scope": "Check tools, arguments and dialogue traces using fixed replay. Real ES and model execution require their separate modes.",
+        "gap": "Known gap: the existing trajectory runner and mock regressions do not establish end-to-end quality for real LLM conversations across multiple turns."
+      }
+    },
+    "evidenceNote": "Links point to code and execution history for inspection. Static case counts, mock regressions, and uncalibrated judge outputs are not treated as proof of passing production quality.",
+    "footer": "Data with a timestamp. Quality with evidence.",
+    "navigation": "Data & tests"
+  },
+  "qaLive": {
+    "eyebrow": "REAL MODEL",
+    "title": "Model response evaluation",
+    "realism": "Real model · synthetic retrieval",
+    "scope": "Manually call the real model with fixed answer and tool behavior cases. Retrieval uses synthetic evidence rather than live Elasticsearch. Opening this page never starts a run.",
+    "unavailable": "Live LLM evaluation is not ready in this version. Refresh the status or try again later.",
+    "busy": "Another live LLM evaluation is running. You can start after it finishes.",
+    "cooldown": "You can start another live LLM evaluation in {n} seconds.",
+    "profile": "Evaluation cases",
+    "cases": "{n} cases",
+    "profiles": {
+      "quick": "Quick check",
+      "dev": "Development set",
+      "holdout": "Holdout set",
+      "all": "All cases"
+    },
+    "budget": "Estimated cost limit (USD)",
+    "budgetNote": "Choose USD 0.01–{n}. Costs are estimated from tokens and published rates, not a hard provider billing cap. Request and runtime limits apply separately.",
+    "limits": "Model {model} · {cases} cases · up to {requests} requests · {tokens} output tokens per request · {minutes} minute deadline",
+    "pricing": "Per million tokens: input {input} / output {output}; rates verified {date}.",
+    "pricingConfigured": "Server-configured rates per million tokens: input {input} / output {output}.",
+    "acknowledge": "I understand that this calls a paid model and agree to start with the selected cases and estimated cost limit.",
+    "start": "Start live LLM evaluation",
+    "refresh": "Refresh status",
+    "result": "Live LLM execution results",
+    "progress": "{n} / {total} cases completed",
+    "structural": "Structural rules",
+    "structuralCounts": "{passed} PASS · {failed} FAIL",
+    "requests": "Actual requests / limit",
+    "tokens": "Measured token usage",
+    "tokenCounts": "Input {input} · output {output}",
+    "estimatedCost": "Estimated cost from measured usage / limit",
+    "reserved": "Currently reserved estimated cost: {n}.",
+    "underestimated": "Measured usage exceeded the earlier reservation. Check the final provider bill for actual charges.",
+    "semanticPending": "Human semantic review pending · model quality has not been determined",
+    "qualityLimit": "Completed means the cases finished executing. Structural rules do not establish full semantic quality. This run has no semantic judge score; human review is still pending.",
+    "executionError": "Execution stopped because",
+    "cancel": "Cancel evaluation",
+    "download": "Download full JSON report",
+    "rulePassed": "Structural rules: PASS",
+    "ruleFailed": "Structural rules: FAIL",
+    "duration": "{n} seconds",
+    "answer": "Actual model answer",
+    "noAnswer": "This case produced no answer.",
+    "noCases": "No completed cases yet. Usage and phases update during execution.",
+    "reportNote": "The full report contains actual answers, source evidence, tool trajectories and usage for human review. Cancellation and timeout preserve completed cases.",
+    "downloadAgain": "Download JSON again",
+    "history": "Recent live LLM evaluations",
+    "status": {
+      "queued": "Queued",
+      "running": "RUNNING",
+      "completed": "Execution completed",
+      "incomplete": "Execution incomplete",
+      "failed": "Execution: FAIL",
+      "cancelled": "Evaluation cancelled",
+      "timed_out": "Evaluation timed out"
+    },
+    "phase": {
+      "queued": "Waiting to start",
+      "starting": "Preparing model and cases",
+      "model": "Model responding",
+      "tool": "Tool RUNNING",
+      "case_complete": "Case completed",
+      "finished": "Execution ended"
+    },
+    "errors": {
+      "busy": "Another live LLM evaluation is running. Please try again later.",
+      "cooldown": "Wait until the cooldown ends before starting.",
+      "unavailable": "Live LLM evaluation is not ready.",
+      "missing": "This evaluation was not found. The service may have been redeployed.",
+      "request": "Unable to load evaluation status or report. Refresh to try again."
+    },
+    "configuration": "Run configuration",
+    "model": "Model",
+    "settingsLocked": "Settings are locked while running",
+    "resourceLimits": "Resource limits",
+    "caseResults": "Case results",
+    "emptyResult": "No evaluation has run. Choose cases and a budget, acknowledge the cost, then start."
+  },
+  "qaLog": {
+    "title": "Full execution log",
+    "open": "View full log",
+    "close": "Close log",
+    "separateReport": "Includes actual execution output. Once the run ends, the conclusion lists test results, failure reasons, and unverified scope.",
+    "conclusion": "View test conclusion",
+    "scope": "Output scope",
+    "entireRun": "Entire run",
+    "follow": "Follow latest output",
+    "download": "Download TXT",
+    "downloadAgain": "Download TXT again",
+    "downloadSnapshot": "TXT download snapshot",
+    "downloadUnknown": "The integrity of this TXT snapshot is unknown; retention of all output cannot be confirmed.",
+    "downloadCapturing": "Capture was active at download time. This TXT is a snapshot and does not contain later output.",
+    "downloadTruncated": "This TXT is incomplete; some output was not retained.",
+    "downloadLegacy": "This TXT contains only the older record's summary; earlier output cannot be restored.",
+    "downloadEnded": "Capture had ended for this TXT snapshot.",
+    "runningNote": "A download during execution is a snapshot. Enabling follow automatically refreshes and scrolls to the latest output.",
+    "legacy": "Only a summary was retained for this older record; earlier output cannot be restored.",
+    "truncated": "Some output was not retained; this record and its download are incomplete.",
+    "missing": "The log is unavailable; it may be outside retention or belong to an older service without automatic archives.",
+    "readError": "Unable to read the execution log. Loaded output is preserved; retry the request.",
+    "downloadError": "Unable to download the execution log. Select Download TXT to retry.",
+    "retry": "Retry reading",
+    "range": "Showing bytes {start}–{end} of {total}",
+    "loading": "Loading log…",
+    "ended": "Capture has ended; retention flags describe output completeness.",
+    "capturing": "Still capturing output",
+    "empty": "There is no output in this range yet.",
+    "output": "Execution log output",
+    "earlier": "Load earlier",
+    "more": "Load more",
+    "refresh": "Refresh output",
+    "windowNote": "The viewer shows up to 256 KiB at a time. Page through it or download TXT for all retained output.",
+    "summary": "Recent output (summary)",
+    "stepOpen": "View full step log",
+    "errors": {
+      "log_size_limit": "Execution output exceeded the retention limit; evidence is incomplete.",
+      "log_storage_error": "Execution log storage failed; evidence is incomplete."
+    }
+  },
+  "qaValidation": {
+    "runAll": "Run three offline groups",
+    "runLayer": "Run this group",
+    "notRun": "NOT RUN",
+    "scope": "Choose offline regression, real ES / API integration or the real ES → LLM end-to-end flow. Each mode keeps its own execution evidence. Selecting a mode or opening this page never starts a run.",
+    "unavailable": "Validation is not ready in this version. The distribution charts remain available.",
+    "busy": "Another validation job is running. Try again after it completes.",
+    "cooldown": "The next run is available in {n} seconds.",
+    "result": "Current run",
+    "offline": "Offline regression",
+    "progress": "{n} of {total} steps completed",
+    "syncInterrupted": "Progress updates interrupted",
+    "syncRetry": "Last observed status: {status}. Retrying automatically; you can also refresh the status. The run outcome has not been confirmed.",
+    "syncMissing": "Last observed status: {status}. This job is no longer recorded by the service. Its outcome is unknown.",
+    "stepPending": "NOT RUN; no test results",
+    "testProgress": "Test progress {n} / {total}",
+    "currentTest": "Current test: {name}",
+    "testOutcomes": "Observed: PASS {passed} · FAIL {failed} · ERROR {errors} · SKIP {skipped}",
+    "collectionErrors": "Test collection errors: {n}",
+    "testPhase": {
+      "collecting": "Collecting tests",
+      "running": "RUNNING",
+      "finished": "Test process ended"
+    },
+    "cancel": "Cancel run",
+    "refresh": "Refresh status",
+    "counts": "{tests} tests · FAIL/ERROR {failed} · SKIP {skipped}",
+    "log": "View run log",
+    "truncated": "The log was truncated; only the last portion is retained.",
+    "unmeasured": "Test report not available yet",
+    "qualityLimit": "This result covers offline regression only. Real ES integration, real models and human semantic quality reviews were not run; it is not evidence that live quality passed.",
+    "history": "Recent runs",
+    "batchStatus": "Whole run: {status}",
+    "suites": {
+      "all": "Three offline groups",
+      "ingestion": "Data and index contracts",
+      "rag": "Retrieval and answer contracts",
+      "agents": "Tools and conversation traces"
+    },
+    "status": {
+      "pending": "NOT RUN",
+      "queued": "Queued",
+      "running": "RUNNING",
+      "completed": "Offline regression: PASS",
+      "failed": "Regression: FAIL",
+      "cancelled": "Cancelled",
+      "timed_out": "Timed out",
+      "incomplete": "Incomplete execution"
+    },
+    "errors": {
+      "busy": "A validation job is already running. Try again shortly.",
+      "cooldown": "Wait for the cooldown before starting another run.",
+      "unavailable": "Validation is not ready.",
+      "missing": "This job is unavailable. The service may have been redeployed.",
+      "request": "Could not read validation status. Refresh to try again.",
+      "turnstile": "Security verification did not complete. Please retry."
+    },
+    "workbenchTitle": "Validation and acceptance",
+    "validationScope": "Validation scope",
+    "scopeAndGaps": "Scope and known gaps",
+    "latestRun": "Current run",
+    "emptyResult": "Choose a mode and scope, then explicitly start. Observed progress and evidence will appear here.",
+    "chooseMode": "Validation mode",
+    "runMode": "Run selected mode",
+    "modeReason": "This mode is not ready: {reason}",
+    "modes": {
+      "offline_regression": {
+        "title": "Offline regression",
+        "scope": "Three regression groups with fixed fixtures: pipeline, RAG and agent behavior. No real ES connection or paid model calls."
+      },
+      "es_integration": {
+        "title": "Real ES / API integration",
+        "scope": "Execute real Elasticsearch and API contracts using isolated test indices. Observe reads, writes and cleanup without paid model calls."
+      },
+      "real_es_llm_e2e": {
+        "title": "Real ES → LLM E2E",
+        "scope": "Run real ES, models, tools, judge and multiple turns through the chat API. This calls paid services and requires explicit cost and budget consent."
+      }
+    },
+    "fixedPlan": "Fixed execution plan",
+    "stages": {
+      "isolatedEs": "Prepare isolated ES test data and observe real retrieval.",
+      "api": "Execute API read/write contracts and retain measured responses and checks.",
+      "storage": "Check persistence and test-data cleanup, retaining failure evidence.",
+      "realChain": "Execute the real ES → model → tools chat flow across multiple turns.",
+      "guard": "Observe guard, citations, sources and persistence; semantic quality needs separate human review."
+    },
+    "selectionIsNotEvidence": "This is the planned scope. Selecting a mode does not establish connectivity or a pass. Use the observed execution evidence below.",
+    "budgetNote": "Server ceiling: USD {n}; conservative whole-chain reservation: USD {reserve}. The budget must cover that reservation. Usage estimates are not a hard provider billing cap.",
+    "models": "Main model {main} · judge {judge} · embedding {embedding}",
+    "pricing": {
+      "main": "Main model",
+      "judge": "Judge",
+      "embedding": "Embedding"
+    },
+    "rate": "Per million tokens: input {input} / output {output}",
+    "executionLimits": "Fixed {turns} turns · up to {seconds} seconds; cancellation retains completed evidence.",
+    "acknowledge": "I understand this runs the real ES → LLM flow and incurs model costs. I agree to start with the displayed settings and budget.",
+    "realStatus": {
+      "pending": "NOT RUN",
+      "queued": "Queued",
+      "running": "RUNNING",
+      "completed": "Measured execution completed",
+      "incomplete": "Incomplete measured execution",
+      "failed": "Measured execution: FAIL",
+      "cancelled": "Cancelled",
+      "timed_out": "Timed out"
+    },
+    "checkStatus": {
+      "passed": "PASS",
+      "failed": "FAIL"
+    },
+    "evidence": "View measured evidence",
+    "stepEvidence": "View step evidence",
+    "noChecks": "No measured checks yet",
+    "covered": "Observed in this run:",
+    "gaps": "Not covered:",
+    "realQualityLimit": "Completion describes this execution and its listed checks. Model quality is undetermined and human semantic review remains pending. Missing, unexecuted or interrupted steps are not passes.",
+    "turnstile": "Complete security verification before starting",
+    "turnstileUnavailable": "Security verification is not configured. This mode cannot start.",
+    "turnstileFailed": "Security verification did not complete. Please retry."
+  },
+  "qaEvidence": {
+    "title": "Results by check",
+    "intro": "Start with what each check does and its result. Open the original checks and execution output when you need to investigate.",
+    "resultMeaning": "PASS means the checks that ran in this step passed. FAIL means a check failed or execution encountered an error. SKIP / NOT RUN do not count as passed. Model answer quality still requires separate review.",
+    "checkCountHint": "The check count is the number of individual checks in this step, not a quality score.",
+    "columns": {
+      "item": "What was checked",
+      "status": "Result",
+      "count": "Checks",
+      "details": "Explanation"
+    },
+    "detailsAction": "View explanation",
+    "technicalDetails": "Original checks and execution output",
+    "rawDetails": "View original codes",
+    "unknownStepDescription": "A plain-language explanation is not available for this step. Open the technical details to see its original name, check results, and execution output.",
+    "coveredTitle": "What this run checked",
+    "gapsTitle": "What this run cannot confirm yet",
+    "unknownBoundary": "This record includes a scope code without a plain-language explanation. Open the original codes to inspect it.",
+    "resultCompleted": "This step finished. Individual results are in the technical details; this does not confirm model answer quality.",
+    "resultFailed": "A check failed or execution encountered an error. Review the technical details.",
+    "resultRunning": "This step is running. Full results will be available after it finishes.",
+    "resultPending": "This step has not run and cannot count as passed.",
+    "resultIncomplete": "This step did not finish in full. Available results remain visible; unfinished work does not count as passed.",
+    "resultCancelled": "This step was cancelled. Available results remain visible; unfinished work does not count as passed.",
+    "resultTimedOut": "This step timed out. Available results remain visible; unfinished work does not count as passed.",
+    "stages": {
+      "indexer": {
+        "title": "Data indexing",
+        "description": "Checks indexer behavior with fixed test data. It does not write data into the real news index."
+      },
+      "crawler": {
+        "title": "News crawling",
+        "description": "Checks crawler parsing and data handling with fixed test data. It does not confirm a live website collection flow."
+      },
+      "storage": {
+        "title": "Data persistence",
+        "description": "Uses fixed data and simulated I/O to check conversation storage, category names, and category merge rules. It does not connect to a real database."
+      },
+      "retrieval": {
+        "title": "Retrieval and answers",
+        "description": "Uses fixed data to check retrieval queries, vector interfaces, citations, and scoring guards. It does not establish real model answer quality."
+      },
+      "retrievalEvaluator": {
+        "title": "Retrieval evaluation",
+        "description": "Uses fixed cases to check the calculations and decisions in retrieval analysis, recall gates, and answer faithfulness scoring tools."
+      },
+      "agentBehavior": {
+        "title": "Tools and conversations",
+        "description": "Uses fixed cases to check agent scope, data and instruction injection protection, conversation turns, and execution interfaces. It does not call paid models."
+      },
+      "trajectoryEvaluator": {
+        "title": "Trajectory evaluation",
+        "description": "Checks agent step scoring with fixed execution records. It does not show that a real model completed a task as intended."
+      },
+      "identityAccess": {
+        "title": "Signed-in identity and database access",
+        "description": "Checks the current user identity, QA index access, and restrictions on production data and administrative permissions."
+      },
+      "newsData": {
+        "title": "News, categories, and vector data",
+        "description": "Reads real news data to check index fields, vector dimensions and values, and the news API data and category format. It does not measure search relevance."
+      },
+      "recordRecommendation": {
+        "title": "Click storage and recommendation response",
+        "description": "Checks that a click is stored with the exact ID assigned to this run, and checks the recommendation API response format. It does not measure recommendation quality."
+      },
+      "conversationStorage": {
+        "title": "Store and read back fixed conversations",
+        "description": "Stores two turns of fixed content and compares the result read back through the chat API. This is a storage test; no model generates answers."
+      },
+      "chatTurn1": {
+        "title": "First model retrieval and answer",
+        "description": "Calls the real model to retrieve news and answer, checking stream completion, cited sources, the automated judge, saved answers, and usage evidence. A pass still needs human quality review."
+      },
+      "chatTurn2": {
+        "title": "Follow-up model retrieval and answer",
+        "description": "Continues the first topic with real model retrieval and an answer, checking citations, the automated judge, turn order, saved answers, and usage evidence. A pass still needs human review."
+      },
+      "feedbackHistory": {
+        "title": "Feedback storage and conversation history",
+        "description": "Checks that feedback matches this user, conversation, and second-turn answer, and checks the history list API response format."
+      },
+      "cleanup": {
+        "title": "Clean up this run's test data",
+        "description": "Removes only tracked test documents still owned by this user, then checks their removal. Uncertain ownership or write outcomes remain visible as failed evidence."
+      }
+    },
+    "boundaryCodes": {
+      "modelQuality": "Real model answer quality has not been evaluated.",
+      "serviceIntegration": "Integration with the real database and APIs has not been run.",
+      "humanReview": "A human has not yet reviewed answers for correctness, completeness, and support from sources.",
+      "crawlerIngestion": "The full flow from collecting a website's news to writing the index has not been run.",
+      "publicIngress": "The service has not been checked through the public connection path used by external users.",
+      "unconfirmedMutation": "Some writes or deletions have unconfirmed outcomes. Check and clean up the test data before continuing."
+    }
+  },
+  "qaWorkbench": {
+    "navigation": "Data and testing navigation",
+    "closeNavigation": "Close navigation",
+    "overview": "Data overview",
+    "vectors": "Vector explorer",
+    "validation": "Validation and acceptance",
+    "live": "Live LLM evaluation",
+    "documents": "Indexed documents",
+    "missing": "Without embeddings",
+    "sample": "Vector sample",
+    "sampleHint": "The plot uses the vector sample in the snapshot; these statistics use the full index.",
+    "exploreVectors": "Explore vectors",
+    "inspector": "Chart information",
+    "sampleLegend": "Sample legend",
+    "legendHint": "Toggle a category to show or hide its points. Full-index statistics are unaffected.",
+    "regionHint": "Labels show the main composition of each region; mixed regions show leading proportions.",
+    "projectionDetails": "About this projection",
+    "selectPoint": "Select a point to view the news article and link.",
+    "executionStatus": "Run status",
+    "viewValidation": "View validation",
+    "qualityPending": "Model quality not yet assessed",
+    "statusReadError": "Unable to update run status",
+    "lastKnownStatus": "Last known state: {status}",
+    "notRun": "NOT RUN",
+    "tests": "{n} tests",
+    "threeDimensions": "3D UMAP",
+    "twoDimensions": "2D projection",
+    "release": {
+      "title": "Verification workbench",
+      "environment": "Current environment",
+      "environmentQa": "QA test environment",
+      "currentVersion": "Currently deployed version",
+      "executionVersion": "Version used for this run",
+      "contextHint": "This workbench uses the QA test environment. The version comes from the deployed application and is shown for reference.",
+      "qaOnly": "Isolated QA environment only",
+      "version": "Version (SHA)",
+      "versionUnknown": "Unavailable",
+      "copyVersion": "Copy full version SHA",
+      "copied": "Version SHA copied",
+      "copyFailed": "Could not copy; select the SHA manually",
+      "preview": "Design preview · sample data",
+      "readiness": {
+        "blocked": "Release evidence is incomplete",
+        "ready": "The selected scope has passed",
+        "running": "Collecting verification evidence",
+        "unknown": "Release evidence cannot be determined",
+        "loading": "Loading verification state"
+      },
+      "summary": {
+        "blocked": "The selected scope still has missing or unsuccessful verification evidence.",
+        "offlinePassed": "Regression passed. Service integration has not run.",
+        "ready": "Regression and service integration passed for the current version.",
+        "running": "Execution progress is retained and results update when the run completes.",
+        "unknown": "Reload the state to confirm the version and execution history.",
+        "loading": "Synchronizing the version, available checks and recent runs."
+      },
+      "nextHint": "Complete the evidence required for the current version and selected scope.",
+      "readyHint": "This conclusion covers this scope only; extended quality checks require separate review.",
+      "actions": {
+        "offline": "Run regression (free)",
+        "integration": "Run service integration (free)",
+        "resume": "View progress and logs",
+        "details": "View these check results",
+        "reload": "Reload verification state",
+        "waiting": "Waiting for an available check",
+        "configureRag": "Configure RAG verification",
+        "configureModel": "Configure model evaluation"
+      },
+      "actionNotes": {
+        "offline": "Check program behavior with fixed data and contracts.",
+        "integration": "Connect real ES and APIs to verify the full flow and responses.",
+        "resume": "View the current step, case results and complete execution log.",
+        "details": "Start with the check purpose and result, then open the complete record if needed.",
+        "reload": "Synchronize state again while retaining existing runs."
+      },
+      "scopeTitle": "Verification scope",
+      "scopeHint": "Check whether the selected scope has enough release evidence.",
+      "columns": {
+        "item": "Check",
+        "status": "Status",
+        "detail": "Details",
+        "scope": "This scope",
+        "note": "Notes"
+      },
+      "modes": {
+        "offline": "Regression",
+        "integration": "Service integration",
+        "rag": "RAG end-to-end",
+        "model": "Model evaluation",
+        "corpus": "Real corpus quality"
+      },
+      "offlineScope": "Fixed data and contract checks",
+      "offlineNote": "Includes data pipelines, RAG and agent behavior.",
+      "integrationDetail": "Database and service connection checks",
+      "integrationScope": "Required in this scope",
+      "integrationNote": "Connect real ES and APIs to verify the full flow and responses.",
+      "passedCount": "{count} passed",
+      "noMeasuredCount": "No measured result count",
+      "optionalTitle": "Extended quality checks · outside this scope",
+      "optionalHint": "Estimate model costs separately and obtain approval before running.",
+      "optionalNote": "Configure cases, models and costs first. Opening settings does not run paid tests.",
+      "latestTitle": "Most recent verification result",
+      "latestHint": "Start with the result status, then read what each check does.",
+      "evidenceLink": "View check explanations and results",
+      "evidenceLinkAccessible": "View check explanations, individual results, and complete logs",
+      "staleEvidenceHint": "These results come from a different application version. Complete checks for the current version before assessing it.",
+      "evidenceUnknown": "No execution evidence yet",
+      "evidenceEmpty": "Run regression to collect case results and the complete execution log.",
+      "dateUnknown": "Execution time unknown",
+      "countsUnknown": "No measured counts",
+      "offlineLimit": "Offline success does not establish real-model or human-reviewed semantic quality.",
+      "scopeLimit": "Run evidence covers that execution scope and does not automatically establish release readiness for the current version.",
+      "syncError": "Some verification state could not be loaded. Earlier evidence is retained; reload to try again.",
+      "reason": {
+        "not_run": "Not run yet",
+        "partial_scope": "The executed scope was incomplete",
+        "version_unknown": "Execution version could not be confirmed",
+        "version_mismatch": "Execution and current versions differ",
+        "unmeasured": "No measured result yet",
+        "failed_checks": "Some checks failed",
+        "skipped_checks": "Some required checks have not completed",
+        "incomplete": "Verification is incomplete",
+        "sync_error": "Execution state could not be synchronized",
+        "unavailable": "This check is unavailable in the current environment",
+        "cooldown": "Cooling down; retry in about {seconds} seconds",
+        "busy": "A verification is already running",
+        "running": "Running; view progress and logs",
+        "passed": "Verification passed for the current version",
+        "ready": "Required checks for the current scope passed",
+        "corpus_drift": "Source corpus changed; stale evidence"
+      },
+      "integrationNextHint": "Run service integration to collect real-connection evidence for this scope.",
+      "latestModeHint": "Results from the most recent {mode} run."
+    },
+    "history": {
+      "title": "Execution history",
+      "intro": "Review recent verification results and complete execution output.",
+      "retention": "Each owner retains the latest 20 validation runs and 5 model evaluations. Run status, reports and full logs are saved automatically on the QA host and restored after restart or container replacement. Reviews are archived separately; download backups for longer retention.",
+      "search": "Search execution history",
+      "searchHint": "Search run ID, revision, or model",
+      "mode": "Verification type",
+      "allModes": "All types",
+      "status": "Result status",
+      "allStatuses": "All statuses",
+      "time": "Started (Taipei)",
+      "run": "Run and scope",
+      "revision": "Executed revision",
+      "measured": "Measured results",
+      "actions": "Evidence",
+      "details": "View results",
+      "logs": "Complete log",
+      "loading": "Loading execution history…",
+      "error": "Some records could not be updated. Showing the last observed results; refresh to retry.",
+      "empty": "No retained execution records yet.",
+      "noMatches": "No records match these filters.",
+      "noVersion": "Revision not recorded",
+      "noTime": "Time not recorded",
+      "noMeasurement": "No measured counts yet",
+      "semanticPending": "Model semantic quality awaits review"
+    },
+    "shell": {
+      "workbench": "Verification workbench",
+      "data": "Data explorer",
+      "back": "Back to workbench",
+      "activeHistory": "Another verification is running and its progress has been retained. Finish or cancel it before opening a different run."
+    }
+  },
+  "qaFlow": {
+    "center": "Verification center",
+    "verificationTasks": "VERIFICATION TASKS",
+    "journey": "Verification journey",
+    "steps": {
+      "choose": "Choose verification",
+      "configure": "Configure scope",
+      "run": "Observe execution",
+      "evidence": "Review evidence"
+    },
+    "chooseTitle": "What do you want to verify?",
+    "chooseIntro": "Choose a goal, configure its scope, then run the checks and review the evidence.",
+    "costConsent": "Cost consent required",
+    "noModelCost": "No model cost",
+    "selected": "Selected: {name}",
+    "configure": "Next: configure scope",
+    "noAutoStart": "Choosing a task does not run tests. Review the scope and requirements on the next page.",
+    "recent": "Recent execution",
+    "recentHint": "Each task retains its history. Progress tracking continues when you switch pages.",
+    "viewRecent": "View task and run history",
+    "activeNotice": "A task is running. Return to it to follow progress.",
+    "tasks": {
+      "offline_regression": {
+        "title": "Code regression",
+        "description": "Check pipelines, retrieval contracts, tools and multi-turn behavior using fixed fixtures.",
+        "scope": "Run every suite or choose pipelines, RAG or agent behavior. Each step retains its test counts and logs.",
+        "limit": "Fixed-fixture regression runs in the QA service. It does not verify real ES, live models or human semantic quality."
+      },
+      "es_integration": {
+        "title": "Service integration",
+        "description": "Connect isolated real ES and APIs to verify storage, retrieval and cleanup.",
+        "scope": "Follow a fixed plan covering indexing, retrieval, API responses and fixture cleanup, with evidence for each check.",
+        "limit": "Uses isolated test data without paid models. This does not certify answer quality."
+      },
+      "real_es_llm_e2e": {
+        "title": "RAG chain",
+        "description": "Select one article from real ES and run two turns to smoke-test the RAG chain.",
+        "scope": "Verify ES → API → models/tools → evaluation. Confirm service requirements, reserved cost and consent first.",
+        "limit": "Uses paid models. A single-article, two-turn smoke test does not establish full real corpus quality."
+      },
+      "model_evaluation": {
+        "title": "Model evaluation",
+        "description": "Check real model answers and tool behavior in fixed synthetic retrieval scenarios.",
+        "scope": "Choose cases and a budget to collect actual answers, tool traces, structural checks, tokens and estimated cost.",
+        "limit": "Model calls incur costs. Retrieval data is synthetic with no real ES connection. Human semantic review remains pending."
+      },
+      "real_corpus_quality": {
+        "title": "Real corpus quality",
+        "description": "Run a versioned real news question bank through current Elasticsearch retrieval, checking each answer against its sources. Report it separately from synthetic regression and the RAG smoke test.",
+        "scope": "Questions, expected facts, source fingerprints and news dates are fixed. ES index, mapping, embedding and article content are checked before execution; drift blocks execution or marks results stale. Loading a bank does not establish execution or quality.",
+        "limit": "Synthetic structural scores are not combined here. A single-article, two-turn RAG smoke test cannot establish a bank pass. Unexecuted and unreviewed cases remain gaps."
+      }
+    }
+  },
+  "qaFlowValidation": {
+    "eyebrow": "VERIFICATION WORKSPACE",
+    "titles": {
+      "offline_regression": "Code regression",
+      "es_integration": "Service integration",
+      "real_es_llm_e2e": "Full RAG chain",
+      "model_evaluation": "Model evaluation"
+    },
+    "workspace": "Verification workspace views",
+    "settings": "Scope and settings",
+    "viewProgress": "View progress",
+    "viewLatest": "View latest evidence",
+    "confirmScope": "Confirm the verification scope",
+    "paidHint": "Review the plan, budget and consent before starting.",
+    "freeHint": "Runs only after you start. No paid model calls.",
+    "scopeLabel": "Test scope",
+    "pricingDetails": "Models and pricing details",
+    "pricingRequired": "Full-chain pricing is not configured. This verification cannot start yet.",
+    "modeUnavailable": "This verification is not ready on the current service.",
+    "unavailableHint": "Execution remains disabled until the service prerequisites are ready. You can inspect other verification types.",
+    "technicalDetails": "Technical details",
+    "start": {
+      "offline_regression": "Start code regression",
+      "es_integration": "Start service integration",
+      "real_es_llm_e2e": "Start full RAG chain"
+    },
+    "explicitStart": "Opening this page or changing settings does not start a run.",
+    "loading": "Reading the latest service status…",
+    "activeRun": "A run is active. Its settings remain locked until it ends.",
+    "budgetRequired": "Enter a valid budget within the service limit and at least the reserved estimate.",
+    "consentRequired": "Confirm the cost consent above before starting.",
+    "observedCounts": "Observed test or check outcomes",
+    "executionEvidence": "Execution evidence",
+    "checkItem": "Check item",
+    "result": "Result",
+    "tests": "Tests",
+    "checks": "Checks",
+    "viewEvidence": "View evidence and logs",
+    "waitingForSteps": "Waiting for the service to report the execution steps. No result has been confirmed.",
+    "notRunHint": "Progress and evidence appear after an explicit start.",
+    "nextStep": "Next step",
+    "downloadReport": "Download full JSON report",
+    "configureAgain": "Configure another run",
+    "continueTo": "Continue: {mode}",
+    "whatYouGet": "What this run provides",
+    "deliverables": {
+      "progress": "Measured progress for each execution step",
+      "evidence": "Actual checks, responses and execution logs",
+      "report": "A downloadable JSON report when available"
+    },
+    "scopeLimits": "What this verification covers",
+    "chooseAnother": "Choose another verification →",
+    "totalTests": "{n} tests",
+    "viewStepEvidence": "View logs",
+    "rawStepName": "Original step name",
+    "stepTitles": {
+      "indexer": "Data indexing",
+      "crawler": "News crawling",
+      "storage": "Data persistence",
+      "retrieval": "Retrieval and answers",
+      "retrieval-evaluator": "Retrieval evaluation",
+      "agent-behavior": "Tools and conversations",
+      "trajectory-evaluator": "Trajectory evaluation"
+    }
+  },
+  "qaFlowLive": {
+    "workspaceViews": "Evaluation workspace views",
+    "settingsView": "Test settings",
+    "executionView": "Execution and evidence",
+    "evidenceView": "Results and evidence",
+    "whatYouGet": "What this run will produce",
+    "answersTitle": "Actual model answers",
+    "answersNote": "Read each model response against fixed synthetic retrieval evidence.",
+    "tracesTitle": "Tool call traces",
+    "tracesNote": "The JSON report preserves tool calls, arguments and source evidence for review.",
+    "rulesTitle": "Structural rules: PASS / FAIL",
+    "rulesNote": "Inspect case-level rule failures and required answer or tool behavior.",
+    "usageTitle": "Tokens and estimated cost",
+    "usageNote": "Track observed requests, token usage and the estimated cost of this run.",
+    "semanticNote": "A completed run and structural PASS do not establish answer quality. Review the actual answers and source evidence.",
+    "notRunNote": "No execution record yet. Configure the cases, confirm the cost and start explicitly.",
+    "loading": "Loading the current service limits…",
+    "chooseProfile": "Choose an available case set before starting.",
+    "invalidBudget": "Enter a budget from USD 0.01 to {n}.",
+    "consentRequired": "Confirm the cost acknowledgement above to enable this run.",
+    "ready": "Ready. Starting will call the configured model and incur API costs.",
+    "nextStep": "Next step",
+    "runningNote": "The run is active. Watch observed progress; cancellation preserves available evidence.",
+    "reviewNote": "Review failed cases and actual answers, then download the complete evidence before deciding what to test next.",
+    "prepareRun": "Configure another evaluation",
+    "continueChain": "Continue: RAG full chain",
+    "scopeTitle": "Scope of this run",
+    "syntheticLimit": "Retrieval uses fixed synthetic data. This run does not verify a live Elasticsearch corpus. Opening another workspace never starts a run."
+  },
+  "qaFaithfulShell": {
+    "history": "Execution history",
+    "account": "Account controls",
+    "breadcrumb": "Verification location",
+    "taipeiTime": "Taipei time"
+  },
+  "qaSemanticReview": {
+    "completedAi": "AI semantic review completed",
+    "completedHuman": "Human semantic review completed",
+    "pending": "Semantic review pending",
+    "counts": "{passed} passed · {failed} failed",
+    "reviewer": "Reviewer: {name} · {time} (Taipei)",
+    "coverage": "Reviewed {reviewed}/{observed} observed cases",
+    "planned": "{planned} planned; {unexecuted} not executed",
+    "completedNote": "The review covers observed cases only. Unexecuted cases, structural failures and revision limits remain. Expand a case below to inspect all four judgments and failure reasons.",
+    "import": "Import semantic review",
+    "importHint": "Choose the review JSON for this run. Mismatched reports or row fingerprints are rejected. Importing does not call a model.",
+    "download": "Download review record",
+    "archiveImport": "Import reviewed execution record",
+    "archiveHint": "Restore the original execution report and review without rerunning a model or incurring model charges.",
+    "imported": "Imported historical execution record",
+    "importedNote": "The original revision and outcome are preserved. Importing does not revalidate the current revision.",
+    "importing": "Checking and saving review evidence…",
+    "saved": "Review evidence saved.",
+    "importError": "Review import failed. Check that the file matches this execution and contains complete case ratings, then retry.",
+    "fileError": "The file is not valid review JSON or exceeds the size limit.",
+    "storageError": "Review evidence could not be saved. This import has not completed.",
+    "failedReview": "This semantic review contains failed cases. Fix and revalidate them.",
+    "reviewedLimit": "The review outcome and reasons have been saved. Use failed cases, unexecuted scope and revision differences to decide the next step.",
+    "caseResult": "Case semantic review",
+    "casePass": "Semantic PASS",
+    "caseFail": "Semantic FAIL",
+    "dimensions": {
+      "intent": "Intent",
+      "grounding": "Grounding",
+      "completeness": "Completeness",
+      "language": "Language"
+    }
+  },
+  "qaEvaluationScope": {
+    "title": "Evaluation purpose and scope",
+    "summary": "Model and agent configuration regression · Synthetic retrieval data",
+    "purpose": "Check whether the model can choose tools, cite evidence and answer as requested within QA Workbench's agent setup. Fixed cases help detect regressions after changes.",
+    "subjectTitle": "What is being tested",
+    "subjectNote": "The current model together with QA Workbench's instructions, tool definitions and agent execution flow (harness). A single run measures this configuration.",
+    "methodTitle": "Test conditions",
+    "methodNote": "Real model calls use fixed synthetic retrieval data. Cases cover tool selection, time filters, citations, follow-up questions and error recovery.",
+    "resultTitle": "How to read results",
+    "resultNote": "An automated PASS means that the case's rules passed. Answer accuracy and support from sources still require review of each case.",
+    "limit": "This evaluation does not measure retrieval quality on real ES data or cover the complete online service flow. Use RAG full-chain validation for end-to-end checks."
+  },
+  "qaFaithfulLive": {
+    "intro": "Check how the model and QA Workbench's agent configuration work together in fixed scenarios.",
+    "configuration": "Evaluation settings",
+    "fixedModel": "Fixed model",
+    "modelNote": "Fixed synthetic data; no real ES connection.",
+    "noRealEs": "No real ES",
+    "allProfiles": "All",
+    "budgetNote": "Set between USD 0.01 and {n}.",
+    "paid": "Paid service",
+    "acknowledge": "I agree this run will incur charges, within the estimated budget above.",
+    "acknowledgeNote": "Costs are estimated from usage and published rates, not a hard provider invoice cap; requests may already be in flight when stopping.",
+    "start": "Confirm and start evaluation",
+    "answersTitle": "Actual model answers",
+    "answersNote": "Inspect real model responses within the synthetic scenarios.",
+    "tracesTitle": "Tool call traces",
+    "tracesNote": "Record the model's tool / API calls and their parameters.",
+    "rulesTitle": "Structural rules PASS / FAIL",
+    "rulesNote": "Check case rules for tools and parameters, time filters, citations, required facts and termination, with PASS / FAIL results.",
+    "usageTitle": "Tokens and estimated cost",
+    "usageNote": "Record actual token usage and calculate the estimated cost of this run.",
+    "semanticTitle": "Answer quality still needs case review",
+    "semanticNote": "Review whether each answer addresses the question, is accurate and cites sources that support its claims. Automated rules alone do not establish semantic quality.",
+    "notRunNote": "No execution record yet",
+    "resourceLink": "View resource limits",
+    "emptyHistory": "No evaluation records yet."
+  },
+  "qaFaithfulValidation": {
+    "rerun": "Run regression again",
+    "offlineSubtitle": "Fixed test fixtures and contract checks · No model cost",
+    "stepsProgress": "{n} / {total} steps",
+    "executionLog": "Execution log",
+    "viewLog": "View summary",
+    "scopeHeading": "Scope of this run",
+    "offlineScope": "Real Elasticsearch, real models, and human semantic quality have not been verified in this run.",
+    "titles": {
+      "completed": "Regression complete",
+      "running": "Regression in progress",
+      "failed": "Regression failed",
+      "timed_out": "Regression timed out",
+      "cancelled": "Regression cancelled",
+      "unknown": "Result unconfirmed"
+    }
+  },
+  "qaFaithfulFlow": {
+    "landingTitle": "Verification and acceptance",
+    "landingIntro": "Use structured verification to check RAG, APIs, tools and model integration.",
+    "chooseHint": "Choose the verification that fits your goal. We will guide you through setup and execution.",
+    "scopeIntro": "This verification will cover:",
+    "recent": "View recent runs",
+    "modelSteps": {
+      "choose": {
+        "title": "Configure cases",
+        "hint": "Confirm model and test set"
+      },
+      "configure": {
+        "title": "Confirm cost",
+        "hint": "Estimate and consent"
+      },
+      "run": {
+        "title": "Observe execution",
+        "hint": "Call the model and record"
+      },
+      "evidence": {
+        "title": "Review answers",
+        "hint": "Inspect results and traces"
+      }
+    },
+    "evidenceSteps": {
+      "choose": "Choose verification",
+      "configure": "Confirm scope",
+      "run": "Observe execution",
+      "evidence": "Review evidence"
+    },
+    "descriptions": {
+      "offline_regression": "Fixed data and contract checks,\ncovering pipelines, RAG and agent behavior.",
+      "es_integration": "Real ES and APIs,\nchecking service flows and responses.",
+      "real_es_llm_e2e": "Select one article from real ES and run two turns to smoke-test the RAG chain.",
+      "model_evaluation": "Real models with synthetic retrieval,\nchecking answers and tool behavior.",
+      "real_corpus_quality": "Run a versioned real news question bank through current Elasticsearch retrieval, checking each answer against its sources. Report it separately from synthetic regression and the RAG smoke test."
+    },
+    "scopes": {
+      "offline_regression": [
+        {
+          "title": "Pipelines and indexing",
+          "body": "Check data ingestion, index creation and updates."
+        },
+        {
+          "title": "Retrieval and answer contracts",
+          "body": "Verify retrieval results, response formats and contracts."
+        },
+        {
+          "title": "Tools and multi-turn dialogs",
+          "body": "Check tool calls and conversation state management."
+        }
+      ],
+      "es_integration": [
+        {
+          "title": "Isolated test data",
+          "body": "Prepare real ES test indexes and fixed test data."
+        },
+        {
+          "title": "Services and API contracts",
+          "body": "Check actual reads, writes, retrieval and API responses."
+        },
+        {
+          "title": "Cleanup and evidence",
+          "body": "Verify cleanup and retain each result and log."
+        }
+      ],
+      "real_es_llm_e2e": [
+        {
+          "title": "Real retrieval and models",
+          "body": "Run models and tools through isolated ES and the chat API."
+        },
+        {
+          "title": "Pricing and budget",
+          "body": "Confirm pricing, the cost limit and explicit consent first."
+        },
+        {
+          "title": "Full chain and evidence",
+          "body": "Observe multi-turn flows; semantic quality still needs source and human review."
+        }
+      ],
+      "model_evaluation": [
+        {
+          "title": "Fixed synthetic scenarios",
+          "body": "Use fixed retrieval data without connecting to real ES."
+        },
+        {
+          "title": "Cases and cost",
+          "body": "Choose cases and confirm the budget and cost consent."
+        },
+        {
+          "title": "Answers and tools",
+          "body": "Collect answers, tool traces and usage; human semantic review remains pending."
+        }
+      ],
+      "real_corpus_quality": [
+        {
+          "title": "Versioned real news question bank",
+          "body": "Questions, expected facts, source fingerprints and news dates are fixed. ES index, mapping, embedding and article content are checked before execution; drift blocks execution or marks results stale. Loading a bank does not establish execution or quality."
+        },
+        {
+          "title": "Source match checks",
+          "body": "The bank and expected facts are fixed. Answers use current news_read retrieval; archived source text is not replayed as retrieved results."
+        },
+        {
+          "title": "Answer semantic quality",
+          "body": "Synthetic structural scores are not combined here. A single-article, two-turn RAG smoke test cannot establish a bank pass. Unexecuted and unreviewed cases remain gaps."
+        }
+      ]
+    }
+  },
+  "qaHealth": {
+    "title": "System health",
+    "preview": "Design preview · Not live data",
+    "subtitle": "Prioritize issues that affect real functionality.",
+    "environment": "Environment",
+    "version": "Version",
+    "updated": "Updated",
+    "refresh": "Reload design data",
+    "refreshed": "Design data reloaded. Observation time stays fixed; no live health check ran.",
+    "summary": "Health overview",
+    "summaryItems": {
+      "service": {
+        "title": "Services healthy",
+        "description": "5 modules operating normally"
+      },
+      "data": {
+        "title": "Data needs attention",
+        "description": "1 module falling behind"
+      },
+      "quality": {
+        "title": "Answer review pending",
+        "description": "No reviewed quality evidence yet"
+      }
+    },
+    "issues": "Open issues",
+    "modulesLabel": "Modules",
+    "moduleFilter": "Filter modules",
+    "currentIssues": "Needs attention",
+    "allModules": "All modules",
+    "viewAll": "View all modules",
+    "healthyModules": "Healthy modules",
+    "collector": "Health collector",
+    "status": {
+      "healthy": "Healthy",
+      "warning": "Needs attention",
+      "stale": "Stale data",
+      "critical": "Failure",
+      "unknown": "Unmeasured"
+    },
+    "healthIndex": "Health index",
+    "rules": "Scoring rules",
+    "rulesDescription": "Formal scoring rules are not implemented, so no numeric score is shown. Use measurements, thresholds, observation times and coverage. Missing or stale observations are not a pass; service metrics do not certify answer quality.",
+    "evidence": "View observation evidence",
+    "evidenceTitle": "Observation evidence",
+    "evidenceHint": "Synthetic data for the selected module, used to inspect page elements and evidence presentation. These are not real service results.",
+    "close": "Close observation evidence",
+    "download": "Download preview JSON",
+    "threshold": "Threshold",
+    "minimum": "minimum",
+    "pending": "Pending",
+    "observed": "Observed at",
+    "articles": "articles",
+    "minutes": "min",
+    "milliseconds": "ms",
+    "percent": "%",
+    "errors": "errors",
+    "measured": "Measurement",
+    "time": "Time",
+    "chartTitle": "Age of oldest pending article",
+    "mockChart": "Synthetic data",
+    "chartDescription": "Illustrative trend: waiting time rises from 6 to 38 minutes against a 20-minute threshold. Expand the data table for all measurements.",
+    "chartValues": "View chart values",
+    "noHistory": "No trend preview for this module",
+    "staleHistory": "Observation data is stale",
+    "noHistoryHint": "Missing charts or old observations do not imply a healthy service.",
+    "lastSuccess": "Last success",
+    "window": "Observation window",
+    "lastHour": "Last 60 minutes",
+    "source": "Observation source",
+    "timeline": "Event timeline",
+    "rootCausePending": "Insufficient evidence to confirm a root cause.",
+    "qualitySeparate": "Service health and answer quality are evaluated separately.",
+    "unknownNote": "Missing or stale data is not a pass.",
+    "sources": {
+      "pipeline": "Schedules and backlog (preview)",
+      "heartbeat": "Collector heartbeat (preview)",
+      "synthetic": "Page probe (preview)",
+      "requests": "Request metrics (preview)",
+      "search": "Search metrics (preview)"
+    },
+    "modules": {
+      "indexer": {
+        "group": "Data pipeline",
+        "short": "falling behind",
+        "list": "Oldest pending: 38 min | Since 13:54",
+        "title": "Latest-news embeddings are delayed",
+        "impact": "Recent articles may not yet appear in vector search. Existing articles and keyword search remain available.",
+        "metric": "Oldest pending",
+        "event0": "Most recent successful news-embedding update.",
+        "event1": "Waiting time observed above 20 minutes; issue detected.",
+        "event2": "Latest observation: 38 minutes and still accumulating."
+      },
+      "collector": {
+        "group": "Monitoring",
+        "short": "stale data",
+        "list": "No update for 6 min | Last observed 14:26",
+        "title": "Health observations stopped updating",
+        "impact": "The collector heartbeat is stale. Its previous observation cannot establish current health; restore monitoring before drawing conclusions.",
+        "metric": "Since last heartbeat",
+        "event0": "Most recent collector heartbeat received.",
+        "event1": "Two-minute heartbeat threshold exceeded; data marked stale.",
+        "event2": "No new observations. Previous healthy verdict is not reused."
+      },
+      "frontend": {
+        "group": "User entry",
+        "short": "",
+        "list": "Page probe: 186 ms",
+        "title": "Frontend is available",
+        "impact": "Page and asset probes are healthy in this preview. Availability does not verify every user journey.",
+        "metric": "Page probe latency",
+        "event0": "Page and static-asset probe completed."
+      },
+      "agent": {
+        "group": "Application service",
+        "short": "",
+        "list": "Complete responses: 99.4%",
+        "title": "Agent API is responding",
+        "impact": "Complete-response success meets the illustrative threshold. Answer content and source quality require a separate review.",
+        "metric": "Complete-response success",
+        "event0": "Complete-response and streaming metrics observed."
+      },
+      "es": {
+        "group": "Data storage",
+        "short": "",
+        "list": "Search p95: 42 ms",
+        "title": "Elasticsearch queries are healthy",
+        "impact": "Query latency is within the illustrative threshold. Data completeness and embedding-model consistency need separate measurements.",
+        "metric": "Search p95",
+        "event0": "News-index query probe completed."
+      },
+      "crawler": {
+        "group": "Data pipeline",
+        "short": "",
+        "list": "Last successful run: 8 min ago",
+        "title": "Crawler is updating",
+        "impact": "The crawl job completed within its expected window. Source coverage and article correctness need separate validation.",
+        "metric": "Since last success",
+        "event0": "Most recent scheduled crawl completed."
+      },
+      "llm": {
+        "group": "External dependency",
+        "short": "",
+        "list": "No call errors in the last 15 min",
+        "title": "LLM API calls are healthy",
+        "impact": "Recent calls recorded no errors. This does not certify answer correctness or imply that a quality evaluation ran.",
+        "metric": "Errors in last 15 min",
+        "event0": "Model-call metrics updated."
+      }
+    },
+    "observationCoverage": "Valid observations",
+    "countLabels": {
+      "healthy": "Healthy",
+      "warning": "Attention",
+      "unknown": "Unconfirmed",
+      "critical": "Failure"
+    },
+    "groupNames": {
+      "service": "Services ",
+      "data": "Data "
+    },
+    "groupStates": {
+      "healthy": "healthy",
+      "warning": "need attention",
+      "stale": "unconfirmed",
+      "critical": "failed"
+    },
+    "groupCoverage": "{n}/{total} modules have valid observations",
+    "groupWarnings": "{n} need attention",
+    "notMeasured": "Not measured",
+    "qualityShort": "Review pending",
+    "reviewNotMeasured": "No reviewed results",
+    "observationNote": "No valid current observations for {modules}. Each summary reflects its stated observation time.",
+    "notScored": "Not scored yet",
+    "thresholdRatio": "{ratio}× the threshold",
+    "lastQuarterHour": "Last 15 minutes",
+    "backToIssues": "Back to modules",
+    "shortPreview": "Design data",
+    "evidenceViews": "Evidence presentation",
+    "evidenceTabs": {
+      "summary": "Check summary",
+      "raw": "Raw data"
+    },
+    "evidenceReasons": {
+      "indexer": "The oldest article has waited {value}, above the {threshold} threshold. {pending} articles are pending.",
+      "collector": "The last heartbeat was at {time}: no update for {value}, above the {threshold} threshold. Current state is unconfirmed without new observations.",
+      "frontend": "The page probe took {value}, within the illustrative {threshold} threshold.",
+      "agent": "Complete responses reached {value}, meeting the illustrative {threshold} minimum. Answer quality still needs review.",
+      "es": "Search p95 is {value}, within the illustrative {threshold} threshold.",
+      "crawler": "The last successful crawl was {value} ago, within the illustrative {threshold} threshold.",
+      "llm": "The last 15 minutes recorded {value}, within the illustrative {threshold} threshold. No quality evaluation ran."
+    },
+    "live": {
+      "observed": "QA observations",
+      "versionUnknown": "Unidentified",
+      "scope": "Scope: this QA instance and mounted shared-ingestion job records.",
+      "refresh": "Reload observations",
+      "retry": "Reload",
+      "loading": "Reading health observations…",
+      "retained": "Previous values are retained as stale; earlier healthy verdicts are not reused.",
+      "expired": "Observations expired or their clock is not synchronized. Reload to check again.",
+      "qualityUnmeasured": "Answer quality unmeasured",
+      "qualityShort": "Not evaluated",
+      "noHistory": "No observation history yet",
+      "noEvents": "No observation events available.",
+      "evidenceHint": "Read-only measurements and source timestamps. Missing probes, stale data and failed jobs remain distinct.",
+      "download": "Download observation JSON",
+      "groupNames": {
+        "service": "QA services ",
+        "data": "Data jobs "
+      },
+      "errors": {
+        "unavailable": "Health observations are unavailable.",
+        "invalid": "The health payload is invalid; state is unconfirmed.",
+        "authentication": "Sign in again with an authorized QA account."
+      },
+      "windows": {
+        "instant": "Current read-only observation",
+        "last_job": "Most recent job record",
+        "unmeasured": "Not measured"
+      },
+      "metrics": {
+        "not_measured": "No measurement",
+        "response_check": "QA API response check",
+        "read_probe_duration": "News-index read duration",
+        "job_report_age": "Age of job report",
+        "assembly_duration": "Collection duration",
+        "frontend_response_duration": "QA entry response time",
+        "llm_success_rate": "Recent model request success rate"
+      },
+      "details": {
+        "errors": "Job errors",
+        "skipped_embed_error": "Failed embedding documents",
+        "retry_pending": "Documents awaiting retry",
+        "http_status": "HTTP status",
+        "frontend_revision": "Entry revision",
+        "request_count": "Observed requests",
+        "completed_count": "Classified completions",
+        "success_count": "Successful",
+        "error_count": "API / connection failures",
+        "timeout_count": "Timeouts",
+        "rate_limit_count": "Rate limited",
+        "cancelled_count": "Cancelled (excluded from rate)",
+        "unclassified_count": "Unclassified (excluded from rate)",
+        "mean_duration_ms": "Mean request duration",
+        "last_success_at": "Last successful request",
+        "window_seconds": "Observation window (seconds)",
+        "window_limited": "Window retention limited"
+      },
+      "titles": {
+        "frontend": "Frontend entry probe",
+        "agent": "Current QA API response",
+        "es": "Elasticsearch read-only query",
+        "crawler": "Crawler job report",
+        "indexer": "Indexer job report",
+        "llm": "LLM request observations",
+        "collector": "Health observation collection"
+      },
+      "impacts": {
+        "frontend": "Checks the public QA entry response, QA page identity and duration. Browser interaction and answer quality require separate checks.",
+        "agent": "Only establishes that this QA API responded to the health request. Chat completion and answer quality need separate validation.",
+        "es": "Checks whether a read-only news-index query completes with all shards successful.",
+        "crawler": "Reads the most recent crawl report. Source coverage and article quality need separate measurements.",
+        "indexer": "Reads the most recent embedding-job report. Failures and retries are not passes; vector completeness and model consistency need separate checks.",
+        "llm": "Read actual QA model SDK outcomes from the last 15 minutes, including the fixed hourly dialogue. The success rate uses classified completions; cancellations and unclassified outcomes remain separate. Loading this page makes no model calls and does not assess answer quality.",
+        "collector": "Collects query results and job records readable by the current QA instance."
+      },
+      "sources": {
+        "not_connected": "Not connected",
+        "qa_request": "Current QA request",
+        "news_read_probe": "Read-only news-index query",
+        "crawler_summary": "Crawler job summary",
+        "indexer_summary": "Indexer job summary",
+        "health_assembly": "Current collection",
+        "qa_frontend_http": "Read-only public QA entry probe",
+        "qa_llm_passive": "QA model request records"
+      },
+      "reasonShort": {
+        "not_connected": "Probe not connected",
+        "api_responded": "QA API responded",
+        "read_probe_ok": "Read-only query completed",
+        "read_probe_failed": "Read-only query incomplete",
+        "collection_completed": "Collection completed",
+        "job_reported": "Job reported success",
+        "job_failed": "Job failed or retries pending",
+        "old_artifact": "Job report expired",
+        "missing_artifact": "No job report",
+        "invalid_artifact": "Invalid job report",
+        "future_artifact": "Job timestamp is ahead",
+        "frontend_entry_ok": "QA entry contract verified",
+        "frontend_entry_failed": "QA entry probe failed",
+        "invalid_probe_target": "Entry probe configuration needs review",
+        "llm_no_recent_requests": "No usable recent request records",
+        "llm_inconclusive": "Inconclusive observations",
+        "llm_requests_ok": "Recent model requests succeeded",
+        "llm_requests_failed": "Recent model request failures",
+        "llm_observation_unavailable": "Request observations unavailable"
+      },
+      "reasons": {
+        "not_connected": "No probe source is connected for this component; health is unconfirmed.",
+        "api_responded": "This QA API answered the health request. Chat and answer quality are not certified.",
+        "read_probe_ok": "The read-only news query completed with every shard successful.",
+        "read_probe_failed": "The news query did not fully succeed: timeout, partial failure or connection failure. Transport diagnostics are withheld.",
+        "collection_completed": "The read-only collection completed without starting jobs or model calls.",
+        "job_reported": "The job summary reported success with no known errors or pending retries.",
+        "job_failed": "The job reported failure or still has errors/pending retries. Inspect the counts below.",
+        "old_artifact": "The job report exceeded its freshness threshold. An old success does not establish current health.",
+        "missing_artifact": "No read-only job summary was found. Connect the observation source to inspect this job.",
+        "invalid_artifact": "The job summary is incomplete, corrupt or exceeds its read limit.",
+        "future_artifact": "The job timestamp is ahead; its healthy claim is not accepted.",
+        "frontend_entry_ok": "The QA entry returned its expected page identity and asset path within the deadline. JavaScript execution and interaction remain separate checks.",
+        "frontend_entry_failed": "The QA entry failed its response check: connection, timeout, redirect or unexpected page. Private transport diagnostics are withheld.",
+        "invalid_probe_target": "The configured QA entry cannot be verified. An operator must review the probe source; no request was sent.",
+        "llm_no_recent_requests": "No usable completed model request was recorded in the last 15 minutes. This page makes no model calls and infers neither health nor failure from missing evidence.",
+        "llm_inconclusive": "Recent records contain cancellations, unclassified outcomes or retention limits. They cannot establish complete provider health.",
+        "llm_requests_ok": "All classifiable QA model requests in the last 15 minutes succeeded. Cancellations and unclassified outcomes are excluded from the rate; answer quality is assessed separately.",
+        "llm_requests_failed": "Model requests failed, timed out or were rate limited in the last 15 minutes. Counts preserve each outcome without inferring a root cause.",
+        "llm_observation_unavailable": "Model request observations are unavailable. Evidence from other releases or model configurations is not reused."
+      },
+      "limited": "Limited",
+      "complete": "Complete",
+      "llmLimited": "Recent records exceeded the retention limit. Only retained observations are shown; health remains inconclusive."
+    },
+    "seconds": "s",
+    "checks": "checks",
+    "history": {
+      "title": "Observation history",
+      "window": "History time range",
+      "24h": "24 hours",
+      "7d": "7 days",
+      "loading": "Loading observation history…",
+      "unavailable": "History is unavailable. Live observations remain independent.",
+      "schedule": "Sampled every 5 minutes, retained for 7 days.",
+      "count": "{count} samples in this range.",
+      "accumulating": "Waiting for scheduled samples. Unmeasured periods are not backfilled.",
+      "last": "Last sampled",
+      "units": "Unit",
+      "chart": "Historical measurements and sampled status timeline",
+      "gaps": "The line uses the latest metric and unit. The strip shows each sampled status. Missing or stale samples and version or measurement contract changes remain gaps. Times are UTC+8.",
+      "unmeasured": "This interval has no valid measurements. Recorded states are retained; unmeasured records do not form a numeric trend.",
+      "single": "Only one valid measurement is available. More observations are needed for a trend.",
+      "table": "Inspect sample values",
+      "tableNote": "Latest 100 samples; the chart covers the full selected range.",
+      "status": "Status",
+      "version": "Sampler revision",
+      "download": "Download selected range JSON",
+      "noMeasurementTitle": "No valid measurements to plot",
+      "sourceNotConnected": "This module has no connected probe. These are unmeasured state records; waiting will not create a numeric trend or establish a service failure.",
+      "invalidSource": "An operator must review the entry probe source. It currently produces no valid measurements; recorded states remain available below.",
+      "waitingForFrontendSample": "The entry probe has a current result. Await the scheduled history sample; earlier unmeasured records are preserved.",
+      "entryVersion": "Entry revision",
+      "samplingTitle": "Sampling status",
+      "lastSuccess": "Last successful sample",
+      "overdue": "{seconds} seconds beyond the five-minute interval",
+      "missed": "{count} sampling slots missing in this range.",
+      "since": "Counted from the first record at {time}, allowing one minute for sampling to finish.",
+      "samplingScope": "Sampling delays and component failures are assessed separately. Missing slots stay empty and are never backfilled.",
+      "samplerOutcomes": {
+        "ok": "Previous scheduled sample succeeded",
+        "lock_busy": "Previous sample deferred because the operations lock was busy",
+        "failed": "Previous sampling attempt failed; component state still uses actual observations",
+        "unavailable": "No valid scheduler report available"
+      },
+      "waitingForLlmRequest": "No recent model measurements can be plotted. Records are added only after actual requests; no model is called to populate a chart. Earlier states remain available."
+    },
+    "moduleStates": "Module status",
+    "observedIssues": "Observed issues",
+    "unobservedModules": "Missing valid observations"
+  },
+  "qaTaskWorkbench": {
+    "title": "Verification workbench",
+    "environment": "QA environment",
+    "currentVersion": "Current revision",
+    "unknownVersion": "Revision unknown",
+    "copyVersion": "Copy current full revision",
+    "copyRunVersion": "Copy this run's full revision",
+    "copied": "Revision copied",
+    "copyFailed": "Could not copy; select the revision text",
+    "items": "Verification tasks",
+    "freeGroup": "Foundation · Free",
+    "paidGroup": "Quality · Model cost estimate required",
+    "selectTask": "Choose a verification task",
+    "selectionHint": "Selecting a task does not start a run.",
+    "free": "Free",
+    "paid": "Paid",
+    "noModel": "No model calls",
+    "before": "Before running",
+    "available": "Isolated test environment available",
+    "unavailable": "Execution requirements are not ready; inspect setup for details",
+    "environmentPending": "Execution requirements are not available yet",
+    "busy": "Another task is running; switching preserves its progress",
+    "idle": "No other task is running",
+    "scopeHint": "Confirm the scope first; partial scope stays explicitly marked",
+    "configure": "Configure verification",
+    "explicitStart": "Confirm the scope, then start explicitly. Paid models never start automatically.",
+    "planDetails": "View execution plan",
+    "latest": "Latest run evidence",
+    "history": "View history",
+    "noEvidence": "No evidence for this task on the current revision.",
+    "evidenceHint": "A run provides individual checks, full logs and a JSON report.",
+    "runVersion": "This run's revision",
+    "evidence": "View checks and results",
+    "evidenceAccessible": "View checks and results, with access to full logs",
+    "unmeasured": "No measured counts available",
+    "partialHint": "Only part of the scope was run; this cannot establish a complete regression pass.",
+    "staleHint": "The evidence revision differs from the current revision or is unknown.",
+    "plan": "What this verifies",
+    "summary": "Evidence and next steps",
+    "loading": "Reading verification status",
+    "unknown": "Release evidence cannot be determined",
+    "blocked": "Verification is blocked",
+    "incomplete": "Release evidence is incomplete",
+    "qualitySeparate": "Foundation checks and answer quality are assessed separately.",
+    "currentEvidence": "Verification status (current revision)",
+    "next": "Suggested next step",
+    "nextHint": "Obtain evidence for this revision; one passing task does not complete all evidence.",
+    "follow": "For further investigation",
+    "modelResult": "View model evaluation",
+    "corpusResult": "View semantic and source evidence",
+    "footer": "Unexecuted, older and unreviewed results do not count as passed.",
+    "waiting": "Waiting for verification status",
+    "reload": "Reload status",
+    "resume": "View the running task",
+    "configureNamed": "Configure {name}",
+    "syncError": "Some verification status could not be read; available evidence is retained.",
+    "backOverview": "Back to task overview",
+    "statuses": {
+      "STRUCTURAL": "Structural pass",
+      "PARTIAL": "Partial scope"
+    },
+    "tasks": {
+      "offline_regression": {
+        "title": "Code regression",
+        "subtitle": "Fixed-data and contract regression",
+        "description": "Check ingestion, RAG and agent behavior using fixed scenarios, without connecting to a real database or paid model."
+      },
+      "es_integration": {
+        "title": "Service integration",
+        "subtitle": "Real Elasticsearch and API contracts",
+        "description": "Use isolated test data with real ES and service APIs to check connectivity, persistence and API response contracts."
+      },
+      "real_es_llm_e2e": {
+        "title": "RAG pipeline",
+        "subtitle": "Real retrieval and model pipeline checks",
+        "description": "Sample one real ES article and run two conversation turns to observe retrieval, models, tools and responses. A smoke pass still needs separate answer and source review."
+      },
+      "model_evaluation": {
+        "title": "Model evaluation",
+        "subtitle": "Model and agent behavior regression",
+        "description": "Check a real model's tool choices, arguments and citation rules using fixed synthetic retrieval. Structural checks and semantic quality are assessed separately."
+      },
+      "real_corpus_quality": {
+        "title": "Real corpus quality",
+        "subtitle": "News-bank answer and source quality",
+        "description": "Use a versioned real-news bank with real ES to inspect answers, tool traces and sources per case. Unexecuted and unreviewed cases remain evidence gaps."
+      }
+    }
+  },
+  "app": {
+    "darkToggle": "Toggle dark mode"
+  },
+  "side": {
+    "language": "Language"
+  }
+}

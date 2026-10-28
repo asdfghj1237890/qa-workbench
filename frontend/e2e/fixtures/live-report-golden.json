@@ -1,0 +1,704 @@
+{
+  "provenance": {
+    "generator": "generate-live-report-golden.py",
+    "parser": "agent-service/app/qa_live_runner.py:read_report",
+    "digest": "agent-service/app/qa_live_runner.py:_digest",
+    "catalog": "8 synthetic case definitions; only selected_cases lookup replaced",
+    "evidence": "offline backend ABI and browser transport; no model or ES execution"
+  },
+  "report": {
+    "version": 1,
+    "complete": true,
+    "metadata": {
+      "model": "gpt-5-mini",
+      "realism": "real_model_synthetic_retrieval",
+      "selection": {
+        "ids": [
+          "fixture-case-1",
+          "fixture-case-2",
+          "fixture-case-3",
+          "fixture-case-4",
+          "fixture-case-5",
+          "fixture-case-6",
+          "fixture-case-7",
+          "fixture-case-8"
+        ],
+        "repeats": 1,
+        "seed": 17
+      },
+      "budget_policy": {
+        "max_usd": 0.25,
+        "max_requests": 128,
+        "input_per_million": 0.25,
+        "output_per_million": 2
+      }
+    },
+    "rows": [
+      {
+        "key": "fixture-case-1/0",
+        "case_id": "fixture-case-1",
+        "case": {
+          "id": "fixture-case-1",
+          "group": "offline-browser-fixture",
+          "split": "dev",
+          "rubric": "OFFLINE BROWSER FIXTURE - inspect synthetic evidence only",
+          "turns": [
+            "Synthetic fixture news request"
+          ]
+        },
+        "group": "offline-browser-fixture",
+        "split": "dev",
+        "rubric": "OFFLINE BROWSER FIXTURE - inspect synthetic evidence only",
+        "grade": {
+          "structural_pass": true,
+          "hard_failures": [],
+          "failures": []
+        },
+        "observation": {
+          "turns": [
+            {
+              "answer": "[OFFLINE BROWSER FIXTURE] 合成測試回答，不是真模型執行證據。\n來源：https://example.test/synthetic-news\n合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。",
+              "status": "completed",
+              "duration_ms": 1820.0,
+              "events": [
+                {
+                  "phase": "dispatch",
+                  "call_id": "fixture-case-1-search",
+                  "name": "search_news",
+                  "args": {
+                    "query": "synthetic fixture"
+                  },
+                  "elapsed_ms": 1.0
+                },
+                {
+                  "phase": "result",
+                  "call_id": "fixture-case-1-search",
+                  "name": "search_news",
+                  "args": {
+                    "query": "synthetic fixture"
+                  },
+                  "outcome": "succeeded",
+                  "elapsed_ms": 1.25,
+                  "output": {
+                    "results": [
+                      {
+                        "id": "synthetic-news",
+                        "url": "https://example.test/synthetic-news"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "phase": "model_result",
+                  "usage": {
+                    "input_tokens": 1200,
+                    "output_tokens": 300
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "key": "fixture-case-2/0",
+        "case_id": "fixture-case-2",
+        "case": {
+          "id": "fixture-case-2",
+          "group": "offline-browser-fixture",
+          "split": "dev",
+          "rubric": "OFFLINE BROWSER FIXTURE - inspect synthetic evidence only",
+          "turns": [
+            "Synthetic fixture news request"
+          ]
+        },
+        "group": "offline-browser-fixture",
+        "split": "dev",
+        "rubric": "OFFLINE BROWSER FIXTURE - inspect synthetic evidence only",
+        "grade": {
+          "structural_pass": false,
+          "hard_failures": [],
+          "failures": [
+            "Fixture: required source reference missing"
+          ]
+        },
+        "observation": {
+          "turns": [
+            {
+              "answer": "[OFFLINE BROWSER FIXTURE] 合成測試回答，不是真模型執行證據。\n來源：https://example.test/synthetic-news\n合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。",
+              "status": "completed",
+              "duration_ms": 1820.25,
+              "events": [
+                {
+                  "phase": "dispatch",
+                  "call_id": "fixture-case-2-search",
+                  "name": "search_news",
+                  "args": {
+                    "query": "synthetic fixture"
+                  },
+                  "elapsed_ms": 1.0
+                },
+                {
+                  "phase": "result",
+                  "call_id": "fixture-case-2-search",
+                  "name": "search_news",
+                  "args": {
+                    "query": "synthetic fixture"
+                  },
+                  "outcome": "succeeded",
+                  "elapsed_ms": 1.25,
+                  "output": {
+                    "results": [
+                      {
+                        "id": "synthetic-news",
+                        "url": "https://example.test/synthetic-news"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "phase": "model_result",
+                  "usage": {
+                    "input_tokens": 1200,
+                    "output_tokens": 300
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "key": "fixture-case-3/0",
+        "case_id": "fixture-case-3",
+        "case": {
+          "id": "fixture-case-3",
+          "group": "offline-browser-fixture",
+          "split": "dev",
+          "rubric": "OFFLINE BROWSER FIXTURE - inspect synthetic evidence only",
+          "turns": [
+            "Synthetic fixture news request"
+          ]
+        },
+        "group": "offline-browser-fixture",
+        "split": "dev",
+        "rubric": "OFFLINE BROWSER FIXTURE - inspect synthetic evidence only",
+        "grade": {
+          "structural_pass": true,
+          "hard_failures": [],
+          "failures": []
+        },
+        "observation": {
+          "turns": [
+            {
+              "answer": "[OFFLINE BROWSER FIXTURE] 合成測試回答，不是真模型執行證據。\n來源：https://example.test/synthetic-news\n合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。",
+              "status": "completed",
+              "duration_ms": 1820.0,
+              "events": [
+                {
+                  "phase": "dispatch",
+                  "call_id": "fixture-case-3-search",
+                  "name": "search_news",
+                  "args": {
+                    "query": "synthetic fixture"
+                  },
+                  "elapsed_ms": 1.0
+                },
+                {
+                  "phase": "result",
+                  "call_id": "fixture-case-3-search",
+                  "name": "search_news",
+                  "args": {
+                    "query": "synthetic fixture"
+                  },
+                  "outcome": "succeeded",
+                  "elapsed_ms": 1.25,
+                  "output": {
+                    "results": [
+                      {
+                        "id": "synthetic-news",
+                        "url": "https://example.test/synthetic-news"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "phase": "model_result",
+                  "usage": {
+                    "input_tokens": 1200,
+                    "output_tokens": 300
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "key": "fixture-case-4/0",
+        "case_id": "fixture-case-4",
+        "case": {
+          "id": "fixture-case-4",
+          "group": "offline-browser-fixture",
+          "split": "dev",
+          "rubric": "OFFLINE BROWSER FIXTURE - inspect synthetic evidence only",
+          "turns": [
+            "Synthetic fixture news request"
+          ]
+        },
+        "group": "offline-browser-fixture",
+        "split": "dev",
+        "rubric": "OFFLINE BROWSER FIXTURE - inspect synthetic evidence only",
+        "grade": {
+          "structural_pass": true,
+          "hard_failures": [],
+          "failures": []
+        },
+        "observation": {
+          "turns": [
+            {
+              "answer": "[OFFLINE BROWSER FIXTURE] 合成測試回答，不是真模型執行證據。\n來源：https://example.test/synthetic-news\n合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。",
+              "status": "completed",
+              "duration_ms": 1820.0,
+              "events": [
+                {
+                  "phase": "dispatch",
+                  "call_id": "fixture-case-4-search",
+                  "name": "search_news",
+                  "args": {
+                    "query": "synthetic fixture"
+                  },
+                  "elapsed_ms": 1.0
+                },
+                {
+                  "phase": "result",
+                  "call_id": "fixture-case-4-search",
+                  "name": "search_news",
+                  "args": {
+                    "query": "synthetic fixture"
+                  },
+                  "outcome": "succeeded",
+                  "elapsed_ms": 1.25,
+                  "output": {
+                    "results": [
+                      {
+                        "id": "synthetic-news",
+                        "url": "https://example.test/synthetic-news"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "phase": "model_result",
+                  "usage": {
+                    "input_tokens": 1200,
+                    "output_tokens": 300
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "key": "fixture-case-5/0",
+        "case_id": "fixture-case-5",
+        "case": {
+          "id": "fixture-case-5",
+          "group": "offline-browser-fixture",
+          "split": "dev",
+          "rubric": "OFFLINE BROWSER FIXTURE - inspect synthetic evidence only",
+          "turns": [
+            "Synthetic fixture news request"
+          ]
+        },
+        "group": "offline-browser-fixture",
+        "split": "dev",
+        "rubric": "OFFLINE BROWSER FIXTURE - inspect synthetic evidence only",
+        "grade": {
+          "structural_pass": true,
+          "hard_failures": [],
+          "failures": []
+        },
+        "observation": {
+          "turns": [
+            {
+              "answer": "[OFFLINE BROWSER FIXTURE] 合成測試回答，不是真模型執行證據。\n來源：https://example.test/synthetic-news\n合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。",
+              "status": "completed",
+              "duration_ms": 1820.0,
+              "events": [
+                {
+                  "phase": "dispatch",
+                  "call_id": "fixture-case-5-search",
+                  "name": "search_news",
+                  "args": {
+                    "query": "synthetic fixture"
+                  },
+                  "elapsed_ms": 1.0
+                },
+                {
+                  "phase": "result",
+                  "call_id": "fixture-case-5-search",
+                  "name": "search_news",
+                  "args": {
+                    "query": "synthetic fixture"
+                  },
+                  "outcome": "succeeded",
+                  "elapsed_ms": 1.25,
+                  "output": {
+                    "results": [
+                      {
+                        "id": "synthetic-news",
+                        "url": "https://example.test/synthetic-news"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "phase": "model_result",
+                  "usage": {
+                    "input_tokens": 1200,
+                    "output_tokens": 300
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "key": "fixture-case-6/0",
+        "case_id": "fixture-case-6",
+        "case": {
+          "id": "fixture-case-6",
+          "group": "offline-browser-fixture",
+          "split": "dev",
+          "rubric": "OFFLINE BROWSER FIXTURE - inspect synthetic evidence only",
+          "turns": [
+            "Synthetic fixture news request"
+          ]
+        },
+        "group": "offline-browser-fixture",
+        "split": "dev",
+        "rubric": "OFFLINE BROWSER FIXTURE - inspect synthetic evidence only",
+        "grade": {
+          "structural_pass": true,
+          "hard_failures": [],
+          "failures": []
+        },
+        "observation": {
+          "turns": [
+            {
+              "answer": "[OFFLINE BROWSER FIXTURE] 合成測試回答，不是真模型執行證據。\n來源：https://example.test/synthetic-news\n合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。",
+              "status": "completed",
+              "duration_ms": 1820.0,
+              "events": [
+                {
+                  "phase": "dispatch",
+                  "call_id": "fixture-case-6-search",
+                  "name": "search_news",
+                  "args": {
+                    "query": "synthetic fixture"
+                  },
+                  "elapsed_ms": 1.0
+                },
+                {
+                  "phase": "result",
+                  "call_id": "fixture-case-6-search",
+                  "name": "search_news",
+                  "args": {
+                    "query": "synthetic fixture"
+                  },
+                  "outcome": "succeeded",
+                  "elapsed_ms": 1.25,
+                  "output": {
+                    "results": [
+                      {
+                        "id": "synthetic-news",
+                        "url": "https://example.test/synthetic-news"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "phase": "model_result",
+                  "usage": {
+                    "input_tokens": 1200,
+                    "output_tokens": 300
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "key": "fixture-case-7/0",
+        "case_id": "fixture-case-7",
+        "case": {
+          "id": "fixture-case-7",
+          "group": "offline-browser-fixture",
+          "split": "dev",
+          "rubric": "OFFLINE BROWSER FIXTURE - inspect synthetic evidence only",
+          "turns": [
+            "Synthetic fixture news request"
+          ]
+        },
+        "group": "offline-browser-fixture",
+        "split": "dev",
+        "rubric": "OFFLINE BROWSER FIXTURE - inspect synthetic evidence only",
+        "grade": {
+          "structural_pass": true,
+          "hard_failures": [],
+          "failures": []
+        },
+        "observation": {
+          "turns": [
+            {
+              "answer": "[OFFLINE BROWSER FIXTURE] 合成測試回答，不是真模型執行證據。\n來源：https://example.test/synthetic-news\n合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。",
+              "status": "completed",
+              "duration_ms": 1820.0,
+              "events": [
+                {
+                  "phase": "dispatch",
+                  "call_id": "fixture-case-7-search",
+                  "name": "search_news",
+                  "args": {
+                    "query": "synthetic fixture"
+                  },
+                  "elapsed_ms": 1.0
+                },
+                {
+                  "phase": "result",
+                  "call_id": "fixture-case-7-search",
+                  "name": "search_news",
+                  "args": {
+                    "query": "synthetic fixture"
+                  },
+                  "outcome": "succeeded",
+                  "elapsed_ms": 1.25,
+                  "output": {
+                    "results": [
+                      {
+                        "id": "synthetic-news",
+                        "url": "https://example.test/synthetic-news"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "phase": "model_result",
+                  "usage": {
+                    "input_tokens": 1200,
+                    "output_tokens": 300
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "key": "fixture-case-8/0",
+        "case_id": "fixture-case-8",
+        "case": {
+          "id": "fixture-case-8",
+          "group": "offline-browser-fixture",
+          "split": "dev",
+          "rubric": "OFFLINE BROWSER FIXTURE - inspect synthetic evidence only",
+          "turns": [
+            "Synthetic fixture news request"
+          ]
+        },
+        "group": "offline-browser-fixture",
+        "split": "dev",
+        "rubric": "OFFLINE BROWSER FIXTURE - inspect synthetic evidence only",
+        "grade": {
+          "structural_pass": true,
+          "hard_failures": [],
+          "failures": []
+        },
+        "observation": {
+          "turns": [
+            {
+              "answer": "[OFFLINE BROWSER FIXTURE] 合成測試回答，不是真模型執行證據。\n來源：https://example.test/synthetic-news\n合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。",
+              "status": "completed",
+              "duration_ms": 1820.0,
+              "events": [
+                {
+                  "phase": "dispatch",
+                  "call_id": "fixture-case-8-search",
+                  "name": "search_news",
+                  "args": {
+                    "query": "synthetic fixture"
+                  },
+                  "elapsed_ms": 1.0
+                },
+                {
+                  "phase": "result",
+                  "call_id": "fixture-case-8-search",
+                  "name": "search_news",
+                  "args": {
+                    "query": "synthetic fixture"
+                  },
+                  "outcome": "succeeded",
+                  "elapsed_ms": 1.25,
+                  "output": {
+                    "results": [
+                      {
+                        "id": "synthetic-news",
+                        "url": "https://example.test/synthetic-news"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "phase": "model_result",
+                  "usage": {
+                    "input_tokens": 1200,
+                    "output_tokens": 300
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "summary": {},
+    "shared_run_usage": {
+      "requests": 16,
+      "reserved_estimated_usd": 0,
+      "measured_estimated_usd": 0.0072,
+      "input_tokens": 9600,
+      "output_tokens": 2400,
+      "underestimated": false
+    }
+  },
+  "public_cases": [
+    {
+      "case_id": "fixture-case-1",
+      "group": "offline-browser-fixture",
+      "split": "dev",
+      "status": "completed",
+      "structural_pass": true,
+      "hard_failures": [],
+      "failures": [],
+      "duration_ms": 1820.0,
+      "answer": "[OFFLINE BROWSER FIXTURE] 合成測試回答，不是真模型執行證據。\n來源：https://example.test/synthetic-news\n合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。",
+      "input_tokens": 1200,
+      "output_tokens": 300,
+      "row_sha": "bd9ddbf89d4bdb2d90e28490c4f1072ee60fb4d85f027666dbe01ad45120d2db"
+    },
+    {
+      "case_id": "fixture-case-2",
+      "group": "offline-browser-fixture",
+      "split": "dev",
+      "status": "completed",
+      "structural_pass": false,
+      "hard_failures": [],
+      "failures": [
+        "Fixture: required source reference missing"
+      ],
+      "duration_ms": 1820.25,
+      "answer": "[OFFLINE BROWSER FIXTURE] 合成測試回答，不是真模型執行證據。\n來源：https://example.test/synthetic-news\n合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。",
+      "input_tokens": 1200,
+      "output_tokens": 300,
+      "row_sha": "eedd0537ef61916f970d247c7844ab9a6b75f6e396e77029337f3f627417cb77"
+    },
+    {
+      "case_id": "fixture-case-3",
+      "group": "offline-browser-fixture",
+      "split": "dev",
+      "status": "completed",
+      "structural_pass": true,
+      "hard_failures": [],
+      "failures": [],
+      "duration_ms": 1820.0,
+      "answer": "[OFFLINE BROWSER FIXTURE] 合成測試回答，不是真模型執行證據。\n來源：https://example.test/synthetic-news\n合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。",
+      "input_tokens": 1200,
+      "output_tokens": 300,
+      "row_sha": "c853ded2595323571ae4834946a2cd17dd1998a10c6f02fae613db3517673246"
+    },
+    {
+      "case_id": "fixture-case-4",
+      "group": "offline-browser-fixture",
+      "split": "dev",
+      "status": "completed",
+      "structural_pass": true,
+      "hard_failures": [],
+      "failures": [],
+      "duration_ms": 1820.0,
+      "answer": "[OFFLINE BROWSER FIXTURE] 合成測試回答，不是真模型執行證據。\n來源：https://example.test/synthetic-news\n合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。",
+      "input_tokens": 1200,
+      "output_tokens": 300,
+      "row_sha": "517c1aeed95f83d145762c1a3be81496983f5d790ff16a3b574fd0ec286ffb6f"
+    },
+    {
+      "case_id": "fixture-case-5",
+      "group": "offline-browser-fixture",
+      "split": "dev",
+      "status": "completed",
+      "structural_pass": true,
+      "hard_failures": [],
+      "failures": [],
+      "duration_ms": 1820.0,
+      "answer": "[OFFLINE BROWSER FIXTURE] 合成測試回答，不是真模型執行證據。\n來源：https://example.test/synthetic-news\n合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。",
+      "input_tokens": 1200,
+      "output_tokens": 300,
+      "row_sha": "8d63e761057568ec54ee8a71f797b93daf1e19f25384ce936c255e32f217b83f"
+    },
+    {
+      "case_id": "fixture-case-6",
+      "group": "offline-browser-fixture",
+      "split": "dev",
+      "status": "completed",
+      "structural_pass": true,
+      "hard_failures": [],
+      "failures": [],
+      "duration_ms": 1820.0,
+      "answer": "[OFFLINE BROWSER FIXTURE] 合成測試回答，不是真模型執行證據。\n來源：https://example.test/synthetic-news\n合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。",
+      "input_tokens": 1200,
+      "output_tokens": 300,
+      "row_sha": "9d6312342c92ea609ddc2a994a374426642eab0d7f97613f2f768b76c7a14f16"
+    },
+    {
+      "case_id": "fixture-case-7",
+      "group": "offline-browser-fixture",
+      "split": "dev",
+      "status": "completed",
+      "structural_pass": true,
+      "hard_failures": [],
+      "failures": [],
+      "duration_ms": 1820.0,
+      "answer": "[OFFLINE BROWSER FIXTURE] 合成測試回答，不是真模型執行證據。\n來源：https://example.test/synthetic-news\n合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。",
+      "input_tokens": 1200,
+      "output_tokens": 300,
+      "row_sha": "922971278bd06566eaa61842a451914262f5842b05f73bbf5f6a5bdd20c1e147"
+    },
+    {
+      "case_id": "fixture-case-8",
+      "group": "offline-browser-fixture",
+      "split": "dev",
+      "status": "completed",
+      "structural_pass": true,
+      "hard_failures": [],
+      "failures": [],
+      "duration_ms": 1820.0,
+      "answer": "[OFFLINE BROWSER FIXTURE] 合成測試回答，不是真模型執行證據。\n來源：https://example.test/synthetic-news\n合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。",
+      "input_tokens": 1200,
+      "output_tokens": 300,
+      "row_sha": "4ce56d9fee70e784e801cbedb9409b65278b45577984c5db9672789378de3206"
+    }
+  ],
+  "raw_rows": [
+    "{\"key\":\"fixture-case-1/0\",\"case_id\":\"fixture-case-1\",\"case\":{\"id\":\"fixture-case-1\",\"group\":\"offline-browser-fixture\",\"split\":\"dev\",\"rubric\":\"OFFLINE BROWSER FIXTURE - inspect synthetic evidence only\",\"turns\":[\"Synthetic fixture news request\"]},\"group\":\"offline-browser-fixture\",\"split\":\"dev\",\"rubric\":\"OFFLINE BROWSER FIXTURE - inspect synthetic evidence only\",\"grade\":{\"structural_pass\":true,\"hard_failures\":[],\"failures\":[]},\"observation\":{\"turns\":[{\"answer\":\"[OFFLINE BROWSER FIXTURE] 合成測試回答，不是真模型執行證據。\\n來源：https://example.test/synthetic-news\\n合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。\",\"status\":\"completed\",\"duration_ms\":1820.0,\"events\":[{\"phase\":\"dispatch\",\"call_id\":\"fixture-case-1-search\",\"name\":\"search_news\",\"args\":{\"query\":\"synthetic fixture\"},\"elapsed_ms\":1.0},{\"phase\":\"result\",\"call_id\":\"fixture-case-1-search\",\"name\":\"search_news\",\"args\":{\"query\":\"synthetic fixture\"},\"outcome\":\"succeeded\",\"elapsed_ms\":1.25,\"output\":{\"results\":[{\"id\":\"synthetic-news\",\"url\":\"https://example.test/synthetic-news\"}]}},{\"phase\":\"model_result\",\"usage\":{\"input_tokens\":1200,\"output_tokens\":300}}]}]}}",
+    "{\"key\":\"fixture-case-2/0\",\"case_id\":\"fixture-case-2\",\"case\":{\"id\":\"fixture-case-2\",\"group\":\"offline-browser-fixture\",\"split\":\"dev\",\"rubric\":\"OFFLINE BROWSER FIXTURE - inspect synthetic evidence only\",\"turns\":[\"Synthetic fixture news request\"]},\"group\":\"offline-browser-fixture\",\"split\":\"dev\",\"rubric\":\"OFFLINE BROWSER FIXTURE - inspect synthetic evidence only\",\"grade\":{\"structural_pass\":false,\"hard_failures\":[],\"failures\":[\"Fixture: required source reference missing\"]},\"observation\":{\"turns\":[{\"answer\":\"[OFFLINE BROWSER FIXTURE] 合成測試回答，不是真模型執行證據。\\n來源：https://example.test/synthetic-news\\n合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。\",\"status\":\"completed\",\"duration_ms\":1820.25,\"events\":[{\"phase\":\"dispatch\",\"call_id\":\"fixture-case-2-search\",\"name\":\"search_news\",\"args\":{\"query\":\"synthetic fixture\"},\"elapsed_ms\":1.0},{\"phase\":\"result\",\"call_id\":\"fixture-case-2-search\",\"name\":\"search_news\",\"args\":{\"query\":\"synthetic fixture\"},\"outcome\":\"succeeded\",\"elapsed_ms\":1.25,\"output\":{\"results\":[{\"id\":\"synthetic-news\",\"url\":\"https://example.test/synthetic-news\"}]}},{\"phase\":\"model_result\",\"usage\":{\"input_tokens\":1200,\"output_tokens\":300}}]}]}}",
+    "{\"key\":\"fixture-case-3/0\",\"case_id\":\"fixture-case-3\",\"case\":{\"id\":\"fixture-case-3\",\"group\":\"offline-browser-fixture\",\"split\":\"dev\",\"rubric\":\"OFFLINE BROWSER FIXTURE - inspect synthetic evidence only\",\"turns\":[\"Synthetic fixture news request\"]},\"group\":\"offline-browser-fixture\",\"split\":\"dev\",\"rubric\":\"OFFLINE BROWSER FIXTURE - inspect synthetic evidence only\",\"grade\":{\"structural_pass\":true,\"hard_failures\":[],\"failures\":[]},\"observation\":{\"turns\":[{\"answer\":\"[OFFLINE BROWSER FIXTURE] 合成測試回答，不是真模型執行證據。\\n來源：https://example.test/synthetic-news\\n合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。\",\"status\":\"completed\",\"duration_ms\":1820.0,\"events\":[{\"phase\":\"dispatch\",\"call_id\":\"fixture-case-3-search\",\"name\":\"search_news\",\"args\":{\"query\":\"synthetic fixture\"},\"elapsed_ms\":1.0},{\"phase\":\"result\",\"call_id\":\"fixture-case-3-search\",\"name\":\"search_news\",\"args\":{\"query\":\"synthetic fixture\"},\"outcome\":\"succeeded\",\"elapsed_ms\":1.25,\"output\":{\"results\":[{\"id\":\"synthetic-news\",\"url\":\"https://example.test/synthetic-news\"}]}},{\"phase\":\"model_result\",\"usage\":{\"input_tokens\":1200,\"output_tokens\":300}}]}]}}",
+    "{\"key\":\"fixture-case-4/0\",\"case_id\":\"fixture-case-4\",\"case\":{\"id\":\"fixture-case-4\",\"group\":\"offline-browser-fixture\",\"split\":\"dev\",\"rubric\":\"OFFLINE BROWSER FIXTURE - inspect synthetic evidence only\",\"turns\":[\"Synthetic fixture news request\"]},\"group\":\"offline-browser-fixture\",\"split\":\"dev\",\"rubric\":\"OFFLINE BROWSER FIXTURE - inspect synthetic evidence only\",\"grade\":{\"structural_pass\":true,\"hard_failures\":[],\"failures\":[]},\"observation\":{\"turns\":[{\"answer\":\"[OFFLINE BROWSER FIXTURE] 合成測試回答，不是真模型執行證據。\\n來源：https://example.test/synthetic-news\\n合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。\",\"status\":\"completed\",\"duration_ms\":1820.0,\"events\":[{\"phase\":\"dispatch\",\"call_id\":\"fixture-case-4-search\",\"name\":\"search_news\",\"args\":{\"query\":\"synthetic fixture\"},\"elapsed_ms\":1.0},{\"phase\":\"result\",\"call_id\":\"fixture-case-4-search\",\"name\":\"search_news\",\"args\":{\"query\":\"synthetic fixture\"},\"outcome\":\"succeeded\",\"elapsed_ms\":1.25,\"output\":{\"results\":[{\"id\":\"synthetic-news\",\"url\":\"https://example.test/synthetic-news\"}]}},{\"phase\":\"model_result\",\"usage\":{\"input_tokens\":1200,\"output_tokens\":300}}]}]}}",
+    "{\"key\":\"fixture-case-5/0\",\"case_id\":\"fixture-case-5\",\"case\":{\"id\":\"fixture-case-5\",\"group\":\"offline-browser-fixture\",\"split\":\"dev\",\"rubric\":\"OFFLINE BROWSER FIXTURE - inspect synthetic evidence only\",\"turns\":[\"Synthetic fixture news request\"]},\"group\":\"offline-browser-fixture\",\"split\":\"dev\",\"rubric\":\"OFFLINE BROWSER FIXTURE - inspect synthetic evidence only\",\"grade\":{\"structural_pass\":true,\"hard_failures\":[],\"failures\":[]},\"observation\":{\"turns\":[{\"answer\":\"[OFFLINE BROWSER FIXTURE] 合成測試回答，不是真模型執行證據。\\n來源：https://example.test/synthetic-news\\n合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。\",\"status\":\"completed\",\"duration_ms\":1820.0,\"events\":[{\"phase\":\"dispatch\",\"call_id\":\"fixture-case-5-search\",\"name\":\"search_news\",\"args\":{\"query\":\"synthetic fixture\"},\"elapsed_ms\":1.0},{\"phase\":\"result\",\"call_id\":\"fixture-case-5-search\",\"name\":\"search_news\",\"args\":{\"query\":\"synthetic fixture\"},\"outcome\":\"succeeded\",\"elapsed_ms\":1.25,\"output\":{\"results\":[{\"id\":\"synthetic-news\",\"url\":\"https://example.test/synthetic-news\"}]}},{\"phase\":\"model_result\",\"usage\":{\"input_tokens\":1200,\"output_tokens\":300}}]}]}}",
+    "{\"key\":\"fixture-case-6/0\",\"case_id\":\"fixture-case-6\",\"case\":{\"id\":\"fixture-case-6\",\"group\":\"offline-browser-fixture\",\"split\":\"dev\",\"rubric\":\"OFFLINE BROWSER FIXTURE - inspect synthetic evidence only\",\"turns\":[\"Synthetic fixture news request\"]},\"group\":\"offline-browser-fixture\",\"split\":\"dev\",\"rubric\":\"OFFLINE BROWSER FIXTURE - inspect synthetic evidence only\",\"grade\":{\"structural_pass\":true,\"hard_failures\":[],\"failures\":[]},\"observation\":{\"turns\":[{\"answer\":\"[OFFLINE BROWSER FIXTURE] 合成測試回答，不是真模型執行證據。\\n來源：https://example.test/synthetic-news\\n合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。\",\"status\":\"completed\",\"duration_ms\":1820.0,\"events\":[{\"phase\":\"dispatch\",\"call_id\":\"fixture-case-6-search\",\"name\":\"search_news\",\"args\":{\"query\":\"synthetic fixture\"},\"elapsed_ms\":1.0},{\"phase\":\"result\",\"call_id\":\"fixture-case-6-search\",\"name\":\"search_news\",\"args\":{\"query\":\"synthetic fixture\"},\"outcome\":\"succeeded\",\"elapsed_ms\":1.25,\"output\":{\"results\":[{\"id\":\"synthetic-news\",\"url\":\"https://example.test/synthetic-news\"}]}},{\"phase\":\"model_result\",\"usage\":{\"input_tokens\":1200,\"output_tokens\":300}}]}]}}",
+    "{\"key\":\"fixture-case-7/0\",\"case_id\":\"fixture-case-7\",\"case\":{\"id\":\"fixture-case-7\",\"group\":\"offline-browser-fixture\",\"split\":\"dev\",\"rubric\":\"OFFLINE BROWSER FIXTURE - inspect synthetic evidence only\",\"turns\":[\"Synthetic fixture news request\"]},\"group\":\"offline-browser-fixture\",\"split\":\"dev\",\"rubric\":\"OFFLINE BROWSER FIXTURE - inspect synthetic evidence only\",\"grade\":{\"structural_pass\":true,\"hard_failures\":[],\"failures\":[]},\"observation\":{\"turns\":[{\"answer\":\"[OFFLINE BROWSER FIXTURE] 合成測試回答，不是真模型執行證據。\\n來源：https://example.test/synthetic-news\\n合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。\",\"status\":\"completed\",\"duration_ms\":1820.0,\"events\":[{\"phase\":\"dispatch\",\"call_id\":\"fixture-case-7-search\",\"name\":\"search_news\",\"args\":{\"query\":\"synthetic fixture\"},\"elapsed_ms\":1.0},{\"phase\":\"result\",\"call_id\":\"fixture-case-7-search\",\"name\":\"search_news\",\"args\":{\"query\":\"synthetic fixture\"},\"outcome\":\"succeeded\",\"elapsed_ms\":1.25,\"output\":{\"results\":[{\"id\":\"synthetic-news\",\"url\":\"https://example.test/synthetic-news\"}]}},{\"phase\":\"model_result\",\"usage\":{\"input_tokens\":1200,\"output_tokens\":300}}]}]}}",
+    "{\"key\":\"fixture-case-8/0\",\"case_id\":\"fixture-case-8\",\"case\":{\"id\":\"fixture-case-8\",\"group\":\"offline-browser-fixture\",\"split\":\"dev\",\"rubric\":\"OFFLINE BROWSER FIXTURE - inspect synthetic evidence only\",\"turns\":[\"Synthetic fixture news request\"]},\"group\":\"offline-browser-fixture\",\"split\":\"dev\",\"rubric\":\"OFFLINE BROWSER FIXTURE - inspect synthetic evidence only\",\"grade\":{\"structural_pass\":true,\"hard_failures\":[],\"failures\":[]},\"observation\":{\"turns\":[{\"answer\":\"[OFFLINE BROWSER FIXTURE] 合成測試回答，不是真模型執行證據。\\n來源：https://example.test/synthetic-news\\n合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。合成案例詳細回答。\",\"status\":\"completed\",\"duration_ms\":1820.0,\"events\":[{\"phase\":\"dispatch\",\"call_id\":\"fixture-case-8-search\",\"name\":\"search_news\",\"args\":{\"query\":\"synthetic fixture\"},\"elapsed_ms\":1.0},{\"phase\":\"result\",\"call_id\":\"fixture-case-8-search\",\"name\":\"search_news\",\"args\":{\"query\":\"synthetic fixture\"},\"outcome\":\"succeeded\",\"elapsed_ms\":1.25,\"output\":{\"results\":[{\"id\":\"synthetic-news\",\"url\":\"https://example.test/synthetic-news\"}]}},{\"phase\":\"model_result\",\"usage\":{\"input_tokens\":1200,\"output_tokens\":300}}]}]}}"
+  ]
+}

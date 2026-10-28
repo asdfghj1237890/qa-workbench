@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "qa-cart-example"
+version = "0.1.0"
+description = "A second system connected to QA Workbench through an installed adapter"
+requires-python = ">=3.11"
+dependencies = ["qa-workbench>=0.1,<1", "pytest>=8,<10"]
+
+[tool.setuptools]
+py-modules = ["application", "cart_qa"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

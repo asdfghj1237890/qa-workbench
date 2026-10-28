@@ -1,0 +1,78 @@
+import { test, expect } from '@playwright/test';
+import { openWorkbench, openHealthHistory, openAuthenticatedWorkbench } from './workbench-actions.js';
+test('another project can configure, explicitly run, review and recover its evidence', async ({ page }, info) => {
+  const workbench = await openWorkbench(page);
+  await workbench.choose('support');
+  expect(workbench.starts()).toHaveLength(0);
+  expect(await workbench.disabled()).toBe(true);
+  await workbench.choose('inventory');
+  expect(workbench.starts()).toHaveLength(0);
+  await workbench.start();
+  await expect.poll(() => workbench.text()).toContain('pending_review');
+  expect(workbench.starts()).toHaveLength(1);
+  expect(workbench.starts()[0].body).toEqual({ task_id: 'inventory', options: {} });
+  await expect.poll(() => workbench.text()).toContain('Measured fixture output');
+  const downloaded = await workbench.download();
+  expect(JSON.parse(downloaded.text).report_sha256).toBe('b'.repeat(64));
+  await workbench.prepareReview();
+  await expect.poll(() => workbench.reviewTemplate()).toEqual([{ row_sha256: 'd'.repeat(64), verdict: '', reason: '' }]);
+  await workbench.review();
+  await expect.poll(() => workbench.reviews().length).toBe(1);
+  expect(workbench.reviews()[0].body.report_sha256).toBe('b'.repeat(64));
+  expect(workbench.reviews()[0].body.verdict).toBe('failed');
+  expect(workbench.reviews()[0].body.rows[0]).toMatchObject({ row_sha256: 'd'.repeat(64), verdict: 'failed' });
+  await workbench.import(downloaded.text);
+  await expect.poll(() => workbench.text()).toContain('historical');
+  expect(workbench.imports()).toHaveLength(1);
+  await workbench.screenshot(info.outputPath('portable-workbench-desktop.png'));
+  await workbench.history();
+  await expect.poll(() => workbench.text()).toContain('Execution history');
+  await workbench.mobile();
+  const bounds = await workbench.overflow();
+  expect(bounds.scroll).toBeLessThanOrEqual(bounds.width);
+  await workbench.screenshot(info.outputPath('portable-workbench-mobile.png'));
+});
+test('extracted health history retains observed evidence on desktop and mobile', async ({ page }, info) => {
+  const health = await openHealthHistory(page);
+  await expect.poll(() => health.text()).toContain('歷史');
+  expect(health.requests().every(request => request.method === 'GET')).toBe(true);
+  await health.screenshot(info.outputPath('portable-health-history-desktop.png'));
+  await health.sevenDays();
+  await expect.poll(() => health.text()).toContain('歷史');
+  await health.mobile();
+  const bounds = await health.overflow();
+  expect(bounds.scroll).toBeLessThanOrEqual(bounds.width);
+  await health.screenshot(info.outputPath('portable-health-history-mobile.png'));
+});
+test('paid dispatch records fresh consent and the exact approved limit', async ({ page }) => {
+  const workbench = await openWorkbench(page);
+  await workbench.choose('support');
+  expect(workbench.starts()).toHaveLength(0);
+  await workbench.consent();
+  await workbench.start();
+  await expect.poll(() => workbench.starts().length).toBe(1);
+  expect(workbench.starts()[0].body).toMatchObject({ task_id: 'support', acknowledge_cost: true, max_usd: 0.25 });
+  await expect.poll(() => workbench.disabled()).toBe(true);
+});
+test('standalone sign-in uses a real bearer-protected HTTP endpoint without persisting credentials', async ({ page }) => {
+  const workbench = await openAuthenticatedWorkbench(page);
+  try {
+    await workbench.signIn(false);
+    await expect.poll(async () => (await workbench.observation()).text).toContain('Credentials were rejected');
+    expect((await workbench.observation()).credential).toBe('');
+    expect((await workbench.observation()).text).not.toContain('rejected-http-fixture');
+    await workbench.signIn();
+    await expect.poll(async () => (await workbench.observation()).applications).toBe(1);
+    await workbench.choose();
+    const signedIn = await workbench.observation();
+    expect(signedIn.requests.every(request => request.method === 'GET')).toBe(true);
+    expect(signedIn.requests.filter(request => request.authorized)).toHaveLength(2);
+    expect(signedIn.tokenInStorage).toBe(false);
+    await workbench.logout();
+    await expect.poll(async () => (await workbench.observation()).applications).toBe(0);
+    expect((await workbench.observation()).credential).toBe('');
+    await workbench.reload();
+    await expect.poll(async () => (await workbench.observation()).text).toContain('Sign in to QA Workbench');
+    expect((await workbench.observation()).applications).toBe(0);
+  } finally { await workbench.close(); }
+});

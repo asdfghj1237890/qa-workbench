@@ -1,0 +1,98 @@
+{
+  "schema_version": 1,
+  "kind": "health_history",
+  "environment": "qa",
+  "scope": "active_qa_instance_and_shared_ingestion",
+  "generated_at": "2026-10-26T00:30:00+00:00",
+  "window": "24h",
+  "module": "indexer",
+  "start_at": "2026-10-25T00:30:00+00:00",
+  "end_at": "2026-10-26T00:30:00+00:00",
+  "interval_seconds": 300,
+  "retention_seconds": 604800,
+  "samples": [
+    {
+      "sampled_at": "2026-10-26T00:00:00+00:00",
+      "source_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "status": "healthy",
+      "freshness": "fresh",
+      "observed_at": "2026-10-25T23:59:00+00:00",
+      "measurement": {
+        "key": "job_report_age",
+        "value": 60,
+        "unit": "seconds",
+        "threshold": 5700
+      },
+      "target_sha": null
+    },
+    {
+      "sampled_at": "2026-10-26T00:05:00+00:00",
+      "source_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "status": "healthy",
+      "freshness": "fresh",
+      "observed_at": "2026-10-25T23:59:00+00:00",
+      "measurement": {
+        "key": "job_report_age",
+        "value": 360,
+        "unit": "seconds",
+        "threshold": 5700
+      },
+      "target_sha": null
+    },
+    {
+      "sampled_at": "2026-10-26T00:15:00+00:00",
+      "source_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "status": "healthy",
+      "freshness": "fresh",
+      "observed_at": "2026-10-25T23:59:00+00:00",
+      "measurement": {
+        "key": "job_report_age",
+        "value": 960,
+        "unit": "seconds",
+        "threshold": 5700
+      },
+      "target_sha": null
+    },
+    {
+      "sampled_at": "2026-10-26T00:20:00+00:00",
+      "source_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "status": "stale",
+      "freshness": "stale",
+      "observed_at": "2026-10-25T22:10:00+00:00",
+      "measurement": {
+        "key": "job_report_age",
+        "value": 7800,
+        "unit": "seconds",
+        "threshold": 5700
+      },
+      "target_sha": null
+    },
+    {
+      "sampled_at": "2026-10-26T00:25:00+00:00",
+      "source_sha": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "status": "healthy",
+      "freshness": "fresh",
+      "observed_at": "2026-10-26T00:24:30+00:00",
+      "measurement": {
+        "key": "job_report_age",
+        "value": 30,
+        "unit": "seconds",
+        "threshold": 5700
+      },
+      "target_sha": null
+    }
+  ],
+  "score": null,
+  "quality_review": "unmeasured",
+  "sampling": {
+    "last_success_at": "2026-10-26T00:25:00+00:00",
+    "overdue_seconds": 0,
+    "missed_intervals": 1,
+    "missed_since_at": "2026-10-26T00:00:00+00:00",
+    "last_attempt": {
+      "started_at": "2026-10-26T00:29:58+00:00",
+      "finished_at": "2026-10-26T00:30:00+00:00",
+      "outcome": "ok"
+    }
+  }
+}

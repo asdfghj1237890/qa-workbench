@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "rag-evalkit-integrations-example"
+version = "0.1.0"
+description = "Explicitly installed external-framework factories for rag-evalkit"
+requires-python = ">=3.11"
+dependencies = ["rag-evalkit[langchain,llamaindex,openai-agents]>=0.2,<1"]
+
+[project.entry-points."rag_evalkit.plugins"]
+external_integrations = "external_evalkit_demo:register"
+
+[tool.setuptools]
+py-modules = ["external_evalkit_demo"]

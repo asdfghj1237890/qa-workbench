@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "status": "ok",
+  "generated_at": "2026-10-18T01:00:00Z",
+  "index": "news-test-snapshot",
+  "total": 1200,
+  "refresh_interval_hours": 24,
+  "embedding": { "model": "BAAI/bge-m3", "dimensions": 1024, "field": "embedding_1024", "count": 1000, "missing": 200, "coverage": 0.8333333333 },
+  "distributions": {
+    "categories": [{ "name": "科技", "count": 800 }, { "name": "國際", "count": 350 }, { "name": "__missing__", "count": 25 }, { "name": "__other__", "count": 25 }],
+    "sources": [{ "name": "cna", "count": 900 }, { "name": "ettoday", "count": 300 }]
+  },
+  "projection": {
+    "method": "umap", "metric": "cosine", "seed": 42,
+    "sample_size": 4, "population": 1000, "sampled": true, "status": "ok",
+    "points": [
+      { "x": -5.2, "y": 2.1, "category": "科技", "site": "cna", "title": "[OFFLINE FIXTURE] 半導體研發新聞", "url": "https://news.example.test/articles/semiconductor?edition=tw" },
+      { "x": -4.8, "y": 1.7, "category": "科技", "site": "ettoday", "title": "[OFFLINE FIXTURE] 科技產業新聞", "url": "https://news.example.test/articles/technology" },
+      { "x": 4.2, "y": -1.1, "category": "國際", "site": "cna" },
+      { "x": 5.1, "y": -2.8, "category": "國際", "site": "cna" }
+    ]
+  }
+}

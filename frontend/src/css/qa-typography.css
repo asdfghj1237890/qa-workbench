@@ -1,0 +1,27 @@
+/* Shared QA type roles. Keep desktop density stable from 960p through 4K;
+   viewport width changes layout, never the meaning or size of a text role. */
+.qa-workbench {
+  --qa-type-page-title: 32px;
+  --qa-type-section-title: 22px;
+  --qa-type-subsection-title: 16px;
+  --qa-type-body: 14px;
+  --qa-type-lead: 16px;
+  --qa-type-control: 14px;
+  --qa-type-meta: 12px;
+  --qa-type-code: 13px;
+  --qa-type-metric: 28px;
+  --qa-type-result: 36px;
+  --qa-leading-title: 1.3;
+  --qa-leading-body: 1.6;
+  font-size: var(--qa-type-body);
+  line-height: var(--qa-leading-body);
+}
+
+@media (max-width: 760px) {
+  .qa-workbench {
+    --qa-type-page-title: 28px;
+    --qa-type-section-title: 20px;
+    --qa-type-metric: 24px;
+    --qa-type-result: 28px;
+  }
+}

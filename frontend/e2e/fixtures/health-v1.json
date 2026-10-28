@@ -1,0 +1,131 @@
+{
+  "schema_version": 1,
+  "kind": "observed_health",
+  "environment": "qa",
+  "scope": "current_qa_instance_and_shared_ingestion",
+  "generated_at": "2026-10-26T00:00:00+00:00",
+  "source_sha": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "max_age_seconds": 120,
+  "cache_seconds": 10,
+  "quality_review": "unmeasured",
+  "modules": [
+    {
+      "id": "frontend",
+      "status": "unknown",
+      "reason": "not_connected",
+      "freshness": "unmeasured",
+      "observed_at": null,
+      "last_success_at": null,
+      "source": "not_connected",
+      "measurement": {
+        "key": "not_measured",
+        "value": null,
+        "unit": "none",
+        "threshold": null
+      },
+      "details": {}
+    },
+    {
+      "id": "agent",
+      "status": "healthy",
+      "reason": "api_responded",
+      "freshness": "fresh",
+      "observed_at": "2026-10-26T00:00:00+00:00",
+      "last_success_at": "2026-10-26T00:00:00+00:00",
+      "source": "qa_request",
+      "measurement": {
+        "key": "response_check",
+        "value": 1,
+        "unit": "checks",
+        "threshold": 1
+      },
+      "details": {}
+    },
+    {
+      "id": "es",
+      "status": "healthy",
+      "reason": "read_probe_ok",
+      "freshness": "fresh",
+      "observed_at": "2026-10-26T00:00:00+00:00",
+      "last_success_at": "2026-10-26T00:00:00+00:00",
+      "source": "news_read_probe",
+      "measurement": {
+        "key": "read_probe_duration",
+        "value": 42,
+        "unit": "milliseconds",
+        "threshold": 2000
+      },
+      "details": {}
+    },
+    {
+      "id": "crawler",
+      "status": "healthy",
+      "reason": "job_reported",
+      "freshness": "fresh",
+      "observed_at": "2026-10-25T23:59:00+00:00",
+      "last_success_at": "2026-10-25T23:59:00+00:00",
+      "source": "crawler_summary",
+      "measurement": {
+        "key": "job_report_age",
+        "value": 60,
+        "unit": "seconds",
+        "threshold": 5700
+      },
+      "details": {
+        "errors": 0
+      }
+    },
+    {
+      "id": "indexer",
+      "status": "critical",
+      "reason": "job_failed",
+      "freshness": "fresh",
+      "observed_at": "2026-10-25T23:59:00+00:00",
+      "last_success_at": null,
+      "source": "indexer_summary",
+      "measurement": {
+        "key": "job_report_age",
+        "value": 60,
+        "unit": "seconds",
+        "threshold": 5700
+      },
+      "details": {
+        "errors": 0,
+        "skipped_embed_error": 0,
+        "retry_pending": 3
+      }
+    },
+    {
+      "id": "llm",
+      "status": "unknown",
+      "reason": "not_connected",
+      "freshness": "unmeasured",
+      "observed_at": null,
+      "last_success_at": null,
+      "source": "not_connected",
+      "measurement": {
+        "key": "not_measured",
+        "value": null,
+        "unit": "none",
+        "threshold": null
+      },
+      "details": {}
+    },
+    {
+      "id": "collector",
+      "status": "healthy",
+      "reason": "collection_completed",
+      "freshness": "fresh",
+      "observed_at": "2026-10-26T00:00:00+00:00",
+      "last_success_at": "2026-10-26T00:00:00+00:00",
+      "source": "health_assembly",
+      "measurement": {
+        "key": "assembly_duration",
+        "value": 12,
+        "unit": "milliseconds",
+        "threshold": 3500
+      },
+      "details": {}
+    }
+  ]
+}

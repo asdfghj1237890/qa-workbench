@@ -1,0 +1,3 @@
+#!/bin/sh
+set -eu
+exec python -I -m qa_workbench.testing.layers --root "$(git rev-parse --show-toplevel)" --config testing.json --staged

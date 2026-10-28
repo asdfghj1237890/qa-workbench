@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "id": "fictional-lab-v1",
+  "description": "Fictional documents and synthetic vectors for protocol demonstration only. No semantic quality or holdout acceptance claim.",
+  "documents": [
+    {"id": "solar", "source_id": "lab:solar", "text": "The fictional Helio battery stores solar energy for six hours.", "vector": [1.0, 0.0, 0.0], "metadata": {"domain": "energy", "synthetic": true}},
+    {"id": "water", "source_id": "lab:water", "text": "The fictional Aqua filter cleans water using a ceramic cartridge.", "vector": [0.0, 1.0, 0.0], "metadata": {"domain": "water", "synthetic": true}},
+    {"id": "wind", "source_id": "lab:wind", "text": "The fictional Aero turbine has three blades and uses wind energy.", "vector": [0.0, 0.0, 1.0], "metadata": {"domain": "energy", "synthetic": true}}
+  ],
+  "cases": [
+    {"id": "solar-lookup", "family": "solar-storage", "split": "dev", "query": "How does the Helio solar battery store energy?", "query_vector": [1.0, 0.0, 0.0], "relevance": {"solar": 3, "water": 0, "wind": 0}, "expected_source_ids": ["lab:solar"], "should_abstain": false, "expected_tools": []}
+  ]
+}
