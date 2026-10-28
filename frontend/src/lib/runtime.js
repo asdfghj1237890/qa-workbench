@@ -15,6 +15,7 @@ let adapter = {
   fetch: (...args) => fetch(...args), categories: defaultCategories,
   branding: { name: 'QA Workbench', mark: '', home: '/' },
   tasks: [], evidence: [], designPreview: false, challengeSitekey: '',
+  healthPanel: null,
   challenge: { get widget() { return null; }, async load() { throw new Error('challenge_provider_required'); } },
   session() { throw new Error('Host authentication adapter required'); },
 };

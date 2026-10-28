@@ -8,6 +8,7 @@ import fixtures from '../../../e2e/observatory-health-physical.cjs';
 import QaHealthWorkspace from '../QaHealthWorkspace.vue';
 import zhTW from '../../i18n/zh-TW.json';
 import en from '../../i18n/en.json';
+import { configureQaAdapter, getQaAdapter } from '../../lib/runtime.js';
 
 const transport = vi.hoisted(() => ({ request: null }));
 vi.mock("../../lib/runtime.js", async original => { const actual = await original(); return ({ ...actual, get QA_EVIDENCE() { return actual.QA_EVIDENCE; }, get QA_REPOSITORY() { return actual.QA_REPOSITORY; }, get WORKBENCH_TASKS() { return actual.WORKBENCH_TASKS; },  AGENT: '/qa/api'  }); });
@@ -17,11 +18,13 @@ const mounted = [];
 // Contract: qaHealth.js validates the shared /qa/health v1 response; the real
 // workspace/child components render it. This local physical owns transport,
 // clock and jsdom's native-dialog replacement, never an external service.
-async function openHealth({ scenario = 'normal', failed = false } = {}) {
+async function openHealth({ scenario = 'normal', failed = false, extension = false, preview = false } = {}) {
   vi.useFakeTimers({ toFake: ['Date', 'setInterval', 'clearInterval'] });
   vi.setSystemTime(new Date('2026-10-26T00:00:00Z'));
   vi.stubGlobal('matchMedia', () => ({ matches: false }));
   const requests = [];
+  const adapter = getQaAdapter();
+  configureQaAdapter({ ...adapter, healthPanel: extension ? { props: ['dark'], template: '<aside data-testid="host-health-extension">Host schedule monitor {{ dark }}</aside>' } : null });
   transport.request = vi.fn(async (url, options) => {
     requests.push({ url, method: options.method });
     if (url.includes('/history?')) { const query = new URL(url, 'http://fixture.invalid').searchParams; return { ok: true, status: 200, json: async () => fixtures.historyBody({ module: query.get('module'), window: query.get('window'), now: Date.now() }) }; }
@@ -29,7 +32,8 @@ async function openHealth({ scenario = 'normal', failed = false } = {}) {
   });
   const i18n = createI18n({ legacy: false, globalInjection: true, locale: 'zh-TW', messages: { 'zh-TW': zhTW, en } });
   const host = document.createElement('div'); document.body.appendChild(host);
-  const wrapper = mount(QaHealthWorkspace, { attachTo: host, props: { dark: true, preview: false }, global: { plugins: [i18n, Quasar] } });
+  const wrapper = mount(QaHealthWorkspace, { attachTo: host, props: { dark: true, preview }, global: { plugins: [i18n, Quasar] } });
+  configureQaAdapter(adapter);
   mounted.push({ wrapper, host });
   await flushPromises();
   const settle = async () => {
@@ -60,6 +64,18 @@ async function openHealth({ scenario = 'normal', failed = false } = {}) {
 afterEach(() => { mounted.splice(0).forEach(({ wrapper, host }) => { wrapper.unmount(); host.remove(); }); vi.useRealTimers(); vi.unstubAllGlobals(); });
 
 describe('authenticated health observations', () => {
+  it('mounts an injected host monitor even when standard observations are unavailable', async () => {
+    const health = await openHealth({ extension: true, failed: true });
+    expect(health.text()).toContain('Host schedule monitor true');
+    expect(health.text()).toContain('目前無法讀取健康觀測');
+    expect(health.requests().map(request => request.method)).toEqual(['GET']);
+  });
+  it('does not mount host monitoring in a design preview or an unextended system', async () => {
+    const preview = await openHealth({ extension: true, preview: true });
+    expect(preview.text()).not.toContain('Host schedule monitor');
+    const health = await openHealth();
+    expect(health.text()).not.toContain('Host schedule monitor');
+  });
   it('shows passive LLM counts, denominator and duration without treating successful counts as errors', async () => {
     const health = await openHealth({ scenario: 'llm-failed' }); await health.choose('llm');
     expect(health.coverage()).toContain('6/7');

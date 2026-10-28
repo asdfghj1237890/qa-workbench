@@ -39,6 +39,13 @@ API transport, identity session, challenge provider, task/evidence descriptions,
 branding and category presentation. Project-specific legacy wire formats are
 handled by these panels; new systems may implement the generic API instead.
 
+An optional `healthPanel` Vue component adds host-specific, read-only monitoring
+above the standard health workspace. Pass a component definition (for example,
+`markRaw(MyScheduleStatus)`) through the adapter before mounting. It receives the
+`dark` prop and owns its authenticated reads and cleanup. It is not mounted in
+design preview. The core health inventory and measurement contract stay unchanged;
+the extension must never start work or send model requests when it is mounted.
+
 The NewsCout adapter lives in `frontend/app/src/adapters/newscoutQa.js` in the host
 repository. Firebase, site taxonomy, Cloudflare script loading and project links
 are confined there and are absent from this frontend's dependency graph.

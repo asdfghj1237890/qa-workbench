@@ -1,5 +1,6 @@
 <template>
   <section class="qh-live-workspace" data-testid="qa-health-workspace" :aria-busy="loading">
+    <component :is="healthPanel" v-if="healthPanel && !preview" :dark="dark" />
     <div v-if="!snapshot" class="qh-state">
       <h1>{{ $t('qaHealth.title') }}</h1><p v-if="preview" class="qh-preview-label">{{ $t('qaHealth.preview') }}</p>
       <p v-if="loading" role="status">{{ $t('qaHealth.live.loading') }}</p>
@@ -16,11 +17,12 @@
 
 <script setup>
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
-import { AGENT } from '../lib/runtime.js';
+import { AGENT, getQaAdapter } from '../lib/runtime.js';
 import { apiFetch } from '../lib/qaSession.js';
 import { observedHealthModel, parseHealthSnapshot } from '../lib/qaHealth.js';
 import QaHealthPanel from './QaHealthPanel.vue';
 const props = defineProps({ dark: Boolean, preview: Boolean });
+const healthPanel = getQaAdapter().healthPanel;
 const snapshot = ref(null), loading = ref(false), error = ref(''), clock = ref(Date.now());
 const model = computed(() => snapshot.value ? observedHealthModel(snapshot.value, { now: clock.value, forceStale: !!error.value, preview: props.preview }) : null);
 let controller, timer, generation = 0;
