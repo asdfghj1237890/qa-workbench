@@ -279,9 +279,9 @@ async function selectProjectionPoint(page, touch = false) {
 async function projectionKey(page, key) { await projection(page).locator(".qa-scatter").focus(); await page.keyboard.press(key); await settleProjection(page); }
 async function toggleProjectionGroup(page, name) { await page.locator(".qa-legend-item").filter({ has: page.getByText(name, { exact: true }) }).click(); await settleProjection(page); }
 async function measureProjectionExploration(page) { const started = Date.now(); await wheelProjection(page); await panProjection(page); await projectionKey(page, "ArrowRight"); return Date.now() - started; }
-async function captureProjection(page, name) { const { test } = require("@playwright/test"); await projection(page).screenshot({ path: test.info().outputPath("projection-" + name + ".png") }); }
-async function projectionMetrics(page, metrics) {
-  const { test } = require("@playwright/test");
+async function captureProjection(page, name, playwright) { const { test } = playwright || require("@playwright/test"); await projection(page).screenshot({ path: test.info().outputPath("projection-" + name + ".png") }); }
+async function projectionMetrics(page, metrics, playwright) {
+  const { test } = playwright || require("@playwright/test");
   await test.info().attach("projection-performance", { body: JSON.stringify(metrics), contentType: "application/json" });
 }
 async function measureProjectionFilter(page, name) {
@@ -296,8 +296,8 @@ async function categoryState(page) {
     theme: root.getAttribute("data-mode"),
   }));
 }
-async function captureCategoryViews(page, name) {
-  const { test } = require("@playwright/test");
+async function captureCategoryViews(page, name, playwright) {
+  const { test } = playwright || require("@playwright/test");
   // Screenshot-only annotation: keep synthetic evidence explicit without leaving
   // a fixed DOM overlay over the phone navigation between captures.
   const annotation = 'body::after { content:"TEST FIXTURE · Screenshot category counts + synthetic coordinates · Not real UMAP";position:fixed;z-index:9999;left:0;right:0;bottom:0;padding:7px 12px;background:#744808;color:#fff;font:11px sans-serif;text-align:center;pointer-events:none; }';
@@ -311,4 +311,16 @@ async function captureCategoryViews(page, name) {
   await projection(page).locator(".qa-scatter").scrollIntoViewIfNeeded();
 }
 
-module.exports = { SNAPSHOT, NEWS_ARTICLE, UNSAFE_NEWS_TITLE, snapshotBody, routeSnapshot, authenticate, BASE, selectView, logout, returnToQaChat, preference, setTheme, workbenchState, releaseState, runWorkbenchPrimary, reopenValidationFromHistory, historyState, openHistoryLog, selectCanvasCentre, articleState, closeArticle, escapeArticle, projectionState, wheelProjection, panProjection, projectionControl, selectProjectionPoint, projectionKey, captureProjection, toggleProjectionGroup, measureProjectionExploration, projectionMetrics, measureProjectionFilter, validation, live, colorByCategory, categoryState, captureCategoryViews };
+const physical = { SNAPSHOT, NEWS_ARTICLE, UNSAFE_NEWS_TITLE, snapshotBody, routeSnapshot, authenticate, BASE, selectView, logout, returnToQaChat, preference, setTheme, workbenchState, releaseState, runWorkbenchPrimary, reopenValidationFromHistory, historyState, openHistoryLog, selectCanvasCentre, articleState, closeArticle, escapeArticle, projectionState, wheelProjection, panProjection, projectionControl, selectProjectionPoint, projectionKey, captureProjection, toggleProjectionGroup, measureProjectionExploration, projectionMetrics, measureProjectionFilter, validation, live, colorByCategory, categoryState, captureCategoryViews };
+
+// Bind runner-owned artifacts per consumer; imports and standalone fixtures stay lazy.
+function createObservatoryPhysical(playwright) {
+  return { ...physical,
+    validation: validation.createValidationPhysical(playwright),
+    live: live.createLiveEvaluationPhysical(playwright),
+    captureProjection: (page, name) => captureProjection(page, name, playwright),
+    projectionMetrics: (page, metrics) => projectionMetrics(page, metrics, playwright),
+    captureCategoryViews: (page, name) => captureCategoryViews(page, name, playwright),
+  };
+}
+module.exports = { ...physical, createObservatoryPhysical };

@@ -49,3 +49,18 @@ embedding individual panels in a host without those styles.
 Shared styles are under `src/css`; licensed font subsets and their original
 licenses are under `public/fonts/qa`. Host compatibility entries forward to this
 single implementation, so fixes apply to both the host and independent project.
+
+## Sharing browser test helpers
+
+A host that reuses `e2e/observatory-physical.cjs` calls
+`createObservatoryPhysical(require("@playwright/test"))` from its own physical
+bridge. The factory also binds the nested validation and live helpers to that
+same runner, including screenshot output paths and test attachments. Direct
+consumers of those modules use `createValidationPhysical` or
+`createLiveEvaluationPhysical` with the same host API. The default exports remain
+self-contained for this project's own installed Playwright dependencies.
+
+Keep SDK resolution in the physical bridge. For host Vitest component tests,
+include `@vue/test-utils` in the host's Vite `resolve.dedupe` alongside Vue and
+Quasar so the shared test sources use the host installation. A second dependency
+installation inside the vendored source is not required.

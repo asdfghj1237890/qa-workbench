@@ -154,8 +154,8 @@ async function attemptRejectedReport(page) {
     return { status: result.status(), downloads };
   } finally { page.off("download", received); }
 }
-async function captureLive(page, name) {
-  const { test } = require("@playwright/test");
+async function captureLive(page, name, playwright) {
+  const { test } = playwright || require("@playwright/test");
   const paths = [];
   // The page scrolls inside .qa-scroll. An element screenshot taller than that
   // viewport clips its invisible children; capture actual visible sections instead.
@@ -170,4 +170,12 @@ async function captureLive(page, name) {
   return paths;
 }
 async function readyLive(page, fixture) { await fixture.ready(); await page.evaluate(() => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)))); }
-module.exports = { LIVE_BASE, LIVE_REPORT_GOLDEN, PROFILES, PRICING, jobBody, caseBody, capabilitiesBody, reportBody, routeLiveEvaluation, liveState, configureLive, acknowledgeLive, startLive, cancelLive, openLiveAnswer, downloadLiveReport, attemptRejectedReport, captureLive, readyLive };
+const physical = { LIVE_BASE, LIVE_REPORT_GOLDEN, PROFILES, PRICING, jobBody, caseBody, capabilitiesBody, reportBody, routeLiveEvaluation, liveState, configureLive, acknowledgeLive, startLive, cancelLive, openLiveAnswer, downloadLiveReport, attemptRejectedReport, captureLive, readyLive };
+
+// Bind runner-owned artifacts per consumer; imports and standalone fixtures stay lazy.
+function createLiveEvaluationPhysical(playwright) {
+  return { ...physical,
+    captureLive: (page, name) => captureLive(page, name, playwright),
+  };
+}
+module.exports = { ...physical, createLiveEvaluationPhysical };

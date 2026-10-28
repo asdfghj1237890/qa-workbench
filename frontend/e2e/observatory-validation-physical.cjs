@@ -213,8 +213,8 @@ async function openValidationEvidence(page) {
   const logs = panel(page).locator('.qa-faithful-log-button[aria-expanded="false"]');
   while (await logs.count()) await logs.first().click();
 }
-async function captureValidation(page, name) {
-  const { test } = require("@playwright/test");
+async function captureValidation(page, name, playwright) {
+  const { test } = playwright || require("@playwright/test");
   const viewport = page.viewportSize();
   if (name === "measured-progress-desktop") await page.setViewportSize({ width: viewport.width, height: 2000 });
   const targets = [panel(page).locator('.qa-guided-heading'), panel(page).locator(".qa-validation-cost"), panel(page).getByTestId('qa-validation-result')];
@@ -227,4 +227,12 @@ async function captureValidation(page, name) {
 async function observeAfterPollingInterval(page) { await page.waitForTimeout(1250); }
 async function readyValidation(page, fixture) { await fixture.ready(); await page.evaluate(() => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)))); }
 
-module.exports = { VALIDATION_BASE, jobBody, capabilitiesBody, routeValidation, validationState, startValidation, selectValidationMode, configureValidationCost, acknowledgeValidationCost, downloadValidationReport, cancelValidation, refreshValidation, captureValidation, observeAfterPollingInterval, readyValidation, openValidationLog, openValidationEvidence };
+const physical = { VALIDATION_BASE, jobBody, capabilitiesBody, routeValidation, validationState, startValidation, selectValidationMode, configureValidationCost, acknowledgeValidationCost, downloadValidationReport, cancelValidation, refreshValidation, captureValidation, observeAfterPollingInterval, readyValidation, openValidationLog, openValidationEvidence };
+
+// Bind runner-owned artifacts per consumer; imports and standalone fixtures stay lazy.
+function createValidationPhysical(playwright) {
+  return { ...physical,
+    captureValidation: (page, name) => captureValidation(page, name, playwright),
+  };
+}
+module.exports = { ...physical, createValidationPhysical };
