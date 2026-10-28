@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """Reusable strict script/action/physical checker, including Git-index source trees.
 
 This is a structural guard, not proof of meaningful scenario vocabulary. Review
