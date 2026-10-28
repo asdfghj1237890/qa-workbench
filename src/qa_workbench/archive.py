@@ -4,6 +4,7 @@ from __future__ import annotations
 import hashlib
 import json
 import logging
+import ntpath
 import os
 import re
 import stat
@@ -15,6 +16,22 @@ MAX_BYTES = 20 * 1024 * 1024
 MAX_FILES = 1024
 NAME = re.compile(r'^[0-9a-f]{64}\.[0-9a-f]{32}\.json$')
 logger = logging.getLogger(__name__)
+
+
+def _windows_extended_path(value):
+    """Keep drive/UNC authority while bypassing Win32's legacy MAX_PATH limit."""
+    value = ntpath.normpath(value)
+    if value.startswith('\\\\?\\'):
+        return value
+    if value.startswith('\\\\'):
+        return '\\\\?\\UNC\\' + value[2:]
+    return '\\\\?\\' + value
+
+
+def _filesystem_path(path):
+    """Convert only I/O paths; callers retain the configured logical root."""
+    absolute = Path(path).absolute()
+    return Path(_windows_extended_path(str(absolute))) if os.name == 'nt' else absolute
 
 
 def _encoded(value):
@@ -39,20 +56,22 @@ class ArchiveStore:
         return hashlib.sha256(owner.encode()).hexdigest()
 
     def _root(self, create=False):
-        for part in (self.root, *self.root.parents):
+        root = _filesystem_path(self.root)
+        for part in (root, *root.parents):
             if part.is_symlink():
                 raise OSError('unsafe_archive_root')
         if create:
-            self.root.mkdir(mode=0o700, parents=True, exist_ok=True)
-        if self.root.exists() and (not self.root.is_dir() or (os.name != 'nt' and self.root.stat().st_mode & 0o077)):
+            root.mkdir(mode=0o700, parents=True, exist_ok=True)
+        if root.exists() and (not root.is_dir() or (os.name != 'nt' and root.stat().st_mode & 0o077)):
             raise OSError('unsafe_archive_root')
 
     def _path(self, owner, job_id):
         if not re.fullmatch(r'[0-9a-f]{32}', job_id):
             raise ValueError('invalid_archive_job_id')
-        return self.root / (self.owner_hash(owner) + '.' + job_id + '.json')
+        return _filesystem_path(self.root) / (self.owner_hash(owner) + '.' + job_id + '.json')
 
     def _read(self, path):
+        path = _filesystem_path(path)
         if path.is_symlink():
             raise OSError('unsafe_archive_file')
         flags = os.O_RDONLY | getattr(os, 'O_NOFOLLOW', 0) | getattr(os, 'O_BINARY', 0)
@@ -78,10 +97,11 @@ class ArchiveStore:
 
     def _files(self):
         self._root()
-        if not self.root.exists():
+        root = _filesystem_path(self.root)
+        if not root.exists():
             return []
         result = []
-        for path in self.root.iterdir():
+        for path in root.iterdir():
             if NAME.fullmatch(path.name):
                 result.append(path)
                 if len(result) > MAX_FILES:
@@ -140,7 +160,7 @@ class ArchiveStore:
         raw = _encoded({'version': 1, 'sha256': hashlib.sha256(_encoded(payload)).hexdigest(), 'payload': payload})
         if len(raw) > self.max_bytes:
             raise OSError('oversized_archive')
-        temporary = self.root / ('.' + uuid.uuid4().hex + '.tmp')
+        temporary = _filesystem_path(self.root) / ('.' + uuid.uuid4().hex + '.tmp')
         try:
             flags = os.O_WRONLY | os.O_CREAT | os.O_EXCL | getattr(os, 'O_NOFOLLOW', 0) | getattr(os, 'O_BINARY', 0)
             with os.fdopen(os.open(temporary, flags, 0o600), 'wb') as stream:

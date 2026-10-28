@@ -13,7 +13,8 @@ has source manifest SHA-256
 That copy passed 391 unit tests (3 existing skips), lint, production build and four
 Chromium journeys, including real local HTTP authentication and mobile views.
 
-The standalone Python suite passes 58 tests. Backend tests cover another-system adapters, explicit start, strict schema and
+The pre-publication standalone Python suite passed 58 tests. Later regression
+coverage is recorded by the CI run for its exact commit. Backend tests cover another-system adapters, explicit start, strict schema and
 paid consent, owner isolation, cancellation, atomic persistence, source identity,
 hash-bound report/case review, historical imports, export privacy and no fallback
 to a host checkout. The project's locked requirements and complete-source ZIP
