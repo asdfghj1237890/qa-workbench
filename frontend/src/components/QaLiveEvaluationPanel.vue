@@ -383,7 +383,7 @@ onBeforeUnmount(() => { controller.abort(); clearTimeout(pollTimer); clearInterv
 .qa-live-archive-import .qa-button { gap: 7px; }
 .qa-live-archive-import p { margin: 0; }
 .qa-live-case-semantic { white-space: nowrap; }
-.qa-live-purpose { margin: 16px 0 20px; border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: 8px; background: var(--surface); }
+.qa-live-purpose { container-type: inline-size; margin: 16px 0 20px; border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: 8px; background: var(--surface); }
 .qa-live-purpose summary { display: flex; align-items: center; gap: 16px; min-height: 52px; box-sizing: border-box; padding: 14px 22px; list-style: none; cursor: pointer; }
 .qa-live-purpose summary::-webkit-details-marker { display: none; }
 .qa-live-purpose summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 6px; }
@@ -541,6 +541,12 @@ onBeforeUnmount(() => { controller.abort(); clearTimeout(pollTimer); clearInterv
 .qa-live-workbench .qa-live-evidence-layout .qa-live-guide-limit { display: block; margin-top: 28px; padding-top: 20px; border-top: 1px solid var(--border); }
 .qa-live-workbench .qa-live-guide-limit p + p { margin-top: 10px; }
 .qa-live-workbench .qa-button { font-size: var(--qa-type-control); }
+/* The workbench's desktop detail pane can be narrower than a phone viewport. */
+@container (max-width: 650px) {
+  .qa-live-purpose summary { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 5px 12px; }
+  .qa-live-purpose-summary { grid-column: 1; }
+  .qa-live-purpose-toggle { grid-column: 2; grid-row: 1 / 3; }
+}
 @media (max-width: 1190px) {
   .qa-live-workbench .qa-live-layout { grid-template-columns: minmax(0, 1fr); }
   .qa-live-workbench .qa-live-guide { padding-bottom: 28px; }
