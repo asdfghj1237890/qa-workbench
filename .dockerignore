@@ -42,6 +42,14 @@ frontend/src/adapters/*
 frontend/src/components/*
 !frontend/src/components/*.vue
 
+!frontend/src/components/workbench
+frontend/src/components/workbench/*
+!frontend/src/components/workbench/*.vue
+
+!frontend/src/composables
+frontend/src/composables/*
+!frontend/src/composables/*.js
+
 !frontend/src/css
 frontend/src/css/*
 !frontend/src/css/*.css
@@ -193,3 +201,4 @@ packages/rag-evalkit/src/rag_evalkit/stores/*
 **/*.log
 **/*.pyc
 **/*.pyo
+

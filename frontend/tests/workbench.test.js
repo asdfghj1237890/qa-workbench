@@ -31,4 +31,12 @@ describe('portable project workbench', () => {
     await scenario.startRun();
     expect(scenario.observation().calls).toEqual([]);
   });
+  it('keeps paid execution disabled when the budget input is cleared', async () => {
+    const scenario = await open();
+    await scenario.chooseTask('support-quality');
+    await scenario.authorizeCost('');
+    expect(scenario.observation().startDisabled).toBe(true);
+    await scenario.startRun();
+    expect(scenario.observation().calls).toEqual([]);
+  });
 });

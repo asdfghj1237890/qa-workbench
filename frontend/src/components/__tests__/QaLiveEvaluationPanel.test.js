@@ -7,7 +7,7 @@ import { Quasar } from "quasar";
 import QaLiveEvaluationPanel from "../QaLiveEvaluationPanel.vue";
 import QaSemanticReviewPanel from "../QaSemanticReviewPanel.vue";
 import fixtures from "../../../e2e/observatory-live-evaluation-physical.cjs";
-import { observeReviewedJob } from "../../lib/__tests__/qa/semantic-review-physical.js";
+import { observeReviewedJob, reviewImportBody } from "../../lib/__tests__/qa/semantic-review-physical.js";
 import zhTW from "../../i18n/zh-TW.json";
 import en from "../../i18n/en.json";
 
@@ -17,12 +17,6 @@ vi.mock("../../lib/qaSession.js", () => ({ apiFetch: (...args) => transport.fetc
 const mounted = [];
 // Contract: qa_evaluations.py POST /{id}/review and /import accept only the raw
 // sidecar review fields. Public semantic_review rows additionally carry case_id.
-function reviewImportBody(job = observeReviewedJob()) {
-  const review = job.semantic_review;
-  return { report_sha256: review.report_sha256, reviewer_kind: review.reviewer_kind, reviewer: review.reviewer,
-    reviewed_at: review.reviewed_at, reviews: review.cases.map((row) => ({ key: row.key, row_sha: row.row_sha,
-      reviewer: row.reviewer, scores: row.scores, reason: row.reason })) };
-}
 const uploadFile = (value, malformed = false) => ({ name: "offline-review.json", size: 1024,
   text: async () => malformed ? "{invalid JSON" : JSON.stringify(value) });
 function archiveImportBody() {

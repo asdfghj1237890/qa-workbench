@@ -57,6 +57,33 @@ Shared styles are under `src/css`; licensed font subsets and their original
 licenses are under `public/fonts/qa`. Host compatibility entries forward to this
 single implementation, so fixes apply to both the host and independent project.
 
+## Views and execution composables
+
+`App.vue` assembles the standalone task settings, execution evidence/review,
+history and health views under `src/components/workbench/`. Those views accept
+data and emit user actions; they do not fetch data or schedule execution.
+`StandaloneShell.vue` continues to own identity and authenticated transport.
+
+The execution state and side effects live in three instance-scoped composables:
+
+| Composable | Responsibility | Injected dependency |
+| --- | --- | --- |
+| `useWorkbench` | Generic task lifecycle, polling, cancellation, logs, report import/export and hash-bound reviews | `{ client }` implementing `createWorkbenchClient` |
+| `useValidationRun` | Validation mode/consent, request deadlines, status observations, cancellation and report downloads | `(props, emit, { request })` |
+| `useLiveEvaluation` | Model evaluation consent, polling/backoff, cancellation, archive and semantic-review sidecars | `(emit, { request })` |
+
+Call these inside Vue `setup()` so watches, requests and timers belong to that
+component's lifecycle. The optional panel `request` dependency defaults to
+`apiFetch`; the default standalone client still uses the configured adapter.
+The generic API and the specialized panel APIs retain their separate contracts.
+The two panels keep their existing props, events, exposed methods, templates and
+scoped styles. Preparing settings never starts a run or preserves paid consent.
+
+`tests/composables.test.js` exercises the composables through actions and physical
+adapters using a minimal Vue lifecycle host, frozen protocol fixtures and fake
+time. It covers disposal, pending reads after cancellation, transient failures,
+fresh consent, review payloads and independent instances without mounting panels.
+
 ## Sharing browser test helpers
 
 A host that reuses `e2e/observatory-physical.cjs` calls

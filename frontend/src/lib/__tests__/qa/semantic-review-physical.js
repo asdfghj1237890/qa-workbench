@@ -58,6 +58,15 @@ export function observeReviewedJob(options = {}, change = () => {}) {
   return job;
 }
 
+// Contract: the /qa/evaluations/{id}/review sidecar accepts raw review fields;
+// public semantic_review observations additionally include derived case IDs.
+export function reviewImportBody(job = observeReviewedJob()) {
+  const review = job.semantic_review;
+  return { report_sha256: review.report_sha256, reviewer_kind: review.reviewer_kind, reviewer: review.reviewer,
+    reviewed_at: review.reviewed_at, reviews: review.cases.map((row) => ({ key: row.key, row_sha: row.row_sha,
+      reviewer: row.reviewer, scores: row.scores, reason: row.reason })) };
+}
+
 export function observedReviewSummary(options = {}, change = () => {}) {
   const job = observeReviewedJob(options, change);
   delete job.cases;
