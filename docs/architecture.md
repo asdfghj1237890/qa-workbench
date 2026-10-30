@@ -46,14 +46,36 @@ The older project-specific panels are supplied as reusable UI components; their
 project protocol is an adapter capability. The standalone task workspace accepts
 arbitrary task IDs and schemas and does not require those specialized protocols.
 
-The frontend separates presentation from execution state. `App.vue` composes
-task settings, run evidence/review, history and health views;
-`useWorkbench` owns their generic API lifecycle. `QaValidationPanel` and
-`QaLiveEvaluationPanel` render their existing panel contracts through
-`useValidationRun` and `useLiveEvaluation`. Each composable owns its cancellation
-signal, timers and observations per instance. Requests can be injected for
-independent lifecycle tests; no shared execution singleton or common retry policy
-is imposed on the different protocols.
+The frontend separates execution, presentation and browser artifacts:
+
+```mermaid
+flowchart LR
+    V[App and panel views] --> P[Panel presentation composables]
+    P --> E[Headless execution cores]
+    P --> R[Hash-bound workbench review]
+    P --> B[Artifact files and challenge widget]
+    E --> T[Injected client or request port]
+    R --> E
+    B --> D[Browser file and DOM adapters]
+    N[Node lifecycle tests] --> E
+    N --> R
+```
+
+`App.vue` composes task settings, run evidence/review, history and health views.
+`useWorkbenchPanel`, `useValidationPanel` and `useLivePanel` provide grouped
+`state`, `form`, `ui`, `actions` and optional `dom` bindings. Presentation owns
+i18n, formatting, visibility, focus and scrolling. Execution cores take explicit
+transport ports; their read-only observations, editable forms and actions are
+testable in a Vue effect scope without DOM or host configuration. The workbench
+review core checks the selection revision before applying report hashes. Browser
+file parsing and URL lifetimes stay outside execution. The original three flat
+composables remain compatibility facades with the same default host adapters.
+
+Each execution instance owns its abort signal, selection revisions and timers.
+Disposal aborts requests and clears timers; late responses cannot overwrite
+cancelled or disposed state. The protocols keep their own polling/retry policies.
+Tests use frozen fixtures and an independent request contract that rejects unknown
+routes, wrong methods, base-prefix collisions and invalid mutation bodies.
 
 ## Evidence rules
 

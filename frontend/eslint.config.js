@@ -15,5 +15,16 @@ export default [
       'vue/require-default-prop': 'off',
     },
   },
+  { files: ['src/composables/*.js'], rules: { 'no-unused-vars': ['error', { argsIgnorePattern: '^_' }] } },
+  {
+    files: ['src/composables/use*Execution.js', 'src/composables/useWorkbenchReview.js'],
+    rules: {
+      'no-restricted-globals': ['error', 'document', 'window', 'navigator', 'localStorage', 'sessionStorage', 'URL', 'File', 'FileReader', 'Intl'],
+      'no-restricted-syntax': ['error', {
+        selector: "ImportDeclaration:not([source.value='vue']):not([source.value='../lib/qaValidation.js']):not([source.value='../lib/qaLiveEvaluation.js']):not([source.value='../lib/qaSemanticReview.js']):not([source.value='../lib/workbenchApi.js'])",
+        message: 'Execution and review cores accept explicit ports and only import Vue or pure protocol helpers.',
+      }],
+    },
+  },
   { ignores: ['dist/**', 'node_modules/**', 'test-results/**', 'test-results-independent/**', 'playwright-report/**', '.yarn/**'] },
 ];

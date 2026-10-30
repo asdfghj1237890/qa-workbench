@@ -1,4 +1,4 @@
-// @vitest-environment jsdom
+// @vitest-environment node
 import { afterEach, describe, expect, it } from 'vitest';
 import { openExecutionFlow, closeExecutionFlows } from './test-support/composable-actions.js';
 
@@ -13,6 +13,8 @@ describe('independent execution composables', () => {
     await flow.authorizeCost(0.25);
     await flow.startRun();
     const result = flow.observation();
+    expect(result.headless).toEqual({ readonlyState: true, groups: ['state', 'form', 'actions', 'lifecycle'] });
+    expect(result.protocolErrors).toEqual([]);
     expect(result.mutations).toHaveLength(1);
     expect(result.mutations[0].body).toMatchObject({ acknowledge_cost: true, max_usd: 0.25 });
     expect(result.acknowledged).toBe(false);
@@ -35,18 +37,20 @@ describe('independent execution composables', () => {
     expect(flow.observation().mutations).toHaveLength(2);
   });
 
-  it.each(['validation', 'live'])('%s ignores a pending poll received after cancellation', async kind => {
+  it.each(['workbench', 'validation', 'live'])('%s ignores a pending poll received after cancellation', async kind => {
     const flow = await openExecutionFlow(kind);
     await flow.choosePaidTask();
     await flow.authorizeCost(0.25);
     await flow.startRun();
     await flow.holdNextPoll();
-    await flow.advanceTime(1000);
+    await flow.advanceTime(kind === 'workbench' ? 2000 : 1000);
     expect(flow.observation().pendingReads).toBe(1);
     await flow.cancelRun();
     await flow.releasePoll();
     expect(flow.observation().job.status).toBe('cancelled');
-    expect(flow.observation().events.filter(event => event.name === 'observation-change').at(-1).value.job.status).toBe('cancelled');
+    if (kind !== 'workbench') {
+      expect(flow.observation().events.filter(event => event.name === 'observation-change').at(-1).value.job.status).toBe('cancelled');
+    }
   });
 
   it.each(['workbench', 'validation', 'live'])('%s aborts an outstanding read and stops polling on disposal', async kind => {
@@ -74,6 +78,36 @@ describe('independent execution composables', () => {
     expect(flow.observation().job.status).toBe('completed');
     await flow.startRun();
     expect(flow.observation().mutations).toHaveLength(1);
+  });
+
+  it.each(['workbench', 'validation', 'live'])('%s discards a start response delivered after its scope is disposed', async kind => {
+    const flow = await openExecutionFlow(kind);
+    await flow.choosePaidTask();
+    await flow.authorizeCost(0.25);
+    await flow.holdNextStart();
+    await flow.beginStart();
+    expect(flow.observation().pendingReads).toBe(1);
+    await flow.close();
+    await flow.releaseOperation();
+    expect(flow.observation().job).toBeNull();
+    expect(flow.observation().error).toBe('');
+  });
+
+  it('discards a pending review preparation when the selected workbench run changes', async () => {
+    const flow = await openExecutionFlow('workbench');
+    await flow.choosePaidTask();
+    await flow.authorizeCost(0.25);
+    await flow.startRun();
+    await flow.completeRun();
+    await flow.advanceTime(2000);
+    await flow.holdNextReport();
+    await flow.beginReviewPreparation();
+    expect(flow.observation().pendingReads).toBe(1);
+    await flow.choosePaidTask();
+    await flow.releaseOperation();
+    expect(flow.observation().job).toBeNull();
+    expect(flow.observation().reviewHash).toBe('');
+    expect(flow.observation().reviewRows).toEqual([]);
   });
 
   it.each(['validation', 'live'])('%s retains observed evidence across a transient status failure', async kind => {
@@ -123,6 +157,19 @@ describe('independent execution composables', () => {
     expect(result.job.semantic_status).toBe('reviewed');
   });
 
+  it.each(['workbench', 'live'])('%s restores archived evidence through its original import contract without starting a run', async kind => {
+    const flow = await openExecutionFlow(kind);
+    await flow.restoreEvidence();
+    const result = flow.observation();
+    expect(result.protocolErrors).toEqual([]);
+    expect(result.mutations).toHaveLength(1);
+    expect(result.mutations[0].path).toMatch(/\/import$/);
+    expect(result.job.status).toBe('completed');
+    expect(result.job.quality_passed).toBe(false);
+    expect(result.job[kind === 'workbench' ? 'historical_import' : 'archive_imported']).toBe(true);
+    expect(result.acknowledged).toBe(false);
+  });
+
   it.each(['workbench', 'validation', 'live'])('%s instances keep their execution state and consent separate', async kind => {
     const first = await openExecutionFlow(kind);
     const second = await openExecutionFlow(kind);
@@ -133,5 +180,16 @@ describe('independent execution composables', () => {
     expect(second.observation().job).toBeNull();
     expect(second.observation().acknowledged).toBe(false);
     expect(second.observation().mutations).toEqual([]);
+  });
+
+  describe.each(['workbench', 'validation', 'live'])('%s fake transport contract', kind => {
+    it.each(['unknownPost', 'unknownGet', 'wrongBase', 'wrongMethod', 'missingConsent', 'invalidBudget', 'extraField', 'invalidCancel'])('rejects %s instead of fabricating a job', async name => {
+      const flow = await openExecutionFlow(kind);
+      const result = await flow.challengeProtocol(name);
+      expect(result.accepted).toBe(false);
+      expect(result.error).toMatch(/^Unexpected execution API request:/);
+      expect(flow.observation().job).toBeNull();
+      expect(flow.observation().protocolErrors).toEqual([result.error]);
+    });
   });
 });
