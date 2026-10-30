@@ -50,6 +50,10 @@ def usage_cost_lower_bound(usage):
     return float(cost)
 
 
+def _reject_nonfinite(value):
+    raise ContractError("nonfinite JSON: " + value)
+
+
 def read_json(path):
     def duplicate(pairs):
         result = {}
@@ -59,6 +63,6 @@ def read_json(path):
             result[key] = value
         return result
     with open(path, encoding="utf-8") as source:
-        result = json.load(source, object_pairs_hook=duplicate, parse_constant=lambda value: (_ for _ in ()).throw(ContractError("nonfinite JSON: " + value)))
+        result = json.load(source, object_pairs_hook=duplicate, parse_constant=_reject_nonfinite)
     plain(result)
     return result

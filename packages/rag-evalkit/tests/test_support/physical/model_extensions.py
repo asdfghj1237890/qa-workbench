@@ -1,6 +1,6 @@
 """Physical protocol fixtures plus actual loopback HTTP SSE.
 
-Contract anchors: models/streaming.py StreamAccumulator, OpenAI Responses
+Contract: models/streaming.py StreamAccumulator, OpenAI Responses
 streaming-responses/images-vision/tools-web-search/tools-file-search guides;
 Anthropic build-with-claude/streaming and vision. These are synthetic protocol
 tests with no model API access, not live model quality or billing evidence.
@@ -81,7 +81,7 @@ def model_identity_run(provider, actual_mode, streaming):
         parsed = model._parse(response, {})
         generation = model.generate([Message("user", "Question")])
     except RuntimeFailure as exc:
-        error = exc
+        error = {"type": type(exc).__name__, "code": exc.code, "raw": copy.deepcopy(exc.raw)}
     result = ToolLoopHarness(model).run([Message("user", "Question")])
     return {"parsed": parsed, "generation": generation, "error": error, "result": result,
             "description": model.describe()}
@@ -139,7 +139,7 @@ def split_credential_stream(provider, channel, fragment_size, escaped=False, par
         for event in model.stream([Message("user", "Question")]):
             public_events.append(event)
     except RuntimeFailure as exc:
-        failure = exc
+        failure = {"type": type(exc).__name__, "code": exc.code, "raw": copy.deepcopy(exc.raw)}
     field = "arguments_delta" if is_tool else "text"
     public_text = "".join(event.data[field] for event in public_events if event.kind == ("tool_call_delta" if is_tool else "text_delta"))
     decoded_public = re.sub(r"\\u([0-9a-fA-F]{4})", lambda match: chr(int(match[1], 16)), public_text)
@@ -284,7 +284,7 @@ def streaming_run(provider, mode="normal", *, iterator=False):
                 try:
                     events = list(model.stream([Message("user", "Question")], limits=limits, cancel=cancel))
                 except RuntimeFailure as exc:
-                    error = exc
+                    error = {"type": type(exc).__name__, "code": exc.code, "raw": copy.deepcopy(exc.raw)}
                 result = next((event.generation for event in events if event.generation), None)
             else:
                 error = None

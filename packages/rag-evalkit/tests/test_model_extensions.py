@@ -25,7 +25,8 @@ def test_provider_reported_model_identity_survives_parse_finalize_and_harness(pr
 @pytest.mark.parametrize(("actual_mode", "status"), [("bad_type", "provider_invalid_model_identity"), ("credential", "provider_credential_echo")])
 def test_invalid_or_secret_provider_model_identity_fails_without_fabricating_an_alias(provider, streaming, actual_mode, status):
     observed = actions.observe_model_identity(provider, actual_mode, streaming=streaming)
-    assert observed["error"].code == status
+    assert observed["error"]["type"] == "RuntimeFailure"
+    assert observed["error"]["code"] == status
     assert observed["result"].status == status
     assert not any(event.kind == "model_end" for event in observed["result"].traces)
     assert actions.EXPECTED_CREDENTIAL not in str(observed["result"])
@@ -109,11 +110,12 @@ def test_stream_credential_echo_is_redacted_from_all_public_events():
 @pytest.mark.parametrize("fragment_size", [1, 2, 5, 12, 20])
 def test_fragmented_credentials_never_reconstruct_from_public_deltas(provider, channel, fragment_size):
     observed = actions.consume_fragmented_credential(provider, channel, fragment_size)
-    assert observed["failure"].code == "provider_credential_echo"
-    assert observed["failure"].raw["api_requests"] == 2
+    assert observed["failure"]["type"] == "RuntimeFailure"
+    assert observed["failure"]["code"] == "provider_credential_echo"
+    assert observed["failure"]["raw"]["api_requests"] == 2
     assert actions.EXPECTED_CREDENTIAL not in observed["public_text"]
     assert actions.EXPECTED_CREDENTIAL not in str(observed["public_events"])
-    assert actions.EXPECTED_CREDENTIAL not in str(observed["failure"].raw)
+    assert actions.EXPECTED_CREDENTIAL not in str(observed["failure"]["raw"])
     assert observed["final"] is None
     assert "Safe " in observed["public_text"]
 
@@ -122,7 +124,7 @@ def test_fragmented_credentials_never_reconstruct_from_public_deltas(provider, c
 @pytest.mark.parametrize("fragment_size", [1, 5, 12])
 def test_json_escaped_credentials_are_protected_across_tool_argument_fragments(provider, fragment_size):
     observed = actions.consume_fragmented_credential(provider, "tool", fragment_size, escaped=True)
-    assert observed["failure"].code == "provider_credential_echo"
+    assert observed["failure"]["code"] == "provider_credential_echo"
     assert actions.EXPECTED_CREDENTIAL not in observed["decoded_public"]
     assert observed["final"] is None
     assert "Safe " in observed["decoded_public"]
