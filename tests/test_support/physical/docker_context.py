@@ -72,3 +72,31 @@ def docker_context_policy():
         "admitted_private_paths": [path for path in PRIVATE_DOCKER_PATHS if _admitted(path, rules)],
         "runtime_source_count": len(actual),
     }
+
+
+def docker_runtime_policy():
+    source = (ROOT / "Dockerfile").read_text(encoding="utf-8").replace("\\\n", " ")
+    instructions = [line.split(None, 1) for line in source.splitlines() if line.strip() and not line.startswith("#")]
+    final_stage = max(index for index, (command, value) in enumerate(instructions) if command == "FROM")
+    runtime = instructions[final_stage + 1:]
+    result = {"user": None, "user_definition": None, "group_definition": None,
+              "created_directories": [], "directory_owners": {}, "user_index": None, "cmd_index": None}
+    for index, (command, value) in enumerate(runtime):
+        if command == "USER":
+            result.update(user=value, user_index=index)
+        elif command == "CMD":
+            result["cmd_index"] = index
+        elif command == "RUN":
+            for operation in value.split("&&"):
+                words = shlex.split(operation)
+                if words[0] == "useradd":
+                    result["user_definition"] = {"name": words[-1], "uid": words[words.index("--uid") + 1],
+                                                 "group": words[words.index("--gid") + 1], "system": "--system" in words}
+                elif words[0] == "groupadd":
+                    result["group_definition"] = {"name": words[-1], "gid": words[words.index("--gid") + 1],
+                                                  "system": "--system" in words}
+                elif words[0] == "mkdir":
+                    result["created_directories"].extend(word for word in words[1:] if not word.startswith("-"))
+                elif words[0] == "chown":
+                    result["directory_owners"][words[-1]] = words[-2]
+    return result
