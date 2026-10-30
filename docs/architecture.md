@@ -46,6 +46,15 @@ The older project-specific panels are supplied as reusable UI components; their
 project protocol is an adapter capability. The standalone task workspace accepts
 arbitrary task IDs and schemas and does not require those specialized protocols.
 
+The frontend separates presentation from execution state. `App.vue` composes
+task settings, run evidence/review, history and health views;
+`useWorkbench` owns their generic API lifecycle. `QaValidationPanel` and
+`QaLiveEvaluationPanel` render their existing panel contracts through
+`useValidationRun` and `useLiveEvaluation`. Each composable owns its cancellation
+signal, timers and observations per instance. Requests can be injected for
+independent lifecycle tests; no shared execution singleton or common retry policy
+is imposed on the different protocols.
+
 ## Evidence rules
 
 GET requests and task selection cannot execute a task. Paid task descriptors have

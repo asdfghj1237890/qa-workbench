@@ -12,3 +12,6 @@ export { default as QaHealthHistory } from './components/QaHealthHistory.vue';
 export { default as QaProjection } from './components/QaProjection.vue';
 export { configureQaAdapter, getQaAdapter } from './lib/runtime.js';
 export { createWorkbenchClient, startPayload, runEvidence } from './lib/workbenchApi.js';
+export { useWorkbench } from './composables/useWorkbench.js';
+export { useValidationRun } from './composables/useValidationRun.js';
+export { useLiveEvaluation } from './composables/useLiveEvaluation.js';
