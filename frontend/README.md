@@ -64,25 +64,46 @@ history and health views under `src/components/workbench/`. Those views accept
 data and emit user actions; they do not fetch data or schedule execution.
 `StandaloneShell.vue` continues to own identity and authenticated transport.
 
-The execution state and side effects live in three instance-scoped composables:
+Execution cores take explicit transport ports and run inside a Vue effect scope,
+including in Node without a component, DOM, locale plugin or configured host:
 
 | Composable | Responsibility | Injected dependency |
 | --- | --- | --- |
-| `useWorkbench` | Generic task lifecycle, polling, cancellation, logs, report import/export and hash-bound reviews | `{ client }` implementing `createWorkbenchClient` |
-| `useValidationRun` | Validation mode/consent, request deadlines, status observations, cancellation and report downloads | `(props, emit, { request })` |
-| `useLiveEvaluation` | Model evaluation consent, polling/backoff, cancellation, archive and semantic-review sidecars | `(emit, { request })` |
+| `useWorkbenchExecution` | Generic task lifecycle, polling, cancellation, logs and evidence transport | `{ client }` implementing `createWorkbenchClient` |
+| `useWorkbenchReview` | Review preparation and submission bound to the selected report and row hashes | `{ execution }` report/review port and selection state |
+| `useValidationExecution` | Validation modes/consent, deadlines, polling and cancellation | `{ request, base, requestedMode?, security?, onStatus?, onObservation?, onModeChange? }` |
+| `useLiveExecution` | Model evaluation consent, polling/backoff, cancellation and review/archive submission | `{ request, base, onStatus?, onObservation? }` |
 
-Call these inside Vue `setup()` so watches, requests and timers belong to that
-component's lifecycle. The optional panel `request` dependency defaults to
-`apiFetch`; the default standalone client still uses the configured adapter.
-The generic API and the specialized panel APIs retain their separate contracts.
-The two panels keep their existing props, events, exposed methods, templates and
-scoped styles. Preparing settings never starts a run or preserves paid consent.
+Each execution core returns `state` (read-only observations), `form` (editable
+configuration), `actions` and `lifecycle` (`signal` and idempotent `dispose`).
+After construction, call `actions.initialize()` for the workbench or
+`actions.refresh()` for the specialized protocols. Stopping the effect scope
+aborts requests and clears timers. A late polling or start response cannot restore
+an obsolete execution state. Review preparation also checks the selection revision.
+
+`useWorkbenchPanel`, `useValidationPanel` and `useLivePanel` assemble those cores
+for Vue views. Components consume four or five groups: `state`, `form`, `ui`,
+`actions`, and optional `dom` refs. These presentation modules own locale-dependent
+text, visibility, history focus/scrolling and component events. Challenge-widget
+handling and browser artifact files have separate adapters; `useArtifactFiles`
+owns object URLs and cleanup and accepts an independent file port. Execution cores
+receive parsed data or a deferred reader and never access file inputs or anchors.
+
+The original `useWorkbench`, `useValidationRun` and `useLiveEvaluation` exports
+remain flat compatibility facades. Their optional transport defaults still use
+the configured adapter or `apiFetch`. Existing panel props, events, exposed methods,
+HTTP payloads and scoped styles remain intact. Preparing settings never starts a
+run or preserves paid consent. ESLint guards execution/review cores against
+presentation imports, host singletons and browser globals.
 
 `tests/composables.test.js` exercises the composables through actions and physical
-adapters using a minimal Vue lifecycle host, frozen protocol fixtures and fake
-time. It covers disposal, pending reads after cancellation, transient failures,
-fresh consent, review payloads and independent instances without mounting panels.
+adapters using a Node effect scope, frozen protocol fixtures and fake time. It
+covers disposal, late responses after cancellation, transient failures, fresh
+consent, review payloads and independent instances. The fake API checks exact
+routes, methods, base boundaries, payload keys and types against an independent
+contract; unknown requests fail instead of fabricating a queued job.
+`tests/artifacts.test.js` separately checks browser file parsing and URL ownership.
+The existing component and browser suites verify presentation and public events.
 
 ## Sharing browser test helpers
 

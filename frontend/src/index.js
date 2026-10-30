@@ -15,3 +15,10 @@ export { createWorkbenchClient, startPayload, runEvidence } from './lib/workbenc
 export { useWorkbench } from './composables/useWorkbench.js';
 export { useValidationRun } from './composables/useValidationRun.js';
 export { useLiveEvaluation } from './composables/useLiveEvaluation.js';
+export { useWorkbenchExecution } from './composables/useWorkbenchExecution.js';
+export { useWorkbenchReview } from './composables/useWorkbenchReview.js';
+export { useValidationExecution } from './composables/useValidationExecution.js';
+export { useLiveExecution } from './composables/useLiveExecution.js';
+export { useWorkbenchPanel } from './composables/useWorkbenchPanel.js';
+export { useValidationPanel } from './composables/useValidationPanel.js';
+export { useLivePanel } from './composables/useLivePanel.js';

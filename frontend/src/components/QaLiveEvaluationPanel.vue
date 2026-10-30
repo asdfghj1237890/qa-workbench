@@ -1,7 +1,7 @@
 <template>
   <section class="qa-testing qa-live" :class="{ 'qa-live-workbench': workbench }" aria-labelledby="qa-live-title" data-testid="qa-live-panel">
     <div class="qa-testing-heading">
-      <div><div v-if="!workbench" class="qa-eyebrow">{{ $t('qaLive.eyebrow') }}</div><component :is="workbench ? 'h1' : 'h2'" id="qa-live-title" data-testid="qa-live-state-title">{{ $t(workbench ? stateTitleKey : 'qaLive.title') }}</component><p v-if="workbench" class="qa-testing-intro">{{ $t('qaLive.title') }}<template v-if="workspacePhase === 'settings'"> · {{ $t('qaFaithfulLive.intro') }}</template></p></div>
+      <div><div v-if="!workbench" class="qa-eyebrow">{{ $t('qaLive.eyebrow') }}</div><component :is="workbench ? 'h1' : 'h2'" id="qa-live-title" data-testid="qa-live-state-title">{{ $t(workbench ? ui.stateTitleKey : 'qaLive.title') }}</component><p v-if="workbench" class="qa-testing-intro">{{ $t('qaLive.title') }}<template v-if="ui.workspacePhase === 'settings'"> · {{ $t('qaFaithfulLive.intro') }}</template></p></div>
       <span v-if="!workbench" class="qa-live-tag">{{ $t('qaLive.realism') }}</span>
     </div>
     <p v-if="!workbench" class="qa-testing-intro">{{ $t('qaLive.scope') }}</p>
@@ -23,104 +23,104 @@
       </div>
     </details>
     <div class="qa-live-archive-import">
-      <button class="qa-button" type="button" data-testid="qa-live-import-archive" :disabled="loading || capabilities?.busy || isLiveActive(job)" @click="archiveInput?.click()"><QaIcon name="upload" aria-hidden="true" />{{ $t('qaSemanticReview.archiveImport') }}</button>
-      <input ref="archiveInput" type="file" accept="application/json,.json" :aria-label="$t('qaSemanticReview.archiveImport')" hidden @change="selectArchive" />
-      <p class="qa-small">{{ $t(importing ? 'qaSemanticReview.importing' : 'qaSemanticReview.archiveHint') }}</p>
-      <p v-if="reviewImportError" role="alert" class="qa-gap">{{ $t(reviewImportError) }}</p>
-      <p v-if="reviewSaved" role="status" class="qa-small">{{ $t('qaSemanticReview.saved') }}</p>
+      <button class="qa-button" type="button" data-testid="qa-live-import-archive" :disabled="state.loading || state.capabilities?.busy || state.isLiveActive(state.job)" @click="dom.archiveInput.value?.click()"><QaIcon name="upload" aria-hidden="true" />{{ $t('qaSemanticReview.archiveImport') }}</button>
+      <input :ref="element => { dom.archiveInput.value = element }" type="file" accept="application/json,.json" :aria-label="$t('qaSemanticReview.archiveImport')" hidden @change="actions.selectArchive" />
+      <p class="qa-small">{{ $t(state.importing ? 'qaSemanticReview.importing' : 'qaSemanticReview.archiveHint') }}</p>
+      <p v-if="ui.reviewImportError" role="alert" class="qa-gap">{{ $t(ui.reviewImportError) }}</p>
+      <p v-if="state.reviewSaved" role="status" class="qa-small">{{ $t('qaSemanticReview.saved') }}</p>
     </div>
-    <div v-if="workbench && job" class="qa-live-view-actions">
-      <button v-if="workspaceView === 'evidence'" class="qa-button" type="button" data-testid="qa-live-show-settings" @click="workspaceView = 'settings'"><QaIcon name="tune" aria-hidden="true" />{{ $t('qaRunFlow.backToSettings') }}</button>
-      <button v-else class="qa-button" type="button" data-testid="qa-live-show-evidence" @click="workspaceView = 'evidence'">{{ $t(isLiveActive(job) ? 'qaRunFlow.running' : 'qaRunFlow.results') }}<span v-if="isLiveActive(job)" class="qa-live-tab-state">RUNNING</span></button>
+    <div v-if="workbench && state.job" class="qa-live-view-actions">
+      <button v-if="ui.workspaceView === 'evidence'" class="qa-button" type="button" data-testid="qa-live-show-settings" @click="ui.workspaceView = 'settings'"><QaIcon name="tune" aria-hidden="true" />{{ $t('qaRunFlow.backToSettings') }}</button>
+      <button v-else class="qa-button" type="button" data-testid="qa-live-show-evidence" @click="ui.workspaceView = 'evidence'">{{ $t(state.isLiveActive(state.job) ? 'qaRunFlow.running' : 'qaRunFlow.results') }}<span v-if="state.isLiveActive(state.job)" class="qa-live-tab-state">RUNNING</span></button>
     </div>
-    <p v-if="error" class="qa-state qa-error" role="alert">{{ $t('qaLive.errors.' + error) }}</p>
-    <p v-if="!loading && !capabilities?.available" class="qa-state" role="status">{{ $t('qaLive.unavailable') }}</p>
-    <p v-if="capabilities?.busy && !isLiveActive(job)" class="qa-small" role="status">{{ $t('qaLive.busy') }}</p>
-    <p v-if="retryAfter > 0" class="qa-small" role="status">{{ $t('qaLive.cooldown', { n: retryAfter }) }}</p>
+    <p v-if="state.error" class="qa-state qa-error" role="alert">{{ $t('qaLive.errors.' + state.error) }}</p>
+    <p v-if="!state.loading && !state.capabilities?.available" class="qa-state" role="status">{{ $t('qaLive.unavailable') }}</p>
+    <p v-if="state.capabilities?.busy && !state.isLiveActive(state.job)" class="qa-small" role="status">{{ $t('qaLive.busy') }}</p>
+    <p v-if="state.retryAfter > 0" class="qa-small" role="status">{{ $t('qaLive.cooldown', { n: state.retryAfter }) }}</p>
 
-    <div class="qa-live-layout" :class="{ 'qa-live-evidence-layout': workbench && workspaceView === 'evidence' && job }">
-      <div v-show="!workbench || workspaceView === 'settings'" class="qa-live-left">
-        <form id="qa-live-config-form" class="qa-panel qa-live-config" @submit.prevent="start">
-          <div v-if="workbench" class="qa-live-config-heading"><h2>{{ $t('qaRunFlow.configuration') }}</h2><span v-if="isLiveActive(job)" class="qa-live-locked">{{ $t('qaLive.settingsLocked') }}</span></div>
+    <div class="qa-live-layout" :class="{ 'qa-live-evidence-layout': workbench && ui.workspaceView === 'evidence' && state.job }">
+      <div v-show="!workbench || ui.workspaceView === 'settings'" class="qa-live-left">
+        <form id="qa-live-config-form" class="qa-panel qa-live-config" @submit.prevent="actions.start">
+          <div v-if="workbench" class="qa-live-config-heading"><h2>{{ $t('qaRunFlow.configuration') }}</h2><span v-if="state.isLiveActive(state.job)" class="qa-live-locked">{{ $t('qaLive.settingsLocked') }}</span></div>
           <div class="qa-live-fields">
             <div v-if="workbench" class="qa-live-field">
               <label for="qa-live-fixed-model">{{ $t('qaLive.model') }}</label>
-              <div class="qa-live-model-shell"><output id="qa-live-fixed-model" class="qa-live-model" data-testid="qa-live-model">{{ capabilities?.model || '—' }}</output><span class="qa-live-fixed-model"><QaIcon name="lock" aria-hidden="true" />{{ $t('qaFaithfulLive.fixedModel') }}</span></div>
+              <div class="qa-live-model-shell"><output id="qa-live-fixed-model" class="qa-live-model" data-testid="qa-live-model">{{ state.capabilities?.model || '—' }}</output><span class="qa-live-fixed-model"><QaIcon name="lock" aria-hidden="true" />{{ $t('qaFaithfulLive.fixedModel') }}</span></div>
               <p class="qa-live-field-note qa-live-model-note"><span>{{ $t('qaFaithfulLive.modelNote') }}</span><QaIcon name="info" aria-hidden="true" /><span class="qa-live-scope-chip">{{ $t('qaFaithfulLive.noRealEs') }}</span></p>
             </div>
             <div class="qa-live-field">
               <label for="qa-live-profile-select">{{ $t('qaLive.profile') }}</label>
-              <div class="qa-live-select-shell"><select id="qa-live-profile-select" v-model="profile" data-testid="qa-live-profile" :disabled="loading || isLiveActive(job)" :aria-describedby="workbench ? 'qa-live-profile-note' : undefined"><option v-for="entry in profiles" :key="entry.id" :value="entry.id">{{ $t('qaLive.profiles.' + entry.id) }} · {{ $t('qaLive.cases', { n: entry.case_count }) }}</option></select><QaIcon v-if="workbench" name="expand_more" aria-hidden="true" /></div>
-              <p v-if="workbench" id="qa-live-profile-note" class="qa-live-field-note">{{ profileCounts }}</p>
+              <div class="qa-live-select-shell"><select id="qa-live-profile-select" v-model="form.profile" data-testid="qa-live-profile" :disabled="state.loading || state.isLiveActive(state.job)" :aria-describedby="workbench ? 'qa-live-profile-note' : undefined"><option v-for="entry in state.profiles" :key="entry.id" :value="entry.id">{{ $t('qaLive.profiles.' + entry.id) }} · {{ $t('qaLive.cases', { n: entry.case_count }) }}</option></select><QaIcon v-if="workbench" name="expand_more" aria-hidden="true" /></div>
+              <p v-if="workbench" id="qa-live-profile-note" class="qa-live-field-note">{{ ui.profileCounts }}</p>
             </div>
             <div class="qa-live-field">
               <label for="qa-live-budget-input">{{ $t('qaLive.budget') }}</label>
-              <input id="qa-live-budget-input" v-model.number="budget" data-testid="qa-live-budget" type="number" min="0.01" :max="ceiling" step="0.01" inputmode="decimal" :disabled="loading || isLiveActive(job)" :aria-invalid="!budgetValid" aria-describedby="qa-live-budget-note" />
-              <p v-if="workbench" id="qa-live-budget-note" class="qa-live-field-note"><span>{{ $t('qaFaithfulLive.budgetNote', { n: ceiling.toFixed(2) }) }}</span><QaIcon name="info" aria-hidden="true" /><span class="qa-live-paid-chip">{{ $t('qaFaithfulLive.paid') }}</span></p>
+              <input id="qa-live-budget-input" v-model.number="form.budget" data-testid="qa-live-budget" type="number" min="0.01" :max="state.ceiling" step="0.01" inputmode="decimal" :disabled="state.loading || state.isLiveActive(state.job)" :aria-invalid="!state.budgetValid" aria-describedby="qa-live-budget-note" />
+              <p v-if="workbench" id="qa-live-budget-note" class="qa-live-field-note"><span>{{ $t('qaFaithfulLive.budgetNote', { n: state.ceiling.toFixed(2) }) }}</span><QaIcon name="info" aria-hidden="true" /><span class="qa-live-paid-chip">{{ $t('qaFaithfulLive.paid') }}</span></p>
             </div>
           </div>
-          <p v-if="!workbench" id="qa-live-budget-note" class="qa-small">{{ $t('qaLive.budgetNote', { n: ceiling }) }}</p>
-          <label class="qa-live-ack"><input v-model="acknowledged" data-testid="qa-live-ack" type="checkbox" :disabled="loading || isLiveActive(job)" /><span>{{ $t(workbench ? 'qaFaithfulLive.acknowledge' : 'qaLive.acknowledge') }}<small v-if="workbench">{{ $t('qaFaithfulLive.acknowledgeNote') }}</small></span></label>
-          <div class="qa-live-actions qa-live-start-actions"><button class="qa-button" :class="{ 'qa-primary': workbench }" data-testid="qa-live-start" type="submit" :disabled="cannotStart" :aria-describedby="workbench ? 'qa-live-start-reason' : undefined" @click.prevent="start"><span>{{ $t(workbench ? 'qaFaithfulLive.start' : 'qaLive.start') }}</span><span v-if="workbench" id="qa-live-start-reason" class="qa-live-start-reason" data-testid="qa-live-start-reason" role="status">{{ startReason }}<QaIcon name="info" aria-hidden="true" /></span></button><button v-if="!workbench" class="qa-button" type="button" :disabled="loading" @click="load">{{ $t('qaLive.refresh') }}</button></div>
-          <div v-if="capabilities && !workbench" class="qa-live-resource"><p class="qa-small qa-live-limits">{{ resourceLimits }}</p><p v-if="capabilities.pricing" class="qa-small">{{ resourcePricing }}</p></div>
+          <p v-if="!workbench" id="qa-live-budget-note" class="qa-small">{{ $t('qaLive.budgetNote', { n: state.ceiling }) }}</p>
+          <label class="qa-live-ack"><input v-model="form.acknowledged" data-testid="qa-live-ack" type="checkbox" :disabled="state.loading || state.isLiveActive(state.job)" /><span>{{ $t(workbench ? 'qaFaithfulLive.acknowledge' : 'qaLive.acknowledge') }}<small v-if="workbench">{{ $t('qaFaithfulLive.acknowledgeNote') }}</small></span></label>
+          <div class="qa-live-actions qa-live-start-actions"><button class="qa-button" :class="{ 'qa-primary': workbench }" data-testid="qa-live-start" type="submit" :disabled="state.cannotStart" :aria-describedby="workbench ? 'qa-live-start-reason' : undefined" @click.prevent="actions.start"><span>{{ $t(workbench ? 'qaFaithfulLive.start' : 'qaLive.start') }}</span><span v-if="workbench" id="qa-live-start-reason" class="qa-live-start-reason" data-testid="qa-live-start-reason" role="status">{{ ui.startReason }}<QaIcon name="info" aria-hidden="true" /></span></button><button v-if="!workbench" class="qa-button" type="button" :disabled="state.loading" @click="actions.load">{{ $t('qaLive.refresh') }}</button></div>
+          <div v-if="state.capabilities && !workbench" class="qa-live-resource"><p class="qa-small qa-live-limits">{{ ui.resourceLimits }}</p><p v-if="state.capabilities.pricing" class="qa-small">{{ ui.resourcePricing }}</p></div>
         </form>
       </div>
 
-      <article v-if="job" v-show="!workbench || workspaceView === 'evidence'" class="qa-panel qa-live-result" data-testid="qa-live-result" :aria-busy="isLiveActive(job)">
-        <div class="qa-panel-head"><component :is="workbench ? 'h2' : 'h3'">{{ $t('qaLive.result') }}</component><strong v-if="!workbench" role="status">{{ missingJob ? 'UNKNOWN' : $t('qaLive.status.' + job.status) }}</strong><button v-if="workbench && isLiveActive(job)" class="qa-button" data-testid="qa-live-cancel" :disabled="cancelling" @click="cancel">{{ $t('qaLive.cancel') }}</button></div>
-        <QaReleaseDecision v-if="!isLiveActive(job) || missingJob || error" :job="job" :source-sha="capabilities?.source_sha" kind="model_evaluation" :sync-issue="Boolean(missingJob || error)" :validation-observation="validationObservation" />
+      <article v-if="state.job" v-show="!workbench || ui.workspaceView === 'evidence'" class="qa-panel qa-live-result" data-testid="qa-live-result" :aria-busy="state.isLiveActive(state.job)">
+        <div class="qa-panel-head"><component :is="workbench ? 'h2' : 'h3'">{{ $t('qaLive.result') }}</component><strong v-if="!workbench" role="status">{{ state.missingJob ? 'UNKNOWN' : $t('qaLive.status.' + state.job.status) }}</strong><button v-if="workbench && state.isLiveActive(state.job)" class="qa-button" data-testid="qa-live-cancel" :disabled="state.cancelling" @click="actions.cancel">{{ $t('qaLive.cancel') }}</button></div>
+        <QaReleaseDecision v-if="!state.isLiveActive(state.job) || state.missingJob || state.error" :job="state.job" :source-sha="state.capabilities?.source_sha" kind="model_evaluation" :sync-issue="Boolean(state.missingJob || state.error)" :validation-observation="validationObservation" />
         <p v-else class="qa-small" data-testid="qa-live-pending-decision">{{ $t('qaRunFlow.summaries.running') }}</p>
-        <p v-if="workbench" class="qa-small"><strong role="status">{{ missingJob ? 'UNKNOWN' : $t('qaLive.status.' + job.status) }}</strong></p>
-        <p v-if="missingJob" class="qa-small">{{ $t('qaWorkbench.lastKnownStatus', { status: $t('qaLive.status.' + job.status) }) }}</p>
-        <p class="qa-small">{{ $t('qaLive.progress', { n: job.completed_cases, total: job.total_cases }) }} · {{ $t('qaLive.profiles.' + job.profile) }} · {{ job.model }}</p>
-        <progress :value="job.completed_cases" :max="job.total_cases" :aria-label="$t('qaLive.progress', { n: job.completed_cases, total: job.total_cases })"></progress>
-        <p class="qa-live-phase" data-testid="qa-live-phase">{{ $t('qaLive.phase.' + job.phase) }}<span v-if="job.current_case"> · {{ job.current_case }}</span><span v-if="job.current_tool"> · {{ job.current_tool }}</span></p>
+        <p v-if="workbench" class="qa-small"><strong role="status">{{ state.missingJob ? 'UNKNOWN' : $t('qaLive.status.' + state.job.status) }}</strong></p>
+        <p v-if="state.missingJob" class="qa-small">{{ $t('qaWorkbench.lastKnownStatus', { status: $t('qaLive.status.' + state.job.status) }) }}</p>
+        <p class="qa-small">{{ $t('qaLive.progress', { n: state.job.completed_cases, total: state.job.total_cases }) }} · {{ $t('qaLive.profiles.' + state.job.profile) }} · {{ state.job.model }}</p>
+        <progress :value="state.job.completed_cases" :max="state.job.total_cases" :aria-label="$t('qaLive.progress', { n: state.job.completed_cases, total: state.job.total_cases })"></progress>
+        <p class="qa-live-phase" data-testid="qa-live-phase">{{ $t('qaLive.phase.' + state.job.phase) }}<span v-if="state.job.current_case"> · {{ state.job.current_case }}</span><span v-if="state.job.current_tool"> · {{ state.job.current_tool }}</span></p>
         <dl class="qa-live-metrics">
-          <div><dt>{{ $t('qaLive.structural') }}</dt><dd>{{ $t('qaLive.structuralCounts', { passed: job.structural.passed, failed: job.structural.failed }) }}</dd></div>
-          <div><dt>{{ $t('qaLive.requests') }}</dt><dd>{{ number(job.usage.requests) }} / {{ number(job.max_requests) }}</dd></div>
-          <div><dt>{{ $t('qaLive.tokens') }}</dt><dd>{{ $t('qaLive.tokenCounts', { input: number(job.usage.input_tokens), output: number(job.usage.output_tokens) }) }}</dd></div>
-          <div><dt>{{ $t('qaLive.estimatedCost') }}</dt><dd>{{ money(job.usage.measured_estimated_usd) }} / {{ money(job.max_usd) }}</dd></div>
+          <div><dt>{{ $t('qaLive.structural') }}</dt><dd>{{ $t('qaLive.structuralCounts', { passed: state.job.structural.passed, failed: state.job.structural.failed }) }}</dd></div>
+          <div><dt>{{ $t('qaLive.requests') }}</dt><dd>{{ ui.number(state.job.usage.requests) }} / {{ ui.number(state.job.max_requests) }}</dd></div>
+          <div><dt>{{ $t('qaLive.tokens') }}</dt><dd>{{ $t('qaLive.tokenCounts', { input: ui.number(state.job.usage.input_tokens), output: ui.number(state.job.usage.output_tokens) }) }}</dd></div>
+          <div><dt>{{ $t('qaLive.estimatedCost') }}</dt><dd>{{ ui.money(state.job.usage.measured_estimated_usd) }} / {{ ui.money(state.job.max_usd) }}</dd></div>
         </dl>
-        <p class="qa-small">{{ $t('qaLive.reserved', { n: money(job.usage.reserved_estimated_usd) }) }}</p>
-        <p v-if="job.usage.underestimated" class="qa-gap" role="status">{{ $t('qaLive.underestimated') }}</p>
-        <p v-if="job.error" class="qa-small" role="alert">{{ $t('qaLive.executionError') }}: {{ logCaptureErrorKey(job.error) ? $t(logCaptureErrorKey(job.error)) : job.error }}</p>
-        <QaSemanticReviewPanel :job="job" :busy="loading || importing || capabilities?.busy || isLiveActive(job)" @import="importReview" @download="downloadReview" />
-        <QaExecutionLog ref="executionLog" family="evaluations" :job-id="job.id" :running="isLiveActive(job)" />
+        <p class="qa-small">{{ $t('qaLive.reserved', { n: ui.money(state.job.usage.reserved_estimated_usd) }) }}</p>
+        <p v-if="state.job.usage.underestimated" class="qa-gap" role="status">{{ $t('qaLive.underestimated') }}</p>
+        <p v-if="state.job.error" class="qa-small" role="alert">{{ $t('qaLive.executionError') }}: {{ ui.logCaptureErrorKey(state.job.error) ? $t(ui.logCaptureErrorKey(state.job.error)) : state.job.error }}</p>
+        <QaSemanticReviewPanel :job="state.job" :busy="state.loading || state.importing || state.capabilities?.busy || state.isLiveActive(state.job)" @import="actions.importReview" @download="actions.downloadReview" />
+        <QaExecutionLog :ref="element => { dom.executionLog.value = element }" family="evaluations" :job-id="state.job.id" :running="state.isLiveActive(state.job)" />
         <h3 v-if="workbench" class="qa-live-cases-heading">{{ $t('qaRunFlow.evidenceDetails') }}</h3>
-        <ol v-if="job.cases.length" class="qa-live-cases">
-          <li v-for="(entry, index) in job.cases" :key="entry.case_id" :data-testid="'qa-live-case-' + entry.case_id">
+        <ol v-if="state.job.cases.length" class="qa-live-cases">
+          <li v-for="(entry, index) in state.job.cases" :key="entry.case_id" :data-testid="'qa-live-case-' + entry.case_id">
             <details>
-              <summary><span v-if="workbench" class="qa-live-case-number">{{ String(index + 1).padStart(2, '0') }}</span><span>{{ entry.case_id }} · {{ entry.group }}</span><span class="qa-live-case-grades"><strong :class="{ 'qa-live-rule-failed': !entry.structural_pass }">{{ $t(entry.structural_pass ? 'qaLive.rulePassed' : 'qaLive.ruleFailed') }}</strong><strong v-if="caseReview(entry)" class="qa-live-case-semantic" :class="{ 'qa-live-rule-failed': !caseReviewPassed(entry) }">{{ $t(caseReviewPassed(entry) ? 'qaSemanticReview.casePass' : 'qaSemanticReview.caseFail') }}</strong></span><QaIcon v-if="workbench" class="qa-live-case-toggle" aria-hidden="true" name="expand_more" /></summary>
-              <p class="qa-small">{{ entry.split }} · {{ $t('qaLive.duration', { n: number(entry.duration_ms / 1000) }) }} · {{ $t('qaLive.tokenCounts', { input: number(entry.input_tokens), output: number(entry.output_tokens) }) }}</p>
+              <summary><span v-if="workbench" class="qa-live-case-number">{{ String(index + 1).padStart(2, '0') }}</span><span>{{ entry.case_id }} · {{ entry.group }}</span><span class="qa-live-case-grades"><strong :class="{ 'qa-live-rule-failed': !entry.structural_pass }">{{ $t(entry.structural_pass ? 'qaLive.rulePassed' : 'qaLive.ruleFailed') }}</strong><strong v-if="ui.caseReview(entry)" class="qa-live-case-semantic" :class="{ 'qa-live-rule-failed': !ui.caseReviewPassed(entry) }">{{ $t(ui.caseReviewPassed(entry) ? 'qaSemanticReview.casePass' : 'qaSemanticReview.caseFail') }}</strong></span><QaIcon v-if="workbench" class="qa-live-case-toggle" aria-hidden="true" name="expand_more" /></summary>
+              <p class="qa-small">{{ entry.split }} · {{ $t('qaLive.duration', { n: ui.number(entry.duration_ms / 1000) }) }} · {{ $t('qaLive.tokenCounts', { input: ui.number(entry.input_tokens), output: ui.number(entry.output_tokens) }) }}</p>
               <ul v-if="entry.hard_failures.length || entry.failures.length" class="qa-live-failures"><li v-for="(failure, failureIndex) in [...entry.hard_failures, ...entry.failures]" :key="failureIndex">{{ failure }}</li></ul>
-              <QaSemanticReviewPanel :job="job" :entry="entry" />
+              <QaSemanticReviewPanel :job="state.job" :entry="entry" />
               <h4>{{ $t('qaLive.answer') }}</h4><pre>{{ entry.answer || $t('qaLive.noAnswer') }}</pre>
             </details>
           </li>
         </ol>
         <p v-else class="qa-small">{{ $t('qaLive.noCases') }}</p>
-        <div class="qa-live-review"><div><p class="qa-live-semantic" data-testid="qa-live-semantic">{{ $t(semanticReview ? semanticReviewKey(job) : 'qaLive.semanticPending') }}</p><p class="qa-gap">{{ $t(semanticReview ? 'qaSemanticReview.reviewedLimit' : 'qaLive.qualityLimit') }}</p></div><div class="qa-live-actions"><button v-if="!workbench && isLiveActive(job)" class="qa-button" data-testid="qa-live-cancel" :disabled="cancelling" @click="cancel">{{ $t('qaLive.cancel') }}</button><button v-if="!workbench && job.report_available" class="qa-button" data-testid="qa-live-report" :disabled="downloading" @click="download">{{ $t('qaLive.download') }}</button><a v-if="reportDownload" class="qa-button" data-testid="qa-live-report-retry" :href="reportDownload.url" :download="reportDownload.filename">{{ $t('qaLive.downloadAgain') }}</a></div></div>
+        <div class="qa-live-review"><div><p class="qa-live-semantic" data-testid="qa-live-semantic">{{ $t(ui.semanticReview ? ui.semanticReviewKey(state.job) : 'qaLive.semanticPending') }}</p><p class="qa-gap">{{ $t(ui.semanticReview ? 'qaSemanticReview.reviewedLimit' : 'qaLive.qualityLimit') }}</p></div><div class="qa-live-actions"><button v-if="!workbench && state.isLiveActive(state.job)" class="qa-button" data-testid="qa-live-cancel" :disabled="state.cancelling" @click="actions.cancel">{{ $t('qaLive.cancel') }}</button><button v-if="!workbench && state.job.report_available" class="qa-button" data-testid="qa-live-report" :disabled="ui.downloading" @click="actions.download">{{ $t('qaLive.download') }}</button><a v-if="ui.reportDownload" class="qa-button" data-testid="qa-live-report-retry" :href="ui.reportDownload.url" :download="ui.reportDownload.filename">{{ $t('qaLive.downloadAgain') }}</a></div></div>
         <p class="qa-small">{{ $t('qaLive.reportNote') }}</p>
       </article>
-      <aside v-if="workbench" class="qa-live-guide qa-panel" :aria-labelledby="job && workspaceView === 'evidence' ? 'qa-live-next-title' : 'qa-live-guide-title'">
-        <template v-if="job && workspaceView === 'evidence'">
-          <h2 id="qa-live-next-title">{{ $t(isLiveActive(job) ? 'qaRunFlow.runningActions' : 'qaRunFlow.resultActions') }}</h2>
-          <p class="qa-small">{{ $t(isLiveActive(job) ? 'qaFlowLive.runningNote' : 'qaFlowLive.reviewNote') }}</p>
-          <button v-if="job.report_available" class="qa-button qa-primary" data-testid="qa-live-report" type="button" :disabled="downloading" @click="download"><QaIcon name="download" aria-hidden="true" />{{ $t('qaLive.download') }}</button>
-          <button v-if="!isLiveActive(job)" class="qa-button" data-testid="qa-live-new-run" type="button" @click="prepareRun"><QaIcon name="tune" aria-hidden="true" />{{ $t('qaFlowLive.prepareRun') }}</button>
+      <aside v-if="workbench" class="qa-live-guide qa-panel" :aria-labelledby="state.job && ui.workspaceView === 'evidence' ? 'qa-live-next-title' : 'qa-live-guide-title'">
+        <template v-if="state.job && ui.workspaceView === 'evidence'">
+          <h2 id="qa-live-next-title">{{ $t(state.isLiveActive(state.job) ? 'qaRunFlow.runningActions' : 'qaRunFlow.resultActions') }}</h2>
+          <p class="qa-small">{{ $t(state.isLiveActive(state.job) ? 'qaFlowLive.runningNote' : 'qaFlowLive.reviewNote') }}</p>
+          <button v-if="state.job.report_available" class="qa-button qa-primary" data-testid="qa-live-report" type="button" :disabled="ui.downloading" @click="actions.download"><QaIcon name="download" aria-hidden="true" />{{ $t('qaLive.download') }}</button>
+          <button v-if="!state.isLiveActive(state.job)" class="qa-button" data-testid="qa-live-new-run" type="button" @click="actions.prepareRun"><QaIcon name="tune" aria-hidden="true" />{{ $t('qaFlowLive.prepareRun') }}</button>
           <button class="qa-button" data-testid="qa-live-back-workbench" type="button" @click="emit('navigate', 'verification')"><QaIcon name="arrow_back" aria-hidden="true" />{{ $t('qaRunFlow.backToWorkbench') }}</button>
-          <div class="qa-live-guide-limit"><h3>{{ $t('qaFlowLive.scopeTitle') }}</h3><p>{{ $t(semanticReview ? 'qaSemanticReview.reviewedLimit' : 'qaLive.qualityLimit') }}</p><p>{{ $t('qaFlowLive.syntheticLimit') }}</p></div>
+          <div class="qa-live-guide-limit"><h3>{{ $t('qaFlowLive.scopeTitle') }}</h3><p>{{ $t(ui.semanticReview ? 'qaSemanticReview.reviewedLimit' : 'qaLive.qualityLimit') }}</p><p>{{ $t('qaFlowLive.syntheticLimit') }}</p></div>
         </template>
         <template v-else>
           <h2 id="qa-live-guide-title">{{ $t('qaFlowLive.whatYouGet') }}</h2>
-          <ul class="qa-live-evidence-list"><li v-for="entry in evidenceGuide" :key="entry.id"><span class="qa-live-evidence-icon"><QaIcon :name="entry.icon" aria-hidden="true" /></span><div><h3>{{ $t('qaFaithfulLive.' + entry.id + 'Title') }}</h3><p>{{ $t('qaFaithfulLive.' + entry.id + 'Note') }}</p></div></li></ul>
+          <ul class="qa-live-evidence-list"><li v-for="entry in ui.evidenceGuide" :key="entry.id"><span class="qa-live-evidence-icon"><QaIcon :name="entry.icon" aria-hidden="true" /></span><div><h3>{{ $t('qaFaithfulLive.' + entry.id + 'Title') }}</h3><p>{{ $t('qaFaithfulLive.' + entry.id + 'Note') }}</p></div></li></ul>
           <div class="qa-live-guide-limit"><QaIcon name="info" aria-hidden="true" /><div><h3>{{ $t('qaFaithfulLive.semanticTitle') }}</h3><p>{{ $t('qaFaithfulLive.semanticNote') }}</p></div></div>
         </template>
       </aside>
     </div>
-    <div v-if="workbench" class="qa-live-footer" :class="{ 'qa-live-footer-with-result': job }"><div v-if="!job" class="qa-live-not-run" data-testid="qa-live-empty"><QaIcon name="pending" aria-hidden="true" /><strong>NOT RUN</strong><span>{{ $t('qaFaithfulLive.notRunNote') }}</span></div><button class="qa-live-resource-toggle" type="button" :aria-expanded="resourceOpen" aria-controls="qa-live-resource-details" @click="resourceOpen = !resourceOpen">{{ $t('qaFaithfulLive.resourceLink') }}<QaIcon name="north_east" aria-hidden="true" /></button></div>
-    <section v-if="workbench" v-show="resourceOpen" id="qa-live-resource-details" class="qa-live-resource qa-panel" :aria-label="$t('qaLive.resourceLimits')"><h2>{{ $t('qaLive.resourceLimits') }}</h2><template v-if="capabilities"><p class="qa-small">{{ resourceLimits }}</p><p class="qa-small">{{ $t('qaLive.budgetNote', { n: ceiling }) }}</p><p v-if="capabilities.pricing" class="qa-small">{{ resourcePricing }}</p></template><button class="qa-button" type="button" :disabled="loading" @click="load"><QaIcon name="refresh" aria-hidden="true" />{{ $t('qaLive.refresh') }}</button></section>
-    <section v-if="historyOpen || (!workbench && recent.length)" ref="historyElement" class="qa-live-history" tabindex="-1" data-testid="qa-live-history"><component :is="workbench ? 'h2' : 'span'">{{ $t('qaLive.history') }}</component><button v-for="entry in recent" :key="entry.id" class="qa-text-link" :class="{ 'qa-history-current': job?.id === entry.id }" :disabled="isLiveActive(job)" @click="show(entry.id)"><time v-if="entry.finished_at || entry.started_at" :datetime="entry.finished_at || entry.started_at">{{ timestamp(entry.finished_at || entry.started_at) }}</time><span>{{ $t('qaLive.profiles.' + entry.profile) }}</span><strong>{{ $t('qaLive.status.' + entry.status) }}</strong></button><p v-if="!recent.length" class="qa-small">{{ $t('qaFaithfulLive.emptyHistory') }}</p></section>
+    <div v-if="workbench" class="qa-live-footer" :class="{ 'qa-live-footer-with-result': state.job }"><div v-if="!state.job" class="qa-live-not-run" data-testid="qa-live-empty"><QaIcon name="pending" aria-hidden="true" /><strong>NOT RUN</strong><span>{{ $t('qaFaithfulLive.notRunNote') }}</span></div><button class="qa-live-resource-toggle" type="button" :aria-expanded="ui.resourceOpen" aria-controls="qa-live-resource-details" @click="ui.resourceOpen = !ui.resourceOpen">{{ $t('qaFaithfulLive.resourceLink') }}<QaIcon name="north_east" aria-hidden="true" /></button></div>
+    <section v-if="workbench" v-show="ui.resourceOpen" id="qa-live-resource-details" class="qa-live-resource qa-panel" :aria-label="$t('qaLive.resourceLimits')"><h2>{{ $t('qaLive.resourceLimits') }}</h2><template v-if="state.capabilities"><p class="qa-small">{{ ui.resourceLimits }}</p><p class="qa-small">{{ $t('qaLive.budgetNote', { n: state.ceiling }) }}</p><p v-if="state.capabilities.pricing" class="qa-small">{{ ui.resourcePricing }}</p></template><button class="qa-button" type="button" :disabled="state.loading" @click="actions.load"><QaIcon name="refresh" aria-hidden="true" />{{ $t('qaLive.refresh') }}</button></section>
+    <section v-if="ui.historyOpen || (!workbench && state.recent.length)" :ref="element => { dom.historyElement.value = element }" class="qa-live-history" tabindex="-1" data-testid="qa-live-history"><component :is="workbench ? 'h2' : 'span'">{{ $t('qaLive.history') }}</component><button v-for="entry in state.recent" :key="entry.id" class="qa-text-link" :class="{ 'qa-history-current': state.job?.id === entry.id }" :disabled="state.isLiveActive(state.job)" @click="actions.show(entry.id)"><time v-if="entry.finished_at || entry.started_at" :datetime="entry.finished_at || entry.started_at">{{ ui.timestamp(entry.finished_at || entry.started_at) }}</time><span>{{ $t('qaLive.profiles.' + entry.profile) }}</span><strong>{{ $t('qaLive.status.' + entry.status) }}</strong></button><p v-if="!state.recent.length" class="qa-small">{{ $t('qaFaithfulLive.emptyHistory') }}</p></section>
   </section>
 </template>
 
@@ -129,24 +129,12 @@ import QaIcon from "./QaIcon.vue";
 import QaExecutionLog from "./QaExecutionLog.vue";
 import QaReleaseDecision from "./QaReleaseDecision.vue";
 import QaSemanticReviewPanel from "./QaSemanticReviewPanel.vue";
-import { useLiveEvaluation } from "../composables/useLiveEvaluation.js";
+import { useLivePanel } from "../composables/useLivePanel.js";
 
 defineProps({ workbench: { type: Boolean, default: false }, validationObservation: { type: Object, default: null } });
 const emit = defineEmits(["status-change", "phase-change", "navigate", "observation-change"]);
-const {
-  acknowledged, archiveInput, budget, budgetValid, cancel,
-  cancelling, cannotStart, capabilities, caseReview, caseReviewPassed,
-  ceiling, download, downloadReview, downloading, error,
-  evidenceGuide, executionLog, historyElement, historyOpen, importReview,
-  importing, isLiveActive, job, load, loading,
-  logCaptureErrorKey, missingJob, money, number, openLogs,
-  prepareRun, profile, profileCounts, profiles, recent,
-  reportDownload, resourceLimits, resourceOpen, resourcePricing, retryAfter,
-  reviewImportError, reviewSaved, selectArchive, semanticReview, semanticReviewKey,
-  show, showHistory, showJob, start, startFree,
-  startReason, stateTitleKey, timestamp, workspacePhase, workspaceView
-} = useLiveEvaluation(emit);
-defineExpose({ showHistory, prepareRun, startFree, showJob, openLogs, refresh: load });
+const { state, form, ui, dom, actions } = useLivePanel(emit);
+defineExpose({ showHistory: actions.showHistory, prepareRun: actions.prepareRun, startFree: actions.startFree, showJob: actions.showJob, openLogs: actions.openLogs, refresh: actions.load });
 </script>
 
 <style scoped>
