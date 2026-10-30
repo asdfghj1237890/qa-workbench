@@ -18,3 +18,13 @@ def test_later_recursive_exclusions_keep_private_outputs_out_of_allowed_trees():
     assert all(result["rules"].index(rule) > final_include for rule in (
         "**/review", "**/reviews", "**/private", "**/runs", "**/data", "**/node_modules", "**/.venv", "**/.git", "**/.env",
     ))
+
+
+def test_runtime_uses_a_fixed_unprivileged_identity_that_owns_the_archive_directory():
+    result = act.inspect_docker_runtime()
+    assert result["user"] == "10001:10001"
+    assert result["user_definition"] == {"name": "qa-workbench", "uid": "10001", "group": "qa-workbench", "system": True}
+    assert result["group_definition"] == {"name": "qa-workbench", "gid": "10001", "system": True}
+    assert "/data/qa-workbench" in result["created_directories"]
+    assert result["directory_owners"]["/data/qa-workbench"] == "qa-workbench:qa-workbench"
+    assert result["user_index"] < result["cmd_index"]

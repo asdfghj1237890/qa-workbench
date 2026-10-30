@@ -16,12 +16,23 @@ def main(argv=None):
     parser.add_argument("--frontend-dir", help="Built standalone frontend directory")
     args = parser.parse_args(argv)
     adapter, authenticate = None, None
-    if args.adapter:
-        try:
-            module, factory = args.adapter.split(":", 1)
-            adapter = getattr(importlib.import_module(module), factory)()
-        except (ValueError, ImportError, AttributeError):
+    if args.adapter is not None:
+        module, separator, factory = args.adapter.partition(":")
+        if not separator or not module or not factory:
             parser.error("adapter must name an installed module:factory")
+        try:
+            adapter_module = importlib.import_module(module)
+        except ModuleNotFoundError as error:
+            if error.name and (module == error.name or module.startswith(error.name + ".")):
+                parser.error("adapter must name an installed module:factory")
+            raise
+        try:
+            create_adapter = getattr(adapter_module, factory)
+        except AttributeError:
+            parser.error("adapter must name an installed module:factory")
+        if not callable(create_adapter):
+            parser.error("adapter must name an installed module:factory")
+        adapter = create_adapter()
     if args.token_env:
         secret = os.environ.get(args.token_env, "")
         if len(secret) < 24:

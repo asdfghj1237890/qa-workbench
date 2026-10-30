@@ -48,6 +48,10 @@ cd ..
 qa-workbench --frontend-dir frontend/dist
 ```
 
+The container runs as UID/GID `10001:10001` and owns `/data/qa-workbench`.
+New named volumes inherit that directory's ownership. Bind-mounted directories
+must be writable by `10001:10001` on the host.
+
 ## Connect a system
 
 Implement `ProjectAdapter` with task descriptors, async execution and health
