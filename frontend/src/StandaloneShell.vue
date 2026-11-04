@@ -15,6 +15,7 @@
       v-if="status === 'ready'"
       :key="generation"
       :client="client"
+      :locale="config.locale || 'en'"
     />
     <main
       v-else

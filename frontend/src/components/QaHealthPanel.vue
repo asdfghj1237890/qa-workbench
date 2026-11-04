@@ -15,6 +15,7 @@
       <div class="qh-tone-stale"><QaIcon name="info" aria-hidden="true" /><div><strong><span class="qh-summary-full">{{ $t(design ? 'qaHealth.summaryItems.quality.title' : 'qaHealth.live.qualityUnmeasured') }}</span><span class="qh-summary-short">{{ $t(design ? 'qaHealth.qualityShort' : 'qaHealth.live.qualityShort') }}</span></strong><span class="qh-summary-description">{{ $t('qaHealth.summaryItems.quality.description') }}</span><small class="qh-summary-observed">{{ $t('qaHealth.reviewNotMeasured') }}</small></div></div>
     </div>
     <p v-if="overview.unknowns.length" class="qh-observation-note" data-testid="health-observation-note"><QaIcon name="info" aria-hidden="true" />{{ $t('qaHealth.observationNote', { modules: overview.unknowns.map(moduleName).join('、') }) }}</p>
+    <slot />
     <div class="qh-workspace">
       <aside ref="master" class="qh-master" :aria-label="$t('qaHealth.modulesLabel')">
         <h2 ref="listHeading" tabindex="-1">{{ $t('qaHealth.moduleStates') }}</h2>

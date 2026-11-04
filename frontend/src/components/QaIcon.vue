@@ -21,11 +21,15 @@ import {
   symOutlinedFormatListBulleted, symOutlinedKeyboardArrowUp, symOutlinedAccountCircle,
   symOutlinedContentCopy, symOutlinedPriorityHigh,
   symOutlinedLanguage, symOutlinedFindInPage, symOutlinedArrowBack, symOutlinedMonitorHeart,
+  symOutlinedAdd, symOutlinedBookmark, symOutlinedBookmarkAdded,
 } from "@quasar/extras/material-symbols-outlined";
 
 const props = defineProps({ name: { type: String, required: true } });
 // Official SVG paths keep QA icons independent of browser font loading.
 const icons = Object.freeze({
+  add: symOutlinedAdd,
+  bookmark: symOutlinedBookmark,
+  bookmark_added: symOutlinedBookmarkAdded,
   ads_click: symOutlinedAdsClick,
   arrow_forward: symOutlinedArrowForward,
   check: symOutlinedCheck,

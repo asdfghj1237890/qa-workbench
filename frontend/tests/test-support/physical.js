@@ -2,7 +2,7 @@
 import { mount, flushPromises } from '@vue/test-utils';
 import App from '../../src/App.vue';
 const SHA = 'a'.repeat(40);
-export async function openWorkbench() {
+export async function openWorkbench(options = {}) {
   const calls = [], runs = [];
   const tasks = [
     { id: 'warehouse-inventory', title: 'Inventory reconciliation', paid: false, input_schema: { type: 'object' } },
@@ -16,7 +16,7 @@ export async function openWorkbench() {
     run: async () => ({ job: runs.at(-1) }),
     logs: async () => ({ text: 'captured adapter output', next_offset: 23, total_bytes: 23, has_more: false, truncated: false }),
   };
-  const wrapper = mount(App, { props: { client }, attachTo: document.body });
+  const wrapper = mount(App, { props: { client, locale: options.locale || 'en' }, attachTo: document.body });
   await flushPromises();
   return {
     async select(id) { await wrapper.get('[data-testid="task-' + id + '"]').trigger('click'); await flushPromises(); },

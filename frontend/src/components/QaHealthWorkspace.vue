@@ -1,6 +1,5 @@
 <template>
   <section class="qh-live-workspace" data-testid="qa-health-workspace" :aria-busy="loading">
-    <component :is="healthPanel" v-if="healthPanel && !preview" :dark="dark" />
     <div v-if="!snapshot" class="qh-state">
       <h1>{{ $t('qaHealth.title') }}</h1><p v-if="preview" class="qh-preview-label">{{ $t('qaHealth.preview') }}</p>
       <p v-if="loading" role="status">{{ $t('qaHealth.live.loading') }}</p>
@@ -10,8 +9,9 @@
     <template v-else>
       <p v-if="error" class="qh-fetch-error" role="alert">{{ $t('qaHealth.live.errors.' + error) }} {{ $t('qaHealth.live.retained') }}</p>
       <p v-else-if="model.expired" class="qh-fetch-error" role="status">{{ $t('qaHealth.live.expired') }}</p>
-      <QaHealthPanel :model="model" :preview="preview" :dark="dark" :loading="loading" @refresh="reload" />
+      <QaHealthPanel :model="model" :preview="preview" :dark="dark" :loading="loading" @refresh="reload"><component :is="healthPanel" v-if="healthPanel && !preview" :dark="dark" /></QaHealthPanel>
     </template>
+    <component :is="healthPanel" v-if="!snapshot && error && healthPanel && !preview" :dark="dark" />
   </section>
 </template>
 

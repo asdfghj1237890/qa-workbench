@@ -6,9 +6,9 @@
   --wb-border: var(--border);
   --wb-ink: var(--ink);
   --wb-muted: var(--ink-2);
-  --wb-accent: #28bfb5;
-  --wb-accent-ink: #072623;
-  --wb-accent-soft: #142522;
+  --wb-accent: #34a48f;
+  --wb-accent-ink: #08110f;
+  --wb-accent-soft: #16241f;
   --wb-warning: #ffbd48;
   --wb-warning-bg: #2b2114;
   --wb-fail: #f3475d;
@@ -21,22 +21,22 @@
   font-family: var(--font-sans);
 }
 .qa-release-shell[data-mode="dark"] {
-  --bg: #111314;
-  --surface: #181a1b;
-  --surface-2: #1b1d1e;
-  --border: #35393a;
-  --border-2: #303536;
-  --ink: #f1f3ef;
-  --ink-2: #bcbfba;
-  --ink-3: #a8ada8;
-  --accent: #28bfb5;
-  --accent-soft: #142522;
+  --bg: #111110;
+  --surface: #1a1a19;
+  --surface-2: #1f1f1e;
+  --border: #292927;
+  --border-2: #222220;
+  --ink: #ecece8;
+  --ink-2: #a8a89f;
+  --ink-3: #96968e;
+  --accent: #34a48f;
+  --accent-soft: #16241f;
   --danger: #f3475d;
 }
 .qa-release-shell[data-mode="light"] {
-  --wb-accent: #08796e;
+  --wb-accent: #137567;
   --wb-accent-ink: #fff;
-  --wb-accent-soft: #e2f3ee;
+  --wb-accent-soft: #e4f0ed;
   --wb-warning: #805615;
   --wb-warning-bg: #fff7e8;
   --wb-fail: #bd2941;

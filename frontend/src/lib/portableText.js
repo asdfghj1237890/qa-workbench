@@ -1,0 +1,33 @@
+// The standalone app defaults to English. A host may supply its current locale;
+// artifact values and adapter errors remain unmodified protocol evidence.
+const zhTW = {
+  'Refresh': '重新整理', 'Validation source revision': '驗證來源版本', 'Tasks': '驗證任務',
+  'Choose a task, configure it, then explicitly start.': '選擇任務後設定，再明確啟動。',
+  'Paid · consent required': '付費任務 · 需明確同意', 'Offline / configured adapter': '離線或已設定的連接器',
+  'No tasks provided by this adapter.': '此連接器尚未提供任務。', 'Execution history': '執行紀錄',
+  'retained runs': '筆保存紀錄', 'System health': '系統健康', 'Import execution evidence': '匯入執行證據',
+  'Configure / Execute / Review': '設定、執行與覆核', 'Select a task': '選擇驗證任務', 'Run settings': '執行設定',
+  'Adapter input schema': '連接器輸入規格', 'Options (JSON object)': '執行選項（JSON 物件）',
+  'Maximum estimated cost (USD)': '預估費用上限（USD）',
+  'I authorize this paid run up to the configured budget.': '我同意啟動此付費任務，費用不得超過設定預算。',
+  'A completed run still requires an independent evidence review.': '任務完成後，仍需獨立覆核其證據。',
+  'Start run': '開始執行', 'Cancel current run': '取消目前任務', 'Execution evidence': '執行證據', 'Run': '執行識別',
+  'Structural checks': '結構檢查', 'Semantic review': '語意覆核', 'Quality': '品質', 'Source revision': '證據來源版本',
+  'Evidence kind': '證據類型', 'unknown': '未知',
+  "This evidence does not establish the current release's quality.": '此證據不能證明目前發布版本的品質。',
+  'Refresh evidence': '重新整理證據', 'Download report': '下載報告', 'Hide logs': '收合日誌', 'Show logs': '展開日誌',
+  'Execution logs': '執行日誌', 'No captured output.': '尚無保存的輸出。',
+  'Log capture is truncated; the original report remains separate evidence.': '保存日誌已截短；原始報告仍是獨立證據。',
+  'Submit an evidence-bound review': '提交綁定證據的覆核',
+  'Use the exact report hash. Reviewer and reason must identify the actual review; structural completion alone is insufficient.': '使用報告的精確雜湊，填寫實際覆核者及具體理由；結構檢查完成仍不足以證明品質。',
+  'Reviewer': '具名覆核者', 'Evidence-based reason': '依據證據的判斷理由', 'Verdict': '覆核結論', 'Failed': '未通過', 'Passed': '通過',
+  'Load exact row hashes for review': '載入覆核列的精確雜湊',
+  'Case reviews (JSON array of row_sha256, verdict, reason)': '逐列覆核（含 row_sha256、verdict、reason 的 JSON 陣列）',
+  'Submit review': '提交覆核', 'No execution selected': '尚未選擇執行紀錄',
+  'Task selection only opens settings. No run has started.': '選取任務只會開啟設定，目前尚未開始執行。',
+  'Persisted evidence': '保存的證據', 'Historical runs retain their original revision, report hashes and review state.': '歷史紀錄保留原版本、報告雜湊與覆核狀態。',
+  'No retained executions.': '尚無保存的執行紀錄。', 'Review': '覆核',
+  'Observed by the project adapter': '由專案連接器提供的觀測', 'Absent observations remain unknown.': '缺少觀測的項目維持未知。',
+  'No health observation.': '尚無健康觀測資料。', 'Status': '觀測狀態', 'Observation time': '觀測時間', 'Full health observation (JSON)': '完整健康觀測（JSON）',
+};
+export const workbenchText = (text, locale) => locale === 'zh-TW' ? zhTW[text] || text : text;

@@ -1,17 +1,18 @@
 <template>
-  <div class="wb-app">
+  <div class="wb-app" :class="{ 'wb-embedded': embedded }">
     <header class="wb-top">
       <a
+        v-if="!embedded"
         class="wb-brand"
         href="./"
-      >{{ project.name || adapter.branding.name }}</a><span>QA Workbench</span><code
+      >{{ project.name || adapter.branding.name }}</a><span v-if="!embedded">QA Workbench</span><code
         v-if="sourceSha"
         :title="sourceSha"
-      >{{ sourceSha.slice(0, 12) }}</code><button
+      >{{ tr('Validation source revision') }} {{ sourceSha.slice(0, 12) }}</code><button
         :disabled="loading"
         @click="refresh"
       >
-        Refresh
+        {{ tr("Refresh") }}
       </button>
     </header>
     <div
@@ -23,8 +24,8 @@
     </div>
     <div class="wb-layout">
       <aside class="wb-sidebar">
-        <h2>Tasks</h2><p class="wb-muted">
-          Choose a task, configure it, then explicitly start.
+        <h2>{{ tr("Tasks") }}</h2><p class="wb-muted">
+          {{ tr("Choose a task, configure it, then explicitly start.") }}
         </p><button
           v-for="task in tasks"
           :key="task.id"
@@ -32,14 +33,14 @@
           :aria-pressed="selectedTaskId === task.id"
           @click="chooseTask(task)"
         >
-          <span>{{ task.title || task.id }}</span><small>{{ task.paid ? 'Paid · consent required' : 'Offline / configured adapter' }}</small>
+          <span>{{ taskLabel(task, 'title') }}</span><small>{{ task.paid ? tr("Paid · consent required") : tr("Offline / configured adapter") }}</small>
         </button><p v-if="!loading && !tasks.length">
-          No tasks provided by this adapter.
+          {{ tr("No tasks provided by this adapter.") }}
         </p><hr><button @click="view = 'history'">
-          Execution history <small>{{ history.length }} retained runs</small>
+          {{ tr("Execution history") }} <small>{{ history.length }} {{ tr('retained runs') }}</small>
         </button><button @click="openHealth">
-          System health
-        </button><label class="wb-import">Import execution evidence<input
+          {{ tr("System health") }}
+        </button><label class="wb-import">{{ tr("Import execution evidence") }}<input
           type="file"
           accept="application/json,.json"
           @change="importEvidence"
@@ -49,22 +50,22 @@
         <template v-if="view === 'task'">
           <div class="wb-heading">
             <p class="wb-eyebrow">
-              Configure / Execute / Review
-            </p><h1>{{ selectedTask?.title || 'Select a task' }}</h1><p>{{ selectedTask?.description }}</p>
+              {{ tr("Configure / Execute / Review") }}
+            </p><h1>{{ selectedTask ? taskLabel(selectedTask, 'title') : tr('Select a task') }}</h1><p>{{ selectedTask ? taskLabel(selectedTask, 'description') : '' }}</p>
           </div>
           <section
             v-if="selectedTask"
             class="wb-panel"
           >
-            <h2>Run settings</h2><details v-if="selectedTask.input_schema && Object.keys(selectedTask.input_schema).length">
-              <summary>Adapter input schema</summary><pre>{{ json(selectedTask.input_schema) }}</pre>
-            </details><label>Options (JSON object)<textarea
+            <h2>{{ tr("Run settings") }}</h2><details v-if="selectedTask.input_schema && Object.keys(selectedTask.input_schema).length">
+              <summary>{{ tr("Adapter input schema") }}</summary><pre>{{ json(selectedTask.input_schema) }}</pre>
+            </details><label>{{ tr("Options (JSON object)") }}<textarea
               v-model="optionsText"
               data-testid="task-options"
               rows="5"
               spellcheck="false"
             /></label><template v-if="selectedTask.paid">
-              <label>Maximum estimated cost (USD)<input
+              <label>{{ tr("Maximum estimated cost (USD)") }}<input
                 v-model.number="maxUsd"
                 data-testid="task-budget"
                 type="number"
@@ -74,12 +75,12 @@
                 v-model="acknowledgeCost"
                 data-testid="task-consent"
                 type="checkbox"
-              >I authorize this paid run up to the configured budget.</label>
+              >{{ tr("I authorize this paid run up to the configured budget.") }}</label>
             </template><p
               v-if="selectedTask.requires_review"
               class="wb-notice"
             >
-              A completed run still requires an independent evidence review.
+              {{ tr("A completed run still requires an independent evidence review.") }}
             </p><div class="wb-actions">
               <button
                 class="wb-primary"
@@ -87,13 +88,13 @@
                 :disabled="loading || busy || (selectedTask.paid && (!acknowledgeCost || !(maxUsd > 0)))"
                 @click="start"
               >
-                Start run
+                {{ tr("Start run") }}
               </button><button
                 v-if="activeRun(selectedRun)"
                 :disabled="loading"
                 @click="cancel"
               >
-                Cancel current run
+                {{ tr("Cancel current run") }}
               </button>
             </div>
           </section>
@@ -103,14 +104,14 @@
             data-testid="run-evidence"
           >
             <div class="wb-section-head">
-              <h2>Execution evidence</h2><strong :class="['wb-status', selectedRun.status]">{{ selectedRun.status }}</strong>
+              <h2>{{ tr("Execution evidence") }}</h2><strong :class="['wb-status', selectedRun.status]">{{ selectedRun.status }}</strong>
             </div><dl class="wb-facts">
-              <div><dt>Run</dt><dd><code>{{ selectedRun.id }}</code></dd></div><div><dt>Structural checks</dt><dd>{{ evidence.structural }}</dd></div><div><dt>Semantic review</dt><dd>{{ evidence.semantic }}</dd></div><div><dt>Quality</dt><dd>{{ evidence.quality }}</dd></div><div><dt>Source revision</dt><dd>{{ evidence.revision }} <code>{{ selectedRun.source_sha || 'unknown' }}</code></dd></div><div><dt>Evidence kind</dt><dd>{{ selectedRun.evidence_kind || 'unknown' }}</dd></div>
+              <div><dt>{{ tr("Run") }}</dt><dd><code>{{ selectedRun.id }}</code></dd></div><div><dt>{{ tr("Structural checks") }}</dt><dd>{{ evidence.structural }}</dd></div><div><dt>{{ tr("Semantic review") }}</dt><dd>{{ evidence.semantic }}</dd></div><div><dt>{{ tr("Quality") }}</dt><dd>{{ evidence.quality }}</dd></div><div><dt>{{ tr("Source revision") }}</dt><dd>{{ evidence.revision }} <code>{{ selectedRun.source_sha || tr("unknown") }}</code></dd></div><div><dt>{{ tr("Evidence kind") }}</dt><dd>{{ selectedRun.evidence_kind || tr("unknown") }}</dd></div>
             </dl><p
               v-if="evidence.revision !== 'current'"
               class="wb-notice"
             >
-              This evidence does not establish the current release's quality.
+              {{ tr("This evidence does not establish the current release's quality.") }}
             </p><ul v-if="selectedRun.gaps?.length">
               <li
                 v-for="gap in selectedRun.gaps"
@@ -125,47 +126,47 @@
               {{ selectedRun.error }}
             </p><div class="wb-actions">
               <button @click="loadRun(selectedRun.id)">
-                Refresh evidence
+                {{ tr("Refresh evidence") }}
               </button><button
                 :disabled="!selectedRun.report_available"
                 @click="downloadReport"
               >
-                Download report
+                {{ tr("Download report") }}
               </button><button @click="showLogs = !showLogs">
-                {{ showLogs ? 'Hide' : 'Show' }} logs
+                {{ tr(showLogs ? 'Hide logs' : 'Show logs') }}
               </button>
             </div><pre
               v-if="showLogs"
               class="wb-log"
               tabindex="0"
-              aria-label="Execution logs"
-            >{{ logText || 'No captured output.' }}</pre><p
+              :aria-label="tr('Execution logs')"
+            >{{ logText || tr("No captured output.") }}</pre><p
               v-if="logTruncated"
               class="wb-notice"
             >
-              Log capture is truncated; the original report remains separate evidence.
+              {{ tr("Log capture is truncated; the original report remains separate evidence.") }}
             </p>
             <details
               v-if="selectedRun.report_available"
               class="wb-review"
             >
-              <summary>Submit an evidence-bound review</summary><p>Use the exact report hash. Reviewer and reason must identify the actual review; structural completion alone is insufficient.</p><label>Reviewer<input
+              <summary>{{ tr("Submit an evidence-bound review") }}</summary><p>{{ tr("Use the exact report hash. Reviewer and reason must identify the actual review; structural completion alone is insufficient.") }}</p><label>{{ tr("Reviewer") }}<input
                 v-model="reviewer"
                 autocomplete="name"
-              ></label><label>Evidence-based reason<textarea
+              ></label><label>{{ tr("Evidence-based reason") }}<textarea
                 v-model="reviewReason"
                 rows="3"
-              /></label><label>Verdict<select v-model="reviewVerdict"><option value="failed">Failed</option><option value="passed">Passed</option></select></label><button
+              /></label><label>{{ tr("Verdict") }}<select v-model="reviewVerdict"><option value="failed">{{ tr("Failed") }}</option><option value="passed">{{ tr("Passed") }}</option></select></label><button
                 :disabled="loading"
                 @click="prepareReview"
               >
-                Load exact row hashes for review
+                {{ tr("Load exact row hashes for review") }}
               </button><p
                 v-if="reviewHash"
                 class="wb-muted"
               >
                 Report SHA-256: <code>{{ reviewHash }}</code>
-              </p><label>Case reviews (JSON array of row_sha256, verdict, reason)<textarea
+              </p><label>{{ tr("Case reviews (JSON array of row_sha256, verdict, reason)") }}<textarea
                 v-model="reviewRows"
                 rows="3"
                 spellcheck="false"
@@ -173,41 +174,42 @@
                 :disabled="loading || !reviewer.trim() || !reviewReason.trim()"
                 @click="review"
               >
-                Submit review
+                {{ tr("Submit review") }}
               </button>
             </details>
           </section><section
             v-else
             class="wb-panel wb-empty"
           >
-            <h2>No execution selected</h2><p>Task selection only opens settings. No run has started.</p>
+            <h2>{{ tr("No execution selected") }}</h2><p>{{ tr("Task selection only opens settings. No run has started.") }}</p>
           </section>
         </template>
         <template v-else-if="view === 'history'">
           <div class="wb-heading">
             <p class="wb-eyebrow">
-              Persisted evidence
-            </p><h1>Execution history</h1><p>Historical runs retain their original revision, report hashes and review state.</p>
+              {{ tr("Persisted evidence") }}
+            </p><h1>{{ tr("Execution history") }}</h1><p>{{ tr("Historical runs retain their original revision, report hashes and review state.") }}</p>
           </div><section class="wb-panel">
             <p v-if="!history.length">
-              No retained executions.
+              {{ tr("No retained executions.") }}
             </p><button
               v-for="run in history"
               :key="run.id"
               class="wb-history"
               @click="selectRun(run)"
             >
-              <span><strong>{{ run.task_id }}</strong><small>{{ run.created_at }} · {{ run.id }}</small></span><span>{{ run.status }}<small>Structural: {{ run.structural_status || 'not_run' }} · Review: {{ run.semantic_status || 'pending_review' }}</small></span>
+              <span><strong>{{ run.task_id }}</strong><small>{{ run.created_at }} · {{ run.id }}</small></span><span>{{ run.status }}<small>{{ tr('Structural checks') }}: {{ run.structural_status || 'not_run' }} · {{ tr('Review') }}: {{ run.semantic_status || 'pending_review' }}</small></span>
             </button>
           </section>
         </template>
         <template v-else>
           <div class="wb-heading">
             <p class="wb-eyebrow">
-              Observed by the project adapter
-            </p><h1>System health</h1><p>Absent observations remain unknown.</p>
+              {{ tr("Observed by the project adapter") }}
+            </p><h1>{{ tr("System health") }}</h1><p>{{ tr("Absent observations remain unknown.") }}</p>
           </div><section class="wb-panel">
-            <pre>{{ health ? json(health) : 'No health observation.' }}</pre>
+            <dl v-if="health" class="wb-facts"><div><dt>{{ tr('Status') }}</dt><dd>{{ health.status || tr('unknown') }}</dd></div><div><dt>{{ tr('Quality') }}</dt><dd>{{ health.quality_status || tr('unknown') }}</dd></div><div><dt>{{ tr('Observation time') }}</dt><dd>{{ health.observed_at || tr('unknown') }}</dd></div></dl>
+            <details v-if="health"><summary>{{ tr('Full health observation (JSON)') }}</summary><pre>{{ json(health) }}</pre></details><p v-else>{{ tr('No health observation.') }}</p>
           </section>
         </template>
       </main>
@@ -216,10 +218,13 @@
 </template>
 
 <script setup>
+import { workbenchText } from './lib/portableText.js';
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
 import { getQaAdapter } from './lib/runtime.js';
 import { activeRun, createWorkbenchClient, runEvidence } from './lib/workbenchApi.js';
-const props = defineProps({ client: Object });
+const props = defineProps({ client: Object, locale: { type: String, default: 'en' }, taskLabel: Function, embedded: Boolean });
+const tr = text => workbenchText(text, props.locale);
+const taskLabel = (task, key) => props.taskLabel?.(task, key) || task[key] || (key === 'title' ? task.id : '');
 const adapter = getQaAdapter();
 const client = props.client || createWorkbenchClient({ apiBase: adapter.apiBase, request: adapter.fetch });
 const project = ref({}), tasks = ref([]), history = ref([]), sourceSha = ref(null), selectedTaskId = ref(''), selectedRun = ref(null);

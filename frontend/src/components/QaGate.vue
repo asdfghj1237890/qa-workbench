@@ -1,8 +1,9 @@
 <template>
   <div v-if="session.status.value === 'ready'" class="qa-shell">
     <nav v-if="!observatoryRoute" class="qa-toolbar" aria-label="QA">
-      <strong>QA</strong>
+      <router-link class="qa-toolbar-brand" to="/"><b aria-hidden="true">{{ branding.name.slice(0, 1).toUpperCase() }}</b>{{ branding.name }}<small>QA</small></router-link>
       <span>{{ session.user.value.email }}</span>
+      <component :is="releasePanel" v-if="releasePanel" />
       <router-link class="qa-toolbar-link" to="/">{{ $t('observatory.back') }}</router-link>
       <router-link class="qa-toolbar-link" to="/observatory">{{ $t('observatory.navigation') }}</router-link>
       <button class="qa-button" @click="session.logout">{{ $t('qa.logout') }}</button>
@@ -31,6 +32,7 @@ import { routeLocationKey } from "vue-router";
 import { getQaSession } from "../lib/qaSession.js";
 import { getQaAdapter } from "../lib/runtime.js";
 const branding = getQaAdapter().branding;
+const releasePanel = getQaAdapter().releasePanel;
 const session = getQaSession();
 const route = inject(routeLocationKey, null);
 const observatoryRoute = computed(() => route?.path === "/observatory");
@@ -56,4 +58,13 @@ h1 { font: 700 25px "Noto Serif TC", serif; margin: 12px 0; } p { line-height: 1
 .qa-google { width: 100%; padding: 13px; margin: 14px 0; font-weight: 600; }.qa-button:disabled { cursor: wait; opacity: .6; }
 .qa-button:focus-visible, a:focus-visible { outline: 3px solid #137567; outline-offset: 3px; }.qa-error { color: #a13229; } a { color: #137567; font-size: 13px; }
 @media (max-width: 600px) { .qa-toolbar { gap: 9px; padding: 7px 12px; flex-wrap: wrap; } .qa-toolbar span { flex-basis: calc(100% - 50px); } .qa-toolbar .qa-button { margin-left: auto; } }
+
+.qa-toolbar { background:#18181a; color:#ecece8; font-family:var(--font-sans,system-ui,sans-serif); }
+.qa-toolbar-brand { display:inline-flex; align-items:center; gap:8px; color:inherit; text-decoration:none; font:600 16px Georgia,serif; }
+.qa-toolbar-brand b { display:grid; place-items:center; width:26px; height:26px; border-radius:7px; background:#34a48f; color:#08110f; font-size:20px; }
+.qa-toolbar-brand small { font:12px system-ui,sans-serif; color:#a8a89f; }
+.qa-login { background:#f3f3f1; color:#1a1a18; }
+.qa-login-card { background:#fff; border-color:#e5e5e1; }
+.qa-wordmark { font-weight:600; }
+.qa-eyebrow { text-transform:none; letter-spacing:0; }
 </style>

@@ -2,7 +2,7 @@
 import { afterEach, describe, expect, it } from 'vitest';
 import { workbenchScenario } from './test-support/actions.js';
 const opened = [];
-async function open() { const scenario = await workbenchScenario(); opened.push(scenario); return scenario; }
+async function open(options) { const scenario = await workbenchScenario(options); opened.push(scenario); return scenario; }
 afterEach(() => { opened.splice(0).forEach(scenario => scenario.close()); document.body.innerHTML = ''; });
 describe('portable project workbench', () => {
   it('accepts a different domain and selection only opens configuration', async () => {
@@ -16,9 +16,10 @@ describe('portable project workbench', () => {
     expect(scenario.observation().text).toContain('not_passed');
     expect(scenario.observation().text).toContain('human_review_not_performed');
   });
-  it('requires fresh paid consent and retains an explicit budget in the request', async () => {
-    const scenario = await open();
+  it.each(['en', 'zh-TW'])('requires fresh paid consent and retains an explicit budget in %s', async locale => {
+    const scenario = await open({ locale });
     await scenario.chooseTask('support-quality');
+    if (locale === 'zh-TW') expect(scenario.observation().text).toContain('我同意啟動此付費任務');
     expect(scenario.observation().startDisabled).toBe(true);
     await scenario.authorizeCost(0.25);
     await scenario.startRun();

@@ -2,8 +2,8 @@ import { openWorkbench } from './physical.js';
 import { authenticatedWorkbench, fallbackCancellationObservations } from './auth-physical.js';
 export const authenticatedScenario = options => authenticatedWorkbench(options);
 export const observeFallbackCancellation = () => fallbackCancellationObservations();
-export async function workbenchScenario() {
-  const driver = await openWorkbench();
+export async function workbenchScenario(options) {
+  const driver = await openWorkbench(options);
   return {
     chooseTask: id => driver.select(id),
     authorizeCost: amount => driver.consent(amount),

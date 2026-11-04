@@ -16,9 +16,9 @@
 .qa-eyebrow { font-family: var(--font-mono); font-size: var(--qa-type-meta); letter-spacing: .13em; text-transform: uppercase; font-weight: 500; color: var(--accent); }
 .qa-eyebrow > span { color: var(--ink-3); margin-left: 12px; }
 .qa-hero-row { display: flex; align-items: center; justify-content: space-between; gap: 26px; margin-top: 12px; }
-.qa-page h1 { font: 700 var(--qa-type-page-title)/var(--qa-leading-title) var(--font-sans); letter-spacing: -.045em; margin: 0; }
+.qa-page h1 { font: 600 var(--qa-type-page-title)/var(--qa-leading-title) var(--font-sans); letter-spacing: 0; margin: 0; }
 .qa-subtitle { color: var(--ink-2); font-size: var(--qa-type-lead); margin: 12px 0 0; line-height: var(--qa-leading-body); }
-.qa-button { display: inline-flex; align-items: center; justify-content: center; gap: 20px; flex-shrink: 0; border: 1px solid var(--border); color: var(--ink); background: var(--surface); border-radius: 7px; padding: 10px 15px; font-size: var(--qa-type-control); cursor: pointer; }
+.qa-button { display:inline-flex; align-items:center; justify-content:center; gap:8px; min-height:40px; flex-shrink:0; border:1px solid var(--border); color:var(--ink); background:var(--surface); border-radius:8px; padding:10px 14px; font-size:var(--qa-type-control); line-height:1.4; cursor:pointer; }
 .qa-button:hover:enabled { border-color: var(--accent); color: var(--accent); }
 .qa-button:disabled { opacity: .6; cursor: wait; }
 .qa-cadence { display: flex; align-items: center; gap: 7px; color: var(--ink-2); font-size: var(--qa-type-meta); margin-top: 22px; line-height: var(--qa-leading-body); }
@@ -35,7 +35,7 @@
 .qa-model > strong { font-size: var(--qa-type-code); letter-spacing: -.5px; margin: auto 0 0; overflow-wrap: anywhere; }
 .qa-panel { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 24px; min-width: 0; }
 .qa-panel-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
-.qa-page h2 { font: 700 var(--qa-type-section-title)/var(--qa-leading-title) var(--font-sans); letter-spacing: -.03em; margin: 0; }
+.qa-page h2 { font: 600 var(--qa-type-section-title)/var(--qa-leading-title) var(--font-sans); letter-spacing: 0; margin: 0; }
 .qa-panel-head .qa-eyebrow { margin-bottom: 6px; }
 .qa-chart-meta { color: var(--ink-2); font-size: var(--qa-type-meta); line-height: var(--qa-leading-body); margin: 17px 0 4px; }
 .qa-chart-meta > span { font-family: var(--font-mono); color: var(--ink-2); margin-left: 16px; }

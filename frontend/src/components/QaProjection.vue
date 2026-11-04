@@ -3,13 +3,17 @@
     <div class="qa-plot-controls" role="group" :aria-label="$t('observatory.plot.controls')">
       <button class="qa-plot-button" data-testid="qa-mode-3d" :aria-pressed="is3d" :disabled="!has3d" @click="setMode(true)">3D</button>
       <button class="qa-plot-button" data-testid="qa-mode-2d" :aria-pressed="!is3d" @click="setMode(false)">{{ has3d ? $t('observatory.plot.xyPlane') : '2D' }}</button>
-      <button v-if="is3d" class="qa-plot-button" data-testid="qa-orbit-mode" :aria-pressed="!panMode" @click="panMode = false">{{ $t('observatory.plot.rotate') }}</button>
-      <button v-if="is3d" class="qa-plot-button" data-testid="qa-pan-mode" :aria-pressed="panMode" @click="panMode = true">{{ $t('observatory.plot.pan') }}</button>
       <button class="qa-plot-button" data-testid="qa-zoom-in" :aria-label="$t('observatory.plot.zoomIn')" :disabled="view.scale >= 12" @click="zoom(1.5)">+</button>
       <button class="qa-plot-button" data-testid="qa-zoom-out" :aria-label="$t('observatory.plot.zoomOut')" :disabled="view.scale <= 1" @click="zoom(1 / 1.5)">−</button>
       <output class="qa-zoom-level" data-testid="qa-zoom-level" :aria-label="$t('observatory.plot.zoomLevel')">{{ Math.round(view.scale * 100) }}%</output>
       <button class="qa-plot-button" data-testid="qa-reset-view" @click="reset">{{ $t('observatory.plot.reset') }}</button>
       <button class="qa-plot-button qa-label-toggle" data-testid="qa-label-toggle" :aria-pressed="showLabels" @click="showLabels = !showLabels">{{ $t('observatory.plot.labels') }}</button>
+      <details v-if="is3d" class="qa-plot-advanced" data-testid="qa-plot-advanced">
+        <summary>{{ $t('observatory.plot.dragMode') }}</summary><div>
+          <button class="qa-plot-button" data-testid="qa-orbit-mode" :aria-pressed="!panMode" @click="panMode = false">{{ $t('observatory.plot.rotate') }}</button>
+          <button class="qa-plot-button" data-testid="qa-pan-mode" :aria-pressed="panMode" @click="panMode = true">{{ $t('observatory.plot.pan') }}</button>
+        </div>
+      </details>
     </div>
     <template v-if="!workbench"><p class="qa-plot-help" data-testid="qa-dimension-note">{{ $t(is3d ? 'observatory.plot.true3d' : has3d ? 'observatory.plot.xyNote' : 'observatory.plot.legacy2d') }}</p><p :id="helpId" class="qa-plot-help">{{ $t(is3d ? 'observatory.plot.help3d' : 'observatory.plot.help') }}</p></template>
     <details v-else class="qa-plot-disclosure"><summary>{{ $t('observatory.plot.controls') }}</summary><p class="qa-plot-help" data-testid="qa-dimension-note">{{ $t(is3d ? 'observatory.plot.true3d' : has3d ? 'observatory.plot.xyNote' : 'observatory.plot.legacy2d') }}</p><p :id="helpId" class="qa-plot-help">{{ $t(is3d ? 'observatory.plot.help3d' : 'observatory.plot.help') }}</p><p class="qa-plot-help">{{ $t('observatory.plot.labelNote') }}</p></details>
@@ -73,7 +77,7 @@ const emit = defineEmits(["selection-change"]);
 const { t, locale } = useI18n();
 const metadataLabel = (name) => name === "__other__" ? t("observatory.other") : !name || name === "__missing__" ? t("observatory.unknown") : name;
 const helpId = useId(), descriptionId = useId(), articleTitleId = useId(), articlePopoverId = useId();
-const container = ref(null), svg = ref(null), canvas = ref(null), popover = ref(null), showLabels = ref(true), dragging = ref(false);
+const container = ref(null), svg = ref(null), canvas = ref(null), popover = ref(null), showLabels = ref(!props.workbench), dragging = ref(false);
 const has3d = computed(() => props.dimensions === 3), is3d = ref(has3d.value), camera = ref(initialOrbit()), panMode = ref(false), frame = ref(0);
 // Keep the original point identity, including nonreactive computed projection data.
 const selected = shallowRef(null);
@@ -253,4 +257,9 @@ onBeforeUnmount(() => { observer?.disconnect(); popoverObserver?.disconnect(); c
 .qa-article-link:focus-visible, .qa-point-popover button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 .qa-article-unavailable { margin: 0; color: var(--ink-2); font-size: var(--qa-type-meta); line-height: var(--qa-leading-body); }
 @media (max-width: 600px) { .qa-point-popover { padding: 12px; } .qa-point-popover-heading button { min-width: 44px; min-height: 44px; } .qa-article-link { min-height: 44px; } }
+
+.qa-plot-advanced { position:relative; font-size:12px; }
+.qa-plot-advanced summary { cursor:pointer; padding:8px 12px; border:1px solid var(--border); border-radius:8px; }
+.qa-plot-advanced summary:focus-visible { outline:2px solid var(--accent); outline-offset:3px; }
+.qa-plot-advanced > div { position:absolute; right:0; top:100%; z-index:5; display:flex; gap:8px; padding:12px; background:var(--surface); border:1px solid var(--border); border-radius:8px; min-width:max-content; }
 </style>

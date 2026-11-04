@@ -6,7 +6,7 @@ import "../../../tests/test-support/panelAdapter.js";
 import { mount } from "@vue/test-utils";
 import { afterEach, describe, expect, it } from "vitest";
 import { Quasar } from "quasar";
-import { symOutlinedHome, symOutlinedKeyboardArrowDown, symOutlinedError } from "@quasar/extras/material-symbols-outlined";
+import { symOutlinedHome, symOutlinedKeyboardArrowDown, symOutlinedError, symOutlinedAdd, symOutlinedBookmark, symOutlinedBookmarkAdded } from "@quasar/extras/material-symbols-outlined";
 import QaIcon from "../QaIcon.vue";
 
 // Expected public asset contracts, not copies of QaIcon's name mapping.
@@ -29,6 +29,12 @@ function openIcon(name) {
 afterEach(() => { mounted.splice(0).forEach((wrapper) => wrapper.unmount()); });
 
 describe("QA icons without font loading", () => {
+  it.each([['add', symOutlinedAdd], ['bookmark', symOutlinedBookmark], ['bookmark_added', symOutlinedBookmarkAdded]])('renders the shared %s action with its official asset and no font dependency', (name, asset) => {
+    const icon = openIcon(name);
+    expect(icon.geometry()).toEqual({ paths: [asset.split('|')[0]], viewBox: SYMBOL_VIEWBOX });
+    expect(icon.ligatures()).toBe(0);
+    expect(icon.accessibility().hidden).toBe('true');
+  });
   it("renders navigation as the official SVG path and viewBox without font ligature text", () => {
     const icon = openIcon("home");
     expect(icon.geometry()).toEqual({ paths: [HOME_PATH], viewBox: SYMBOL_VIEWBOX });

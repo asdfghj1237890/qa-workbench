@@ -19,6 +19,7 @@
           <div><span v-if="canLogout">{{ accountEmail }}</span><router-link to="/">{{ $t('observatory.back') }}</router-link><router-link to="/workbench">QA Workbench</router-link><a :href="repository" target="_blank" rel="noopener noreferrer">GitHub</a><button v-if="canLogout" class="qa-button" @click="logout">{{ $t('qa.logout') }}</button></div>
         </details>
         <div class="qa-preferences">
+          <component :is="releasePanel" v-if="releasePanel" />
           <div class="seg-ctl" role="group" :aria-label="$t('side.language')"><button :class="{ on: locale === 'zh-TW' }" :aria-pressed="locale === 'zh-TW'" @click="setLanguage('zh-TW')">中文</button><button :class="{ on: locale === 'en' }" :aria-pressed="locale === 'en'" @click="setLanguage('en')">EN</button></div>
           <button class="qa-icon-button" :aria-label="$t('app.darkToggle')" :aria-pressed="dark" @click="toggleDark"><QaIcon aria-hidden="true" name="contrast" /></button>
         </div>
@@ -111,7 +112,7 @@ import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 import QaIcon from "../components/QaIcon.vue";
 import { getQaAdapter } from "../lib/runtime.js";
-const branding = getQaAdapter().branding, brandMark = branding.mark;
+const branding = getQaAdapter().branding, brandMark = branding.mark, releasePanel = getQaAdapter().releasePanel;
 import { AGENT, QA_DESIGN_PREVIEW } from "../lib/runtime.js";
 import { apiFetch } from "../lib/qaSession.js";
 import { QA_REPOSITORY, projectedPoints, validQaSnapshot } from "../lib/qa.js";
